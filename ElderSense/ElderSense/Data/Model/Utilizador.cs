@@ -8,7 +8,8 @@ namespace ElderSense.Data.Model
     public enum TipoUtilizador
     {
         Idoso,
-        Cuidador
+        Cuidador,
+        Admin
     }
 
     /// <summary>
@@ -32,12 +33,24 @@ namespace ElderSense.Data.Model
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         public DateOnly DataNascimento { get; set; }
 
-        [StringLength(50)]
+        [Display(Name = "Tipo de Utilizador")]
+        [Required(ErrorMessage = "O {0} é obrigatório")]
         public TipoUtilizador Tipo { get; set; }
 
         [Required(ErrorMessage = "O número de {0} é obrigatório")]
         [StringLength(17)]
         [RegularExpression(@"\+?[0-9]{9,18}")] //telemóvel em Portugal, podemos adicionar formatos de paises depois
         public string Telefone { get; set; } = "";
+
+
+        /// <summary>
+        /// RELACIONAMENTO M:N cuidador <-> idoso
+        /// </summary>
+
+        //Se for idoso, esta lista guarda quem cuida
+        public ICollection<Utilizador> ListadeCuidadores { get; set; } = [];
+
+        //se for cuidador, esta lista guarda os idosos
+        public ICollection<Utilizador> ListadeIdosos { get; set; } = [];
     }
 }

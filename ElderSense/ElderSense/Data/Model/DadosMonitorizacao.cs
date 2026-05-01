@@ -15,15 +15,27 @@ namespace ElderSense.Data.Model
         public DateTime DataHora { get; set; } = DateTime.Now;
 
         //ex: movimento, porta
-        public string tipo { get; set; } = "";
+        [StringLength(50)]
+        public string Tipo { get; set; } = "";
 
-        //ex: aberta, ausente
-        public string valor { get; set; } = "";
+        //ex: aberta, ausente 2h
+        [StringLength(100)]
+        public string Valor { get; set; } = "";
 
-        //relacionamento utilizador
+        /// <summary>
+        /// Relacionamento 1-N obrigatório com a classe Utilizador
+        /// </summary>
+        [Display(Name = "Responsável")]
         [ForeignKey(nameof(Utilizador))]
-        public Utilizador FKUtilizador { get; set; }
+        public int FKUtilizador { get; set; }
 
+        /// <summary>
+        /// Relacionamento 1-N obrigatório com a classe Sensor
+        /// </summary>
+
+        [Display(Name = "Sensor")]
+        [ForeignKey(nameof(Sensor))]
+        public int FKSensor { get; set; }
 
     }
 }

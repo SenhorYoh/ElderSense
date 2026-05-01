@@ -19,8 +19,12 @@ namespace ElderSense.Data.Model
         [Display(Name = "Estado")]
         public bool Estado { get; set; }
 
-        //relacionamento do utilizador
+
+        /// <summary>
+        /// Relacionamento 1-N com a classe Utilizador
+        /// </summary>
+        [Display(Name = "Responsável")]
         [ForeignKey(nameof(Utilizador))]
-        public Utilizador FKUtilizador { get; set; }
+        public int FKUtilizador { get; set; }
     }
 }
