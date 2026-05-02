@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace ElderSense.Data.Model
 {
@@ -15,12 +16,12 @@ namespace ElderSense.Data.Model
     /// <summary>
     /// classe que representa os utilizadores da plataforma,
     /// engloba tanto idosos quanto cuidadores/familiares,
-    /// distinguidos pelo tipo
+    /// distinguidos pelo tipo.
+    /// O Utilizador herda o IdentityUser pois assim o utilizador do sistema (quem faz login)
+    /// é igual ao utilizador do negócio (idoso/cuidador)
     /// </summary>
-    public class Utilizador{
+    public class Utilizador : IdentityUser{
 
-        [Key]
-        public int Id { get; set; }
 
         [Display(Name = "Utilizador")]
         [Required(ErrorMessage = "O {0} é obrigatório")]
