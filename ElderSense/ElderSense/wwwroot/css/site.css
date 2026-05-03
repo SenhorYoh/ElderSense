@@ -29,3 +29,33 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.btn-google-icon {
+
+    background: white;
+    border: 1px solid #dadce0;
+    border-radius: 50%; 
+
+    width: 50px;
+    height: 50px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+    .btn-google-icon img {
+        width: 24px; 
+        height: 24px;
+    }
+
+    .btn-google-icon:hover {
+        background-color: #f8f9fa;
+        border-color: #d2e3fc;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
