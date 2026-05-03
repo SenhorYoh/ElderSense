@@ -69,8 +69,13 @@ namespace ElderSense.Areas.Identity.Pages.Account
             public TipoUtilizador Tipo { get; set; }
 
             [Required(ErrorMessage = "O(a) {0} é obrigatório(a)")]
-            [Display(Name = "Telefone")]
-            public string Telefone { get; set; }
+            [Display(Name = "Data de nascimento")]
+            [DataType(DataType.Date)]
+            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+            public DateOnly DataNascimento { get; set; }
+
+            [Display(Name = "Telefone (Opcional)")]
+            public string? Telefone { get; set; }
 
             [Required(ErrorMessage = "O(a) {0} é obrigatório(a)")]
             [EmailAddress]
