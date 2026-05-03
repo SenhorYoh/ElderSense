@@ -8,9 +8,8 @@ namespace ElderSense.Data.Model
     /// </summary>
     public enum TipoUtilizador
     {
-        Idoso,
-        Cuidador,
-        Admin
+        Idoso, //0
+        Cuidador, //1
     }
 
     /// <summary>
@@ -38,10 +37,9 @@ namespace ElderSense.Data.Model
         [Required(ErrorMessage = "O {0} é obrigatório")]
         public TipoUtilizador Tipo { get; set; }
 
-        [Required(ErrorMessage = "O número de {0} é obrigatório")]
         [StringLength(17)]
         [RegularExpression(@"\+?[0-9]{9,18}")] //telemóvel em Portugal, podemos adicionar formatos de paises depois
-        public string Telefone { get; set; } = "";
+        public string? Telefone { get; set; }
 
 
         /// <summary>

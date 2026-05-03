@@ -11,5 +11,14 @@ namespace ElderSense.Data
         public DbSet<DadosMonitorizacao> DadosMonitorizacao { get; set; }
         public DbSet<Sensor> Sensores { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder); 
+
+            // Configura o Enum para ser guardado como String na Base de Dados
+            builder.Entity<Utilizador>()
+                .Property(u => u.Tipo)
+                .HasConversion<string>();
+        }
     }
 }

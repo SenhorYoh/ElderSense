@@ -68,9 +68,8 @@ namespace ElderSense.Areas.Identity.Pages.Account
             [Display(Name = "Tipo de Utilizador")]
             public TipoUtilizador Tipo { get; set; }
 
-            [Required(ErrorMessage = "O(a) {0} é obrigatório(a)")]
-            [Display(Name = "Telefone")]
-            public string Telefone { get; set; }
+            [Display(Name = "Telefone (Opcional)")]
+            public string? Telefone { get; set; }
 
             [Required(ErrorMessage = "O(a) {0} é obrigatório(a)")]
             [EmailAddress]
