@@ -60,8 +60,11 @@ namespace ElderSense.Areas.Identity.Pages.Account
             }
 
             Email = email;
-            // Once you add a real email sender, you should remove this code that lets you confirm the account
-            DisplayConfirmAccountLink = true;
+            ///<summary>
+            ///DisplayConfirmAccountLink é declarada como falso para que exija uma conta confirmada
+            ///e impede o login imediato
+            ///</summary>
+            DisplayConfirmAccountLink = false;
             if (DisplayConfirmAccountLink)
             {
                 var userId = await _userManager.GetUserIdAsync(user);
