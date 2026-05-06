@@ -29,9 +29,10 @@ public class EmailSender : IEmailSender
     public async Task Execute(string apiKey, string subject, string message, string toEmail)
     {
         var client = new SendGridClient(apiKey);
+        var fromEmail = Options.SendGridEmail;
         var msg = new SendGridMessage()
         {
-            From = new EmailAddress("yohanenrique8@gmail.com", "ElderSense"),
+            From = new EmailAddress(fromEmail, "ElderSense"),
             Subject = subject,
             PlainTextContent = message,
             HtmlContent = message
