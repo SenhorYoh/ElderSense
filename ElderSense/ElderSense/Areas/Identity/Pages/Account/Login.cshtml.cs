@@ -114,13 +114,11 @@ namespace ElderSense.Areas.Identity.Pages.Account
             {
                 ShowPassword = true;
 
-                // LIMPEZA CRUCIAL: Remove o erro de "Password Required" do ModelState 
-                // para que a página não mostre mensagens de erro vermelhas no primeiro passo.
                 ModelState.Clear();
                 return Page();
             }
 
-            // 4. Se chegou aqui, já temos Email e Password. Validamos o estado geral.
+            // 4. já temos Email e Password. Validamos o estado geral.
             if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(
@@ -147,7 +145,7 @@ namespace ElderSense.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    // Se a password estiver errada, mantemos o campo visível
+                    // Se a password estiver errada, mantém-se o campo visível
                     ShowPassword = true;
                     ModelState.AddModelError(string.Empty, "Password incorreta.");
                     return Page();
