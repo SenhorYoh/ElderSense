@@ -260,3 +260,92 @@ body {
         background: #f5f5f5;
         color: #1a1a1a;
     }
+
+/* ==================== SECÇÕES ==================== */
+
+/* Contentor padrão de cada secção */
+.es-section {
+    padding: 4rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Etiqueta colorida acima do título */
+.es-section-label {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #1D9E75;
+    margin-bottom: 0.75rem;
+}
+
+/* Título de secção */
+.es-section h2 {
+    font-size: 26px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+}
+
+/* Texto de secção */
+.es-section p {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.7;
+}
+
+/* Linha divisória entre secções */
+.es-divider {
+    border: none;
+    border-top: 0.5px solid #e5e5e5;
+    margin: 0 2rem;
+}
+
+/* ==================== CARDS DE BENEFÍCIOS ==================== */
+
+/* Grelha de cards */
+.es-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 2rem;
+}
+
+/* Card individual */
+.es-card {
+    background: #fff;
+    border: 0.5px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+/* Ícone do card */
+.es-card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #E1F5EE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 18px;
+    color: #0F6E56;
+}
+
+/* Título do card */
+.es-card h3 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+}
+
+/* Texto do card */
+.es-card p {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
