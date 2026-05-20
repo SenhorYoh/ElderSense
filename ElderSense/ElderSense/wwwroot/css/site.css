@@ -402,3 +402,96 @@ body {
     line-height: 1.6;
     margin: 0;
 }
+
+/* ==================== PLANOS ==================== */
+
+/* Grelha dos planos */
+.es-pricing {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 2rem;
+}
+
+/* Card de plano */
+.es-plan {
+    background: #fff;
+    border: 0.5px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+    /* Plano em destaque */
+    .es-plan.featured {
+        border: 2px solid #1D9E75;
+    }
+
+/* Selo do plano mais popular */
+.es-plan-badge {
+    font-size: 11px;
+    font-weight: 500;
+    background: #E1F5EE;
+    color: #0F6E56;
+    padding: 3px 10px;
+    border-radius: 999px;
+    display: inline-block;
+    width: fit-content;
+}
+
+/* Nome do plano */
+.es-plan h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+/* Preço do plano */
+.es-plan-price {
+    font-size: 28px;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+    .es-plan-price span {
+        font-size: 13px;
+        font-weight: 400;
+        color: #666;
+    }
+
+/* Descrição do plano */
+.es-plan-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Lista de funcionalidades do plano */
+.es-plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+    .es-plan-features li {
+        font-size: 13px;
+        color: #666;
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+        /* Ícone de check em verde */
+        .es-plan-features li i {
+            color: #1D9E75;
+            font-size: 15px;
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
