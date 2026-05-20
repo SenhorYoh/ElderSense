@@ -1,6 +1,7 @@
 using ElderSense.Data;
 using ElderSense.Data.Model;
-using Microsoft.AspNetCore.Identity;
+using ElderSense.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,8 +18,11 @@ builder.Services.AddDefaultIdentity<Utilizador>(options => options.SignIn.Requir
 builder.Services.AddAuthentication()
     .AddGoogle(options =>
     {
-        // No mundo real, usamos User Secrets ou Environment Variables
-        // Para a entrega na ESTT, podes colocar aqui, mas cuidado com o GitHub!
+        ///<summary>
+        ///Configuração da autenticação com a conta google
+        ///estes dados não podem ir para o github, estando na pasta privada
+        ///</summary>
+;
         options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
         options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
     });
@@ -26,6 +30,17 @@ builder.Services.AddAuthentication()
 builder.Services.AddRazorPages();
 
 
+///<summary>
+///O utilizador não pode fazer login até confirmar o seu email 
+///+ o tempo limite de inatividade é definido para 5 dias
+///</summary>
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
+
+builder.Services.ConfigureApplicationCookie(o => {
+    o.ExpireTimeSpan = TimeSpan.FromDays(5);
+    o.SlidingExpiration = true;
+});
 
 var app = builder.Build();
 
