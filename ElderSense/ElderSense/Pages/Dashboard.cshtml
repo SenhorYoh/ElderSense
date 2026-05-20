@@ -1,0 +1,217 @@
+﻿@page
+@model ElderSense.Pages.DashboardModel
+@{
+    /* Define o título e o layout exclusivo do dashboard */
+    ViewData["Title"] = "Dashboard";
+    Layout = "_LayoutDashboard";
+}
+
+<!-- Texto oculto para leitores de ecrã (acessibilidade) -->
+<h2 class="sr-only">Dashboard ElderSense — painel do cuidador</h2>
+
+<!-- ==================== ESTRUTURA PRINCIPAL ==================== -->
+<div class="db-wrap">
+
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="db-sidebar">
+
+        <!-- Logo -->
+        <div class="db-logo">Elder<span>Sense</span></div>
+
+        <!-- Links de navegação -->
+        <a asp-page="/Dashboard" class="db-nav-item active">
+            <i class="ti ti-home"></i> Início
+        </a>
+        <a href="#" class="db-nav-item">
+            <i class="ti ti-clock"></i> Rotina
+        </a>
+        <a href="#" class="db-nav-item">
+            <i class="ti ti-bell"></i> Alertas
+        </a>
+        <a href="#" class="db-nav-item">
+            <i class="ti ti-wifi"></i> Sensores
+        </a>
+        <a href="#" class="db-nav-item">
+            <i class="ti ti-chart-bar"></i> Insights
+        </a>
+        <a href="#" class="db-nav-item">
+            <i class="ti ti-settings"></i> Definições
+        </a>
+
+        <!-- Utilizador no rodapé da sidebar -->
+        <div class="db-sidebar-footer">
+            <div class="db-user">
+                <div class="db-avatar">MS</div>
+                <div class="db-user-info">
+                    <p>Miguel Santos</p>
+                    <span>Cuidador</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ==================== CONTEÚDO PRINCIPAL ==================== -->
+    <main class="db-main">
+
+        <!-- Cabeçalho do dashboard -->
+        <div class="db-header">
+            <h1>Bom dia, Miguel</h1>
+            <p>Tudo sob controlo · Quarta-feira, 20 de maio de 2026</p>
+        </div>
+
+        <!-- Card do idoso monitorizado -->
+        <div class="db-idoso-card">
+            <div class="db-idoso-header">
+                <div>
+                    <div class="db-idoso-name">Sr. Roberto</div>
+                    <div class="db-idoso-status">
+                        <div class="db-status-dot"></div>
+                        Ativo · última atualização há 3 min
+                    </div>
+                </div>
+                <div class="db-atencao-badge">2 alertas</div>
+            </div>
+            <div class="db-idoso-meta">
+                <div class="db-meta-item">
+                    <span>Localização</span>
+                    <p>Casa de Banho</p>
+                </div>
+                <div class="db-meta-item">
+                    <span>Atividade</span>
+                    <p>12h ativas hoje</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grelha com confiança da rotina e alertas -->
+        <div class="db-grid">
+
+            <!-- Confiança da rotina -->
+            <div class="db-card">
+                <div class="db-card-label">Confiança da rotina</div>
+                <div class="db-rotina-score">
+                    <div class="db-score-circle">
+                        <span>92%</span>
+                        <small>hoje</small>
+                    </div>
+                    <div class="db-score-info">
+                        <p>Rotina dentro do esperado</p>
+                        <span>Próximo padrão: Medicação às 09:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alertas recentes -->
+            <div class="db-card">
+                <div class="db-card-label">Alertas recentes</div>
+                <div class="db-alertas-list">
+                    <div class="db-alerta-item">
+                        <i class="ti ti-alert-triangle"></i>
+                        <div>
+                            <p>Pequeno-almoço não detetado</p>
+                            <span>18:00 · Fora da janela habitual (08:00–09:30)</span>
+                        </div>
+                    </div>
+                    <div class="db-alerta-item">
+                        <i class="ti ti-alert-triangle"></i>
+                        <div>
+                            <p>Medicação ainda não confirmada</p>
+                            <span>09:30 · Tensão Arterial esperada às 09:00</span>
+                        </div>
+                    </div>
+                </div>
+                <a href="#" class="db-ver-todos">Ver todos os alertas →</a>
+            </div>
+        </div>
+
+        <!-- Grelha com rotina recente e sensores -->
+        <div class="db-grid">
+
+            <!-- Rotina recente -->
+            <div class="db-card">
+                <div class="db-card-label">Rotina recente</div>
+                <div class="db-timeline">
+                    <div class="db-timeline-item">
+                        <div class="db-timeline-time">07:33</div>
+                        <div class="db-timeline-dot"></div>
+                        <div class="db-timeline-content">
+                            <p>Levantou-se e saiu do quarto</p>
+                            <span>Quarto</span>
+                        </div>
+                    </div>
+                    <div class="db-timeline-item">
+                        <div class="db-timeline-time">07:38</div>
+                        <div class="db-timeline-dot"></div>
+                        <div class="db-timeline-content">
+                            <p>Higiene matinal</p>
+                            <span>Casa de Banho</span>
+                        </div>
+                    </div>
+                    <div class="db-timeline-item">
+                        <div class="db-timeline-time">07:52</div>
+                        <div class="db-timeline-dot"></div>
+                        <div class="db-timeline-content">
+                            <p>Pequeno-almoço detetado</p>
+                            <span>Cozinha</span>
+                        </div>
+                    </div>
+                    <div class="db-timeline-item">
+                        <div class="db-timeline-time">08:17</div>
+                        <div class="db-timeline-dot"></div>
+                        <div class="db-timeline-content">
+                            <p>Regressou à sala após refeição</p>
+                            <span>Sala de Estar</span>
+                        </div>
+                    </div>
+                    <div class="db-timeline-item">
+                        <div class="db-timeline-time">08:58</div>
+                        <div class="db-timeline-dot"></div>
+                        <div class="db-timeline-content">
+                            <p>Medicação tomada na hora certa</p>
+                            <span>Cozinha</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estado dos sensores -->
+            <div class="db-card">
+                <div class="db-card-label">Estado dos sensores</div>
+                <div class="db-sensores-grid">
+                    <div class="db-sensor-item">
+                        <i class="ti ti-door"></i>
+                        <div>
+                            <p>Porta</p>
+                            <span>Ativo</span>
+                        </div>
+                        <div class="db-sensor-dot"></div>
+                    </div>
+                    <div class="db-sensor-item">
+                        <i class="ti ti-bed"></i>
+                        <div>
+                            <p>Quarto</p>
+                            <span>Ativo</span>
+                        </div>
+                        <div class="db-sensor-dot"></div>
+                    </div>
+                    <div class="db-sensor-item">
+                        <i class="ti ti-tools-kitchen-2"></i>
+                        <div>
+                            <p>Cozinha</p>
+                            <span>Ativo</span>
+                        </div>
+                        <div class="db-sensor-dot"></div>
+                    </div>
+                    <div class="db-sensor-item">
+                        <i class="ti ti-droplet"></i>
+                        <div>
+                            <p>Casa de Banho</p>
+                            <span>Ativo</span>
+                        </div>
+                        <div class="db-sensor-dot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
