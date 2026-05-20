@@ -1,10 +1,22 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    /* Define o título e o layout exclusivo da landing page */
+    ViewData["Title"] = "ElderSense";
+    Layout = "_LayoutLanding";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+<!-- Texto oculto para leitores de ecrã (acessibilidade) -->
+<h2 class="sr-only">Landing page ElderSense</h2>
+
+<!-- ==================== NAVEGAÇÃO ==================== -->
+<nav class="es-nav">
+    <div class="es-logo">Elder<span>Sense</span></div>
+    <div class="es-nav-links">
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#planos">Planos</a>
+        <a href="#contacto">Contacto</a>
+        <a asp-page="/Account/Login" asp-area="Identity" class="es-btn-nav">Entrar</a>
+    </div>
+</nav>
