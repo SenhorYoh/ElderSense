@@ -6,7 +6,8 @@ namespace ElderSense.Data.Model
     /// <summary>
     /// classe dos dados da monitorização do idoso
     /// </summary>
-    public class DadosMonitorizacao{
+    public class DadosMonitorizacao
+    {
 
         [Key]
         public int Id { get; set; }
@@ -36,6 +37,11 @@ namespace ElderSense.Data.Model
         [Display(Name = "Sensor")]
         [ForeignKey(nameof(Sensor))]
         public int FKSensor { get; set; }
+
+        /// <summary>
+        /// RELACIONAMENTO N:M COM Alerta
+        /// </summary>
+        public ICollection<Alerta> ListadeAlertas { get; set; } = [];
 
     }
 }
