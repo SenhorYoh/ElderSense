@@ -349,3 +349,56 @@ body {
     line-height: 1.6;
     margin: 0;
 }
+
+/* ==================== COMO FUNCIONA ==================== */
+
+/* Contentor dos passos */
+.es-how {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+}
+
+/* Passo individual */
+.es-step {
+    display: flex;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    border-top: 0.5px solid #e5e5e5;
+}
+
+    .es-step:last-child {
+        border-bottom: 0.5px solid #e5e5e5;
+    }
+
+/* Número do passo */
+.es-step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #E1F5EE;
+    color: #0F6E56;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* Título do passo */
+.es-step-content h4 {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+
+/* Descrição do passo */
+.es-step-content p {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
