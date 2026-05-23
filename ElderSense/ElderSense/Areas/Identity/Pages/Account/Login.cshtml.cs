@@ -77,7 +77,9 @@ namespace ElderSense.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
-            returnUrl ??= Url.Content("~/");
+            // Após login redireciona para o Dashboard em vez da página inicial
+            // pois é lá que o utilizador acede aos dados do seu idoso
+            returnUrl ??= Url.Content("~/Dashboard");
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -89,7 +91,9 @@ namespace ElderSense.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            // Após login redireciona para o Dashboard em vez da página inicial
+            // pois é lá que o utilizador acede aos dados do seu idoso
+            returnUrl ??= Url.Content("~/Dashboard");
 
             // Recarregar sempre os logins externos para o botão do Google não desaparecer
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
