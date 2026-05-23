@@ -954,3 +954,24 @@ body {
     margin-left: auto;
     flex-shrink: 0;
 }
+
+/* Botão de logout na sidebar */
+.db-logout-btn {
+    width: 100%;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #999;
+    text-align: left;
+}
+
+    .db-logout-btn:hover {
+        background: #fff0f0;
+        color: #c00;
+    }
+
+/* Remove estilo de link do logo da sidebar */
+a.db-logo {
+    text-decoration: none;
+    display: block;
+}

@@ -18,7 +18,15 @@
         <a href="#como-funciona">Como funciona</a>
         <a href="#planos">Planos</a>
         <a href="#contacto">Contacto</a>
-        <a asp-page="/Account/Login" asp-area="Identity" class="es-btn-nav">Entrar</a>
+        <!-- Se estiver autenticado mostra link para o dashboard, senão mostra entrar -->
+        @if (User.Identity!.IsAuthenticated)
+        {
+            <a asp-page="/Dashboard" class="es-btn-nav">Dashboard</a>
+        }
+        else
+        {
+            <a asp-page="/Account/Login" asp-area="Identity" class="es-btn-nav">Entrar</a>
+        }
     </div>
 </nav>
 

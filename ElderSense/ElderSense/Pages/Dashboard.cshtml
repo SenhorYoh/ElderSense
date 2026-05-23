@@ -15,8 +15,8 @@
     <!-- ==================== SIDEBAR ==================== -->
     <aside class="db-sidebar">
 
-        <!-- Logo -->
-        <div class="db-logo">Elder<span>Sense</span></div>
+        <!-- Logo — clique redireciona para a página principal -->
+        <a asp-page="/Index" class="db-logo">Elder<span>Sense</span></a>
 
         <!-- Links de navegação -->
         <a asp-page="/Dashboard" class="db-nav-item active">
@@ -47,6 +47,13 @@
                     <span>Cuidador</span>
                 </div>
             </div>
+
+            <!-- Botão de logout na sidebar -->
+            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" style="width:100%;">
+                <button type="submit" class="db-nav-item db-logout-btn">
+                    <i class="ti ti-logout"></i> Sair
+                </button>
+            </form>
         </div>
     </aside>
 
