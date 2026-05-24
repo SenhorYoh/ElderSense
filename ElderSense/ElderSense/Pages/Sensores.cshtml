@@ -1,0 +1,217 @@
+﻿@page
+@model ElderSense.Pages.SensoresModel
+@{
+    /* Define o título e o layout exclusivo do dashboard */
+    ViewData["Title"] = "Sensores";
+    Layout = "_LayoutDashboard";
+}
+
+<!-- Texto oculto para leitores de ecrã (acessibilidade) -->
+<h2 class="sr-only">Sensores ElderSense — estado e detalhes dos sensores instalados</h2>
+
+<!-- ==================== ESTRUTURA PRINCIPAL ==================== -->
+<div class="db-wrap">
+
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="db-sidebar">
+
+        <!-- Logo com link para a página principal -->
+        <a asp-page="/Index" class="db-logo">Elder<span>Sense</span></a>
+
+        <!-- Links de navegação -->
+        <a asp-page="/Dashboard" class="db-nav-item">
+            <i class="ti ti-home"></i> Início
+        </a>
+        <a asp-page="/Rotina" class="db-nav-item">
+            <i class="ti ti-clock"></i> Rotina
+        </a>
+        <a asp-page="/Alertas" class="db-nav-item">
+            <i class="ti ti-bell"></i> Alertas
+        </a>
+        <a asp-page="/Sensores" class="db-nav-item active">
+            <i class="ti ti-wifi"></i> Sensores
+        </a>
+        <a href="#" class="db-nav-item">
+            <i class="ti ti-chart-bar"></i> Insights
+        </a>
+        <a href="#" class="db-nav-item">
+            <i class="ti ti-settings"></i> Definições
+        </a>
+
+        <!-- Utilizador no rodapé da sidebar -->
+        <div class="db-sidebar-footer">
+            <div class="db-user">
+                <div class="db-avatar">MS</div>
+                <div class="db-user-info">
+                    <p>Miguel Santos</p>
+                    <span>Cuidador</span>
+                </div>
+            </div>
+
+            <!-- Botão de logout na sidebar -->
+            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" style="width:100%;">
+                <button type="submit" class="db-nav-item db-logout-btn">
+                    <i class="ti ti-logout"></i> Sair
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- ==================== CONTEÚDO PRINCIPAL ==================== -->
+    <main class="db-main">
+
+        <!-- Cabeçalho da página -->
+        <div class="db-header">
+            <h1>Sensores</h1>
+            <p>Estado e detalhes dos sensores instalados</p>
+        </div>
+
+        <!-- ==================== ESTATÍSTICAS ==================== -->
+        <div class="sn-stats">
+            <div class="sn-stat">
+                <div class="sn-stat-label">Total</div>
+                <div class="sn-stat-value">4</div>
+            </div>
+            <div class="sn-stat">
+                <div class="sn-stat-label">Ativos</div>
+                <div class="sn-stat-value active">3</div>
+            </div>
+            <div class="sn-stat">
+                <div class="sn-stat-label">Inativos</div>
+                <div class="sn-stat-value inactive">1</div>
+            </div>
+        </div>
+
+        <!-- ==================== GRELHA DE SENSORES ==================== -->
+        <div class="sn-grid">
+
+            <!-- Sensor 1 — Porta -->
+            <div class="sn-card">
+                <div class="sn-card-header">
+                    <div class="sn-card-title">
+                        <div class="sn-icon"><i class="ti ti-door"></i></div>
+                        <div>
+                            <div class="sn-name">Sensor de Porta</div>
+                            <div class="sn-location">Entrada principal</div>
+                        </div>
+                    </div>
+                    <span class="sn-badge active">Ativo</span>
+                </div>
+                <div class="sn-details">
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Última atividade</div>
+                        <div class="sn-detail-value">08:17</div>
+                    </div>
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Estado</div>
+                        <div class="sn-detail-value">Fechada</div>
+                    </div>
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Bateria</div>
+                        <div class="sn-detail-value">87%</div>
+                    </div>
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Eventos hoje</div>
+                        <div class="sn-detail-value">6</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sensor 2 — Quarto -->
+            <div class="sn-card">
+                <div class="sn-card-header">
+                    <div class="sn-card-title">
+                        <div class="sn-icon"><i class="ti ti-bed"></i></div>
+                        <div>
+                            <div class="sn-name">Sensor de Quarto</div>
+                            <div class="sn-location">Quarto principal</div>
+                        </div>
+                    </div>
+                    <span class="sn-badge active">Ativo</span>
+                </div>
+                <div class="sn-details">
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Última atividade</div>
+                        <div class="sn-detail-value">13:56</div>
+                    </div>
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Estado</div>
+                        <div class="sn-detail-value">Ocupado</div>
+                    </div>
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Bateria</div>
+                        <div class="sn-detail-value">72%</div>
+                    </div>
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Eventos hoje</div>
+                        <div class="sn-detail-value">4</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sensor 3 — Cozinha -->
+            <div class="sn-card">
+                <div class="sn-card-header">
+                    <div class="sn-card-title">
+                        <div class="sn-icon"><i class="ti ti-tools-kitchen-2"></i></div>
+                        <div>
+                            <div class="sn-name">Sensor de Cozinha</div>
+                            <div class="sn-location">Cozinha</div>
+                        </div>
+                    </div>
+                    <span class="sn-badge active">Ativo</span>
+                </div>
+                <div class="sn-details">
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Última atividade</div>
+                        <div class="sn-detail-value">19:40</div>
+                    </div>
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Estado</div>
+                        <div class="sn-detail-value">Livre</div>
+                    </div>
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Bateria</div>
+                        <div class="sn-detail-value">91%</div>
+                    </div>
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Eventos hoje</div>
+                        <div class="sn-detail-value">8</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sensor 4 — Casa de Banho (inativo) -->
+            <div class="sn-card inactive">
+                <div class="sn-card-header">
+                    <div class="sn-card-title">
+                        <div class="sn-icon inactive"><i class="ti ti-droplet"></i></div>
+                        <div>
+                            <div class="sn-name">Sensor de Casa de Banho</div>
+                            <div class="sn-location">Casa de banho</div>
+                        </div>
+                    </div>
+                    <span class="sn-badge inactive">Inativo</span>
+                </div>
+                <div class="sn-details">
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Última atividade</div>
+                        <div class="sn-detail-value">07:38</div>
+                    </div>
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Estado</div>
+                        <div class="sn-detail-value">Sem sinal</div>
+                    </div>
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Bateria</div>
+                        <div class="sn-detail-value">12%</div>
+                    </div>
+                    <div class="sn-detail">
+                        <div class="sn-detail-label">Eventos hoje</div>
+                        <div class="sn-detail-value">2</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
