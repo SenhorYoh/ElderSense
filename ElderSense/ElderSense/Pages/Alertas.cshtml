@@ -1,0 +1,178 @@
+﻿@page
+@model ElderSense.Pages.AlertasModel
+@{
+    /* Define o título e o layout exclusivo do dashboard */
+    ViewData["Title"] = "Alertas";
+    Layout = "_LayoutDashboard";
+}
+
+<!-- Texto oculto para leitores de ecrã (acessibilidade) -->
+<h2 class="sr-only">Alertas ElderSense — lista de alertas do idoso</h2>
+
+<!-- ==================== ESTRUTURA PRINCIPAL ==================== -->
+<div class="db-wrap">
+
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="db-sidebar">
+
+        <!-- Logo com link para a página principal -->
+        <a asp-page="/Index" class="db-logo">Elder<span>Sense</span></a>
+
+        <!-- Links de navegação -->
+        <a asp-page="/Dashboard" class="db-nav-item">
+            <i class="ti ti-home"></i> Início
+        </a>
+        <a href="#" class="db-nav-item">
+            <i class="ti ti-clock"></i> Rotina
+        </a>
+        <a asp-page="/Alertas" class="db-nav-item active">
+            <i class="ti ti-bell"></i> Alertas
+        </a>
+        <a href="#" class="db-nav-item">
+            <i class="ti ti-wifi"></i> Sensores
+        </a>
+        <a href="#" class="db-nav-item">
+            <i class="ti ti-chart-bar"></i> Insights
+        </a>
+        <a href="#" class="db-nav-item">
+            <i class="ti ti-settings"></i> Definições
+        </a>
+
+        <!-- Utilizador no rodapé da sidebar -->
+        <div class="db-sidebar-footer">
+            <div class="db-user">
+                <div class="db-avatar">MS</div>
+                <div class="db-user-info">
+                    <p>Miguel Santos</p>
+                    <span>Cuidador</span>
+                </div>
+            </div>
+
+            <!-- Botão de logout na sidebar -->
+            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" style="width:100%;">
+                <button type="submit" class="db-nav-item db-logout-btn">
+                    <i class="ti ti-logout"></i> Sair
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- ==================== CONTEÚDO PRINCIPAL ==================== -->
+    <main class="db-main">
+
+        <!-- Cabeçalho da página -->
+        <div class="db-header">
+            <h1>Alertas</h1>
+            <p>Eventos que precisam de atenção</p>
+        </div>
+
+        <!-- ==================== ESTATÍSTICAS ==================== -->
+        <!-- Cards com resumo dos alertas -->
+        <div class="al-stats">
+            <div class="al-stat">
+                <div class="al-stat-label">Por resolver</div>
+                <div class="al-stat-value warning">2</div>
+            </div>
+            <div class="al-stat">
+                <div class="al-stat-label">Resolvidos hoje</div>
+                <div class="al-stat-value resolved">3</div>
+            </div>
+            <div class="al-stat">
+                <div class="al-stat-label">Total este mês</div>
+                <div class="al-stat-value">18</div>
+            </div>
+        </div>
+
+        <!-- ==================== FILTROS ==================== -->
+        <!-- Botões para filtrar alertas por estado -->
+        <div class="al-filters">
+            <button class="al-filter-btn active">Todos</button>
+            <button class="al-filter-btn">Por resolver</button>
+            <button class="al-filter-btn">Resolvidos</button>
+        </div>
+
+        <!-- ==================== LISTA DE ALERTAS ==================== -->
+        <div class="al-list">
+
+            <!-- Alerta por resolver 1 -->
+            <div class="al-item unresolved">
+                <div class="al-icon warning">
+                    <i class="ti ti-alert-triangle"></i>
+                </div>
+                <div class="al-content">
+                    <div class="al-title">Pequeno-almoço não detetado</div>
+                    <div class="al-desc">O padrão habitual de pequeno-almoço não foi detetado dentro da janela habitual (08:00 – 09:30).</div>
+                    <div class="al-meta">
+                        <span class="al-time"><i class="ti ti-clock"></i> 18:00 · Hoje</span>
+                        <span class="al-badge warning">Por resolver</span>
+                    </div>
+                </div>
+                <button class="al-action">Marcar como resolvido</button>
+            </div>
+
+            <!-- Alerta por resolver 2 -->
+            <div class="al-item unresolved">
+                <div class="al-icon warning">
+                    <i class="ti ti-alert-triangle"></i>
+                </div>
+                <div class="al-content">
+                    <div class="al-title">Medicação (Tensão Arterial) ainda não confirmada</div>
+                    <div class="al-desc">A medicação Tensão Arterial esperada às 09:00 ainda não foi confirmada pelo ecossistema de sensores.</div>
+                    <div class="al-meta">
+                        <span class="al-time"><i class="ti ti-clock"></i> 09:30 · Hoje</span>
+                        <span class="al-badge warning">Por resolver</span>
+                    </div>
+                </div>
+                <button class="al-action">Marcar como resolvido</button>
+            </div>
+
+            <!-- Alerta resolvido 1 -->
+            <div class="al-item resolved">
+                <div class="al-icon resolved">
+                    <i class="ti ti-check"></i>
+                </div>
+                <div class="al-content">
+                    <div class="al-title">Ausência prolongada na sala de estar</div>
+                    <div class="al-desc">O Sr. Roberto esteve ausente da sala de estar por mais de 3 horas sem atividade registada.</div>
+                    <div class="al-meta">
+                        <span class="al-time"><i class="ti ti-clock"></i> 14:00 · Hoje</span>
+                        <span class="al-badge resolved">Resolvido</span>
+                    </div>
+                </div>
+                <button class="al-action done" disabled>Resolvido</button>
+            </div>
+
+            <!-- Alerta resolvido 2 -->
+            <div class="al-item resolved">
+                <div class="al-icon resolved">
+                    <i class="ti ti-check"></i>
+                </div>
+                <div class="al-content">
+                    <div class="al-title">Medicação (Colesterol) confirmada com atraso</div>
+                    <div class="al-desc">A medicação foi tomada às 21:10, fora da janela habitual das 20:30 – 21:00.</div>
+                    <div class="al-meta">
+                        <span class="al-time"><i class="ti ti-clock"></i> 21:10 · Ontem</span>
+                        <span class="al-badge resolved">Resolvido</span>
+                    </div>
+                </div>
+                <button class="al-action done" disabled>Resolvido</button>
+            </div>
+
+            <!-- Alerta resolvido 3 -->
+            <div class="al-item resolved">
+                <div class="al-icon resolved">
+                    <i class="ti ti-check"></i>
+                </div>
+                <div class="al-content">
+                    <div class="al-title">Jantar não detetado</div>
+                    <div class="al-desc">Não foi registada atividade na cozinha durante a janela habitual do jantar (19:00 – 20:30).</div>
+                    <div class="al-meta">
+                        <span class="al-time"><i class="ti ti-clock"></i> 20:30 · Ontem</span>
+                        <span class="al-badge resolved">Resolvido</span>
+                    </div>
+                </div>
+                <button class="al-action done" disabled>Resolvido</button>
+            </div>
+        </div>
+    </main>
+</div>

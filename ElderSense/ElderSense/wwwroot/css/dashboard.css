@@ -427,3 +427,204 @@ a.db-logo {
     margin-left: auto;
     flex-shrink: 0;
 }
+
+/* ==================== ALERTAS ==================== */
+
+/* Grelha de estatísticas dos alertas */
+.al-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 1.5rem;
+}
+
+/* Card de estatística */
+.al-stat {
+    background: #fff;
+    border: 0.5px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+}
+
+/* Etiqueta da estatística */
+.al-stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #999;
+    margin-bottom: 6px;
+}
+
+/* Valor da estatística */
+.al-stat-value {
+    font-size: 24px;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+    /* Valor em amarelo para alertas por resolver */
+    .al-stat-value.warning {
+        color: #D97706;
+    }
+
+    /* Valor em verde para alertas resolvidos */
+    .al-stat-value.resolved {
+        color: #1D9E75;
+    }
+
+/* ==================== FILTROS ==================== */
+
+/* Contentor dos botões de filtro */
+.al-filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+}
+
+/* Botão de filtro */
+.al-filter-btn {
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    border: 0.5px solid #e5e5e5;
+    background: #fff;
+    color: #666;
+    cursor: pointer;
+}
+
+    /* Filtro ativo */
+    .al-filter-btn.active {
+        background: #E1F5EE;
+        color: #0F6E56;
+        border-color: #1D9E75;
+        font-weight: 500;
+    }
+
+/* ==================== LISTA DE ALERTAS ==================== */
+
+/* Contentor da lista */
+.al-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Item de alerta */
+.al-item {
+    background: #fff;
+    border: 0.5px solid #e5e5e5;
+    border-radius: 0 12px 12px 0;
+    padding: 1.25rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+    /* Alerta por resolver — borda amarela à esquerda */
+    .al-item.unresolved {
+        border-left: 3px solid #D97706;
+    }
+
+    /* Alerta resolvido — borda verde à esquerda */
+    .al-item.resolved {
+        border-left: 3px solid #1D9E75;
+    }
+
+/* Ícone do alerta */
+.al-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 18px;
+}
+
+    /* Ícone de aviso */
+    .al-icon.warning {
+        background: #FEF3C7;
+        color: #D97706;
+    }
+
+    /* Ícone de resolvido */
+    .al-icon.resolved {
+        background: #E1F5EE;
+        color: #1D9E75;
+    }
+
+/* Conteúdo do alerta */
+.al-content {
+    flex: 1;
+}
+
+/* Título do alerta */
+.al-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+
+/* Descrição do alerta */
+.al-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+/* Metadados do alerta */
+.al-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Hora do alerta */
+.al-time {
+    font-size: 11px;
+    color: #999;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Badge de estado */
+.al-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+    .al-badge.warning {
+        background: #FEF3C7;
+        color: #92400E;
+    }
+
+    .al-badge.resolved {
+        background: #E1F5EE;
+        color: #0F6E56;
+    }
+
+/* Botão de ação do alerta */
+.al-action {
+    font-size: 12px;
+    color: #1D9E75;
+    background: none;
+    border: 0.5px solid #1D9E75;
+    border-radius: 6px;
+    padding: 4px 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+    /* Botão quando já resolvido */
+    .al-action.done {
+        color: #999;
+        border-color: #e5e5e5;
+        cursor: default;
+    }
