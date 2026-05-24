@@ -1,0 +1,115 @@
+﻿/* ==================== PÁGINA DE LOGIN ==================== */
+
+/* Página completa de login */
+.login-page {
+    min-height: 100vh;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Contentor central do formulário */
+.login-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    max-width: 420px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Cabeçalho do login */
+.login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+    .login-header h1 {
+        font-size: 22px;
+        font-weight: 500;
+        color: #1a1a1a;
+        margin-bottom: 0.5rem;
+    }
+
+    .login-header p {
+        font-size: 14px;
+        color: #999;
+    }
+
+/* Campo de input */
+.login-field {
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+    .login-field label {
+        font-size: 13px;
+        font-weight: 500;
+        color: #1a1a1a;
+        display: block;
+        margin-bottom: 6px;
+    }
+
+/* Input estilizado */
+.login-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 0.5px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1a1a1a;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+    .login-input:focus {
+        border-color: #1D9E75;
+    }
+
+/* Mensagem de erro */
+.login-error {
+    background: #fff0f0;
+    border: 0.5px solid #f5c6c6;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #c00;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+/* Links abaixo do botão */
+.login-links {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+    .login-links a {
+        font-size: 13px;
+        color: #1D9E75;
+        text-decoration: none;
+    }
+
+/* Divisor entre formulário e Google */
+.login-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 1.5rem 0;
+    width: 100%;
+}
+
+    .login-divider::before,
+    .login-divider::after {
+        content: '';
+        flex: 1;
+        border-top: 0.5px solid #e5e5e5;
+    }
+
+    .login-divider span {
+        font-size: 12px;
+        color: #999;
+    }

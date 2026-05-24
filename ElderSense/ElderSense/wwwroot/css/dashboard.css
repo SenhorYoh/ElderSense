@@ -1,0 +1,429 @@
+﻿/* ==================== DASHBOARD - ESTRUTURA ==================== */
+
+/* Reset do body do dashboard */
+.db-body {
+    margin: 0;
+    padding: 0;
+    background: #f7f7f5;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Estrutura principal — sidebar + conteúdo lado a lado */
+.db-wrap {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ==================== SIDEBAR ==================== */
+
+.db-sidebar {
+    width: 220px;
+    background: #fff;
+    border-right: 0.5px solid #e5e5e5;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.db-logo {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1a1a1a;
+    padding: 0 0.5rem 1.5rem;
+    border-bottom: 0.5px solid #e5e5e5;
+    margin-bottom: 0.5rem;
+}
+
+    .db-logo span {
+        color: #1D9E75;
+    }
+
+.db-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #666;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+    .db-nav-item:hover {
+        background: #f5f5f5;
+        color: #1a1a1a;
+    }
+
+    .db-nav-item.active {
+        background: #E1F5EE;
+        color: #0F6E56;
+        font-weight: 500;
+    }
+
+    .db-nav-item i {
+        font-size: 16px;
+    }
+
+.db-sidebar-footer {
+    margin-top: auto;
+    border-top: 0.5px solid #e5e5e5;
+    padding-top: 1rem;
+}
+
+.db-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+}
+
+.db-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #E1F5EE;
+    color: #0F6E56;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.db-user-info p {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.db-user-info span {
+    font-size: 11px;
+    color: #999;
+}
+
+/* Botão de logout na sidebar */
+.db-logout-btn {
+    width: 100%;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #999;
+    text-align: left;
+}
+
+    .db-logout-btn:hover {
+        background: #fff0f0;
+        color: #c00;
+    }
+
+/* Remove estilo de link do logo da sidebar */
+a.db-logo {
+    text-decoration: none;
+    display: block;
+}
+
+/* ==================== CONTEÚDO PRINCIPAL ==================== */
+
+.db-main {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.db-header {
+    margin-bottom: 1.5rem;
+}
+
+    .db-header h1 {
+        font-size: 22px;
+        font-weight: 500;
+        color: #1a1a1a;
+        margin: 0;
+    }
+
+    .db-header p {
+        font-size: 14px;
+        color: #999;
+        margin-top: 2px;
+        margin-bottom: 0;
+    }
+
+/* ==================== CARD DO IDOSO ==================== */
+
+.db-idoso-card {
+    background: #fff;
+    border: 0.5px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 12px;
+}
+
+.db-idoso-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.db-idoso-name {
+    font-size: 20px;
+    font-weight: 500;
+    color: #1a1a1a;
+}
+
+.db-idoso-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #999;
+    margin-top: 2px;
+}
+
+.db-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #1D9E75;
+}
+
+.db-atencao-badge {
+    background: #FEF3C7;
+    color: #92400E;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 999px;
+}
+
+.db-idoso-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.db-meta-item span {
+    font-size: 11px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.db-meta-item p {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+/* ==================== GRELHA DE CARDS ==================== */
+
+.db-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.db-card {
+    background: #fff;
+    border: 0.5px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.db-card-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #999;
+    margin-bottom: 0.75rem;
+}
+
+/* ==================== CONFIANÇA DA ROTINA ==================== */
+
+.db-rotina-score {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.db-score-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 3px solid #1D9E75;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+    .db-score-circle span {
+        font-size: 16px;
+        font-weight: 500;
+        color: #1D9E75;
+        line-height: 1;
+    }
+
+    .db-score-circle small {
+        font-size: 9px;
+        color: #999;
+    }
+
+.db-score-info p {
+    font-size: 13px;
+    color: #1a1a1a;
+    font-weight: 500;
+    margin: 0 0 2px;
+}
+
+.db-score-info span {
+    font-size: 12px;
+    color: #999;
+}
+
+/* ==================== ALERTAS ==================== */
+
+.db-alertas-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.db-alerta-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px;
+    background: #FEF9F0;
+    border: 0.5px solid #FDE68A;
+    border-radius: 8px;
+}
+
+    .db-alerta-item i {
+        color: #D97706;
+        font-size: 16px;
+        margin-top: 1px;
+        flex-shrink: 0;
+    }
+
+    .db-alerta-item p {
+        font-size: 13px;
+        font-weight: 500;
+        color: #1a1a1a;
+        margin: 0 0 2px;
+    }
+
+    .db-alerta-item span {
+        font-size: 11px;
+        color: #999;
+    }
+
+.db-ver-todos {
+    font-size: 12px;
+    color: #1D9E75;
+    text-decoration: none;
+    display: block;
+    text-align: right;
+    margin-top: 8px;
+}
+
+/* ==================== TIMELINE DA ROTINA ==================== */
+
+.db-timeline {
+    display: flex;
+    flex-direction: column;
+}
+
+.db-timeline-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-top: 0.5px solid #f0f0f0;
+}
+
+    .db-timeline-item:first-child {
+        border-top: none;
+    }
+
+.db-timeline-time {
+    font-size: 12px;
+    color: #999;
+    width: 40px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.db-timeline-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #1D9E75;
+    margin-top: 5px;
+    flex-shrink: 0;
+}
+
+.db-timeline-content p {
+    font-size: 13px;
+    color: #1a1a1a;
+    margin: 0 0 2px;
+}
+
+.db-timeline-content span {
+    font-size: 11px;
+    color: #999;
+}
+
+/* ==================== SENSORES ==================== */
+
+.db-sensores-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.db-sensor-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background: #f7f7f5;
+    border-radius: 8px;
+}
+
+    .db-sensor-item i {
+        font-size: 15px;
+        color: #1D9E75;
+    }
+
+    .db-sensor-item p {
+        font-size: 12px;
+        color: #1a1a1a;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    .db-sensor-item span {
+        font-size: 11px;
+        color: #999;
+        display: block;
+    }
+
+.db-sensor-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #1D9E75;
+    margin-left: auto;
+    flex-shrink: 0;
+}
