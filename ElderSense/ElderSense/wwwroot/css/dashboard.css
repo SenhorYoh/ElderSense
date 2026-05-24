@@ -628,3 +628,227 @@ a.db-logo {
         border-color: #e5e5e5;
         cursor: default;
     }
+
+/* ==================== ROTINA ==================== */
+
+/* Barra de confiança da rotina */
+.rt-score-bar {
+    background: #fff;
+    border: 0.5px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* Círculo com percentagem */
+.rt-score-circle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 3px solid #1D9E75;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+    .rt-score-circle span {
+        font-size: 16px;
+        font-weight: 500;
+        color: #1D9E75;
+        line-height: 1;
+    }
+
+    .rt-score-circle small {
+        font-size: 9px;
+        color: #999;
+    }
+
+/* Informação da pontuação */
+.rt-score-info {
+    flex: 1;
+}
+
+    .rt-score-info p {
+        font-size: 14px;
+        font-weight: 500;
+        color: #1a1a1a;
+        margin-bottom: 4px;
+    }
+
+    .rt-score-info span {
+        font-size: 13px;
+        color: #999;
+    }
+
+/* Barra de progresso */
+.rt-progress {
+    height: 4px;
+    background: #e5e5e5;
+    border-radius: 999px;
+    margin-top: 10px;
+}
+
+/* Preenchimento da barra de progresso */
+.rt-progress-bar {
+    height: 4px;
+    background: #1D9E75;
+    border-radius: 999px;
+    width: 92%;
+}
+
+/* ==================== NAVEGAÇÃO ENTRE DIAS ==================== */
+
+/* Contentor de navegação */
+.rt-nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+    align-items: center;
+}
+
+/* Botão de navegação */
+.rt-nav-btn {
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 0.5px solid #e5e5e5;
+    background: #fff;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+    .rt-nav-btn:hover {
+        background: #f5f5f5;
+        color: #1a1a1a;
+    }
+
+/* Data atual na navegação */
+.rt-date {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a1a1a;
+    flex: 1;
+    text-align: center;
+}
+
+/* ==================== TIMELINE ==================== */
+
+/* Contentor da timeline */
+.rt-timeline {
+    background: #fff;
+    border: 0.5px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+/* Etiqueta da timeline */
+.rt-timeline-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #999;
+    margin-bottom: 1rem;
+}
+
+/* Item da timeline */
+.rt-item {
+    display: flex;
+    gap: 1rem;
+    padding: 12px 0;
+    border-top: 0.5px solid #f0f0f0;
+}
+
+    .rt-item:first-of-type {
+        border-top: none;
+    }
+
+/* Hora do evento */
+.rt-time {
+    font-size: 12px;
+    color: #999;
+    width: 44px;
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+/* Contentor do ponto */
+.rt-dot-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Ponto da timeline */
+.rt-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #1D9E75;
+    margin-top: 4px;
+}
+
+    /* Ponto de evento não detetado */
+    .rt-dot.missed {
+        background: #FCA5A5;
+    }
+
+/* Conteúdo do evento */
+.rt-content {
+    flex: 1;
+}
+
+    .rt-content p {
+        font-size: 13px;
+        color: #1a1a1a;
+        font-weight: 500;
+        margin-bottom: 2px;
+    }
+
+    .rt-content span {
+        font-size: 12px;
+        color: #999;
+    }
+
+/* Linha com título e tag */
+.rt-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2px;
+}
+
+/* Tag de estado do evento */
+.rt-tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    flex-shrink: 0;
+}
+
+    /* Tag normal */
+    .rt-tag.ok {
+        background: #E1F5EE;
+        color: #0F6E56;
+    }
+
+    /* Tag não detetado */
+    .rt-tag.missed {
+        background: #FEF2F2;
+        color: #991B1B;
+    }
+
+    /* Tag com atraso */
+    .rt-tag.late {
+        background: #FEF3C7;
+        color: #92400E;
+    }

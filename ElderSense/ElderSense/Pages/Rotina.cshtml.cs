@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ElderSense.Pages
 {
-    // Apenas utilizadores autenticados podem aceder aos alertas
+    // Apenas utilizadores autenticados podem aceder à rotina
     [Authorize]
-    public class AlertasModel : PageModel
+    public class RotinaModel : PageModel
     {
         public void OnGet()
         {

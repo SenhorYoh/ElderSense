@@ -1,0 +1,241 @@
+﻿@page
+@model ElderSense.Pages.RotinaModel
+@{
+    /* Define o título e o layout exclusivo do dashboard */
+    ViewData["Title"] = "Rotina";
+    Layout = "_LayoutDashboard";
+}
+
+<!-- Texto oculto para leitores de ecrã (acessibilidade) -->
+<h2 class="sr-only">Rotina diária ElderSense — timeline de atividade do idoso</h2>
+
+<!-- ==================== ESTRUTURA PRINCIPAL ==================== -->
+<div class="db-wrap">
+
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="db-sidebar">
+
+        <!-- Logo com link para a página principal -->
+        <a asp-page="/Index" class="db-logo">Elder<span>Sense</span></a>
+
+        <!-- Links de navegação -->
+        <a asp-page="/Dashboard" class="db-nav-item">
+            <i class="ti ti-home"></i> Início
+        </a>
+        <a asp-page="/Rotina" class="db-nav-item active">
+            <i class="ti ti-clock"></i> Rotina
+        </a>
+        <a asp-page="/Alertas" class="db-nav-item">
+            <i class="ti ti-bell"></i> Alertas
+        </a>
+        <a href="#" class="db-nav-item">
+            <i class="ti ti-wifi"></i> Sensores
+        </a>
+        <a href="#" class="db-nav-item">
+            <i class="ti ti-chart-bar"></i> Insights
+        </a>
+        <a href="#" class="db-nav-item">
+            <i class="ti ti-settings"></i> Definições
+        </a>
+
+        <!-- Utilizador no rodapé da sidebar -->
+        <div class="db-sidebar-footer">
+            <div class="db-user">
+                <div class="db-avatar">MS</div>
+                <div class="db-user-info">
+                    <p>Miguel Santos</p>
+                    <span>Cuidador</span>
+                </div>
+            </div>
+
+            <!-- Botão de logout na sidebar -->
+            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" style="width:100%;">
+                <button type="submit" class="db-nav-item db-logout-btn">
+                    <i class="ti ti-logout"></i> Sair
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- ==================== CONTEÚDO PRINCIPAL ==================== -->
+    <main class="db-main">
+
+        <!-- Cabeçalho da página -->
+        <div class="db-header">
+            <h1>Rotina Diária</h1>
+            <p>Atividade de Sr. Roberto</p>
+        </div>
+
+        <!-- ==================== CONFIANÇA DA ROTINA ==================== -->
+        <!-- Barra de progresso com percentagem de cumprimento da rotina -->
+        <div class="rt-score-bar">
+            <div class="rt-score-circle">
+                <span>92%</span>
+                <small>hoje</small>
+            </div>
+            <div class="rt-score-info">
+                <p>Rotina dentro do esperado</p>
+                <span>10 de 11 padrões cumpridos hoje</span>
+                <div class="rt-progress">
+                    <div class="rt-progress-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== NAVEGAÇÃO ENTRE DIAS ==================== -->
+        <!-- Permite navegar para dias anteriores ou seguintes -->
+        <div class="rt-nav">
+            <button class="rt-nav-btn"><i class="ti ti-arrow-left"></i> Anterior</button>
+            <div class="rt-date">Quarta-feira, 20 de maio de 2026</div>
+            <button class="rt-nav-btn">Seguinte <i class="ti ti-arrow-right"></i></button>
+        </div>
+
+        <!-- ==================== TIMELINE DO DIA ==================== -->
+        <div class="rt-timeline">
+            <div class="rt-timeline-label">Atividade do dia</div>
+
+            <!-- Evento 1 -->
+            <div class="rt-item">
+                <div class="rt-time">07:33</div>
+                <div class="rt-dot-wrap"><div class="rt-dot"></div></div>
+                <div class="rt-content">
+                    <div class="rt-row">
+                        <p>Levantou-se e saiu do quarto</p>
+                        <span class="rt-tag ok">Normal</span>
+                    </div>
+                    <span>Quarto</span>
+                </div>
+            </div>
+
+            <!-- Evento 2 -->
+            <div class="rt-item">
+                <div class="rt-time">07:38</div>
+                <div class="rt-dot-wrap"><div class="rt-dot"></div></div>
+                <div class="rt-content">
+                    <div class="rt-row">
+                        <p>Higiene matinal — casa de banho</p>
+                        <span class="rt-tag ok">Normal</span>
+                    </div>
+                    <span>Casa de Banho</span>
+                </div>
+            </div>
+
+            <!-- Evento 3 -->
+            <div class="rt-item">
+                <div class="rt-time">07:52</div>
+                <div class="rt-dot-wrap"><div class="rt-dot"></div></div>
+                <div class="rt-content">
+                    <div class="rt-row">
+                        <p>Pequeno-almoço — cozinha detetada</p>
+                        <span class="rt-tag ok">Normal</span>
+                    </div>
+                    <span>Cozinha</span>
+                </div>
+            </div>
+
+            <!-- Evento 4 -->
+            <div class="rt-item">
+                <div class="rt-time">08:17</div>
+                <div class="rt-dot-wrap"><div class="rt-dot"></div></div>
+                <div class="rt-content">
+                    <div class="rt-row">
+                        <p>Regressou à sala após refeição</p>
+                        <span class="rt-tag ok">Normal</span>
+                    </div>
+                    <span>Sala de Estar</span>
+                </div>
+            </div>
+
+            <!-- Evento 5 -->
+            <div class="rt-item">
+                <div class="rt-time">08:58</div>
+                <div class="rt-dot-wrap"><div class="rt-dot"></div></div>
+                <div class="rt-content">
+                    <div class="rt-row">
+                        <p>Medicação (Tensão Arterial) tomada na hora certa</p>
+                        <span class="rt-tag ok">Normal</span>
+                    </div>
+                    <span>Cozinha</span>
+                </div>
+            </div>
+
+            <!-- Evento 6 -->
+            <div class="rt-item">
+                <div class="rt-time">12:29</div>
+                <div class="rt-dot-wrap"><div class="rt-dot"></div></div>
+                <div class="rt-content">
+                    <div class="rt-row">
+                        <p>Almoço — cozinha detetada</p>
+                        <span class="rt-tag ok">Normal</span>
+                    </div>
+                    <span>Cozinha</span>
+                </div>
+            </div>
+
+            <!-- Evento 7 -->
+            <div class="rt-item">
+                <div class="rt-time">12:54</div>
+                <div class="rt-dot-wrap"><div class="rt-dot"></div></div>
+                <div class="rt-content">
+                    <div class="rt-row">
+                        <p>Regressou à sala após refeição</p>
+                        <span class="rt-tag ok">Normal</span>
+                    </div>
+                    <span>Sala de Estar</span>
+                </div>
+            </div>
+
+            <!-- Evento 8 -->
+            <div class="rt-item">
+                <div class="rt-time">13:56</div>
+                <div class="rt-dot-wrap"><div class="rt-dot"></div></div>
+                <div class="rt-content">
+                    <div class="rt-row">
+                        <p>Período de descanso — quarto</p>
+                        <span class="rt-tag ok">Normal</span>
+                    </div>
+                    <span>Quarto</span>
+                </div>
+            </div>
+
+            <!-- Evento 9 -->
+            <div class="rt-item">
+                <div class="rt-time">19:40</div>
+                <div class="rt-dot-wrap"><div class="rt-dot"></div></div>
+                <div class="rt-content">
+                    <div class="rt-row">
+                        <p>Jantar — cozinha detetada</p>
+                        <span class="rt-tag ok">Normal</span>
+                    </div>
+                    <span>Cozinha</span>
+                </div>
+            </div>
+
+            <!-- Evento 10 -->
+            <div class="rt-item">
+                <div class="rt-time">20:05</div>
+                <div class="rt-dot-wrap"><div class="rt-dot"></div></div>
+                <div class="rt-content">
+                    <div class="rt-row">
+                        <p>Regressou à sala após refeição</p>
+                        <span class="rt-tag ok">Normal</span>
+                    </div>
+                    <span>Sala de Estar</span>
+                </div>
+            </div>
+
+            <!-- Evento 11 — não detetado -->
+            <div class="rt-item">
+                <div class="rt-time">20:56</div>
+                <div class="rt-dot-wrap"><div class="rt-dot missed"></div></div>
+                <div class="rt-content">
+                    <div class="rt-row">
+                        <p>Medicação (Colesterol) não confirmada</p>
+                        <span class="rt-tag missed">Não detetado</span>
+                    </div>
+                    <span>Esperada às 20:30 – 21:00</span>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
