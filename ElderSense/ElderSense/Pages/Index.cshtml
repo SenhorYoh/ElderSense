@@ -7,7 +7,6 @@
 }
 
 <!--Nota: O "es" das classes significa ElderSense-->
-
 <!-- Texto oculto para leitores de ecrã (acessibilidade) -->
 <h2 class="sr-only">Landing page ElderSense</h2>
 
@@ -18,7 +17,6 @@
         <a href="#como-funciona">Como funciona</a>
         <a href="#planos">Planos</a>
         <a href="#contacto">Contacto</a>
-        <!-- Se estiver autenticado mostra link para o dashboard, senão mostra entrar -->
         @if (User.Identity!.IsAuthenticated)
         {
             <a asp-page="/Dashboard" class="es-btn-nav">Dashboard</a>
@@ -30,56 +28,80 @@
     </div>
 </nav>
 
-<!-- ==================== HERO ==================== -->
-<div class="es-hero">
+<!-- ==================== HERO COM CARROSSEL ==================== -->
+<div class="hero-wrap">
 
-    <!-- Selo de confiança no topo -->
-    <div class="es-badge">
-        <i class="ti ti-shield-check"></i> Sem câmaras. Sem microfones.
+    <!-- Texto do hero à esquerda -->
+    <div class="hero-text">
+        <div class="es-badge">
+            <i class="ti ti-shield-check"></i> Sem câmaras. Sem microfones.
+        </div>
+        <h1>Tranquilidade para a família,<br><em>autonomia para o idoso.</em></h1>
+        <p>O ElderSense monitoriza a rotina do seu familiar em casa, detetando desvios e enviando alertas apenas quando é necessário — sem vigilância invasiva.</p>
+        <div class="es-hero-btns">
+            <a href="#planos" class="es-btn-primary">Ver planos <i class="ti ti-arrow-right"></i></a>
+            <a href="#como-funciona" class="es-btn-outline">Como funciona</a>
+        </div>
     </div>
 
-    <!-- Título principal -->
-    <h1>Tranquilidade para a família,<br><em>autonomia para o idoso.</em></h1>
+    <!-- Carrossel de produtos à direita -->
+    <div class="carousel">
+        <div class="carousel-track" id="carouselTrack">
 
-    <!-- Descrição curta do produto -->
-    <p>O ElderSense monitoriza a rotina do seu familiar em casa, detetando desvios e enviando alertas apenas quando é necessário — sem vigilância invasiva.</p>
+            <!-- Slide 1 — Hub -->
+            <div class="carousel-slide">
+                <div class="carousel-img">
+                    <img src="~/images/Hub.png" alt="Hub ElderSense" />
+                </div>
+            </div>
 
-    <!-- Botões de ação principais -->
-    <div class="es-hero-btns">
-        <a href="#planos" class="es-btn-primary">Ver planos <i class="ti ti-arrow-right"></i></a>
-        <a href="#como-funciona" class="es-btn-outline">Como funciona</a>
+            <!-- Slide 2 — Pulseira -->
+            <div class="carousel-slide">
+                <div class="carousel-img">
+                    <img src="~/images/Pulseira.png" alt="Pulseira ElderSense" />
+                </div>
+            </div>
+
+            <!-- Slide 3 — Sensor -->
+            <div class="carousel-slide">
+                <div class="carousel-img">
+                    <img src="~/images/Sensor.png" alt="Sensor ElderSense" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Controlos do carrossel -->
+        <div class="carousel-controls">
+            <button class="carousel-btn" onclick="moveCarousel(-1)">&#8592;</button>
+            <div class="carousel-dots">
+                <div class="carousel-dot active" onclick="goTo(0)"></div>
+                <div class="carousel-dot" onclick="goTo(1)"></div>
+                <div class="carousel-dot" onclick="goTo(2)"></div>
+            </div>
+            <button class="carousel-btn" onclick="moveCarousel(1)">&#8594;</button>
+        </div>
     </div>
-</div>
+
+</div><!-- fim do hero-wrap -->
 
 <hr class="es-divider">
 
 <!-- ==================== PROPOSTA DE VALOR ==================== -->
 <section class="es-section" id="proposta">
-
-    <!-- Etiqueta da secção -->
     <div class="es-section-label">Proposta de valor</div>
-
     <h2>Tecnologia que cuida sem invadir</h2>
     <p>Em vez de câmaras ou interações constantes, o ElderSense interpreta padrões de comportamento e emite alertas apenas quando existe um desvio relevante face à rotina esperada.</p>
-
-    <!-- Três cards com os benefícios principais -->
     <div class="es-cards">
-
-        <!-- Card do cuidador -->
         <div class="es-card">
             <div class="es-card-icon"><i class="ti ti-heart"></i></div>
             <h3>Para o cuidador</h3>
             <p>Reduz ansiedade e centraliza a informação. Sabe quando deve intervir.</p>
         </div>
-
-        <!-- Card do idoso -->
         <div class="es-card">
             <div class="es-card-icon"><i class="ti ti-user"></i></div>
             <h3>Para o idoso</h3>
             <p>Preserva a autonomia, privacidade e dignidade no dia a dia.</p>
         </div>
-
-        <!-- Card dos alertas -->
         <div class="es-card">
             <div class="es-card-icon"><i class="ti ti-bell"></i></div>
             <h3>Alertas inteligentes</h3>
@@ -92,16 +114,9 @@
 
 <!-- ==================== COMO FUNCIONA ==================== -->
 <section class="es-section" id="como-funciona">
-
-    <!-- Etiqueta da secção -->
     <div class="es-section-label">Como funciona</div>
-
     <h2>Simples para si. Invisível para o idoso.</h2>
-
-    <!-- Passos numerados do processo -->
     <div class="es-how">
-
-        <!-- Passo 1 -->
         <div class="es-step">
             <div class="es-step-num">1</div>
             <div class="es-step-content">
@@ -109,8 +124,6 @@
                 <p>Sensores discretos instalados em casa captam movimentos e padrões de rotina sem câmaras ou microfones.</p>
             </div>
         </div>
-
-        <!-- Passo 2 -->
         <div class="es-step">
             <div class="es-step-num">2</div>
             <div class="es-step-content">
@@ -118,8 +131,6 @@
                 <p>Define horários de refeições, medicação e atividades. O sistema aprende o que é normal para o seu familiar.</p>
             </div>
         </div>
-
-        <!-- Passo 3 -->
         <div class="es-step">
             <div class="es-step-num">3</div>
             <div class="es-step-content">
@@ -127,8 +138,6 @@
                 <p>Quando algo foge ao padrão habitual, recebe uma notificação com contexto — sem alarmes constantes.</p>
             </div>
         </div>
-
-        <!-- Passo 4 -->
         <div class="es-step">
             <div class="es-step-num">4</div>
             <div class="es-step-content">
@@ -143,17 +152,10 @@
 
 <!-- ==================== PLANOS ==================== -->
 <section class="es-section" id="planos">
-
-    <!-- Etiqueta da secção -->
     <div class="es-section-label">Planos</div>
-
     <h2>Escolha o plano certo para a sua família</h2>
     <p>Todos os planos incluem acesso à plataforma web, app móvel e suporte técnico. Sem contratos de longo prazo.</p>
-
-    <!-- Grelha com os três planos disponíveis -->
     <div class="es-pricing">
-
-        <!-- Plano básico -->
         <div class="es-plan">
             <h3>Básico</h3>
             <div class="es-plan-price">€14,99 <span>/ mês</span></div>
@@ -166,8 +168,6 @@
             </ul>
             <a href="#" class="es-btn-outline" style="width:100%; text-align:center; margin-top:auto;">Começar</a>
         </div>
-
-        <!-- Plano familiar — destaque como mais popular -->
         <div class="es-plan featured">
             <div class="es-plan-badge">Mais popular</div>
             <h3>Familiar</h3>
@@ -182,8 +182,6 @@
             </ul>
             <a href="#" class="es-btn-primary" style="width:100%; text-align:center; margin-top:auto;">Escolher plano</a>
         </div>
-
-        <!-- Plano institucional — para organizações -->
         <div class="es-plan">
             <h3>Institucional</h3>
             <div class="es-plan-price">Sob consulta</div>
@@ -203,26 +201,48 @@
 
 <!-- ==================== CONFIANÇA / CONTACTO ==================== -->
 <section class="es-section" id="contacto">
-
-    <!-- Três pilares de confiança do produto -->
     <div class="es-trust">
-
-        <!-- Pilar 1 - Privacidade -->
         <div class="es-trust-item">
             <i class="ti ti-lock"></i>
             <p>Sem câmaras nem microfones. Privacidade garantida.</p>
         </div>
-
-        <!-- Pilar 2 - Hardware -->
         <div class="es-trust-item">
             <i class="ti ti-wifi"></i>
             <p>Sensores IoT discretos e fáceis de instalar.</p>
         </div>
-
-        <!-- Pilar 3 - Plataforma -->
         <div class="es-trust-item">
             <i class="ti ti-device-mobile"></i>
             <p>App móvel e plataforma web incluídas.</p>
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script>
+        /* Lógica do carrossel de produtos */
+        let current = 0;
+        const total = 3;
+
+        function updateCarousel() {
+            document.getElementById('carouselTrack').style.transform = `translateX(-${current * 100}%)`;
+            document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === current);
+            });
+        }
+
+        /* Move o carrossel para a direção indicada */
+        function moveCarousel(dir) {
+            current = (current + dir + total) % total;
+            updateCarousel();
+        }
+
+        /* Vai diretamente para um slide específico */
+        function goTo(index) {
+            current = index;
+            updateCarousel();
+        }
+
+        /* Avança automaticamente a cada 4 segundos */
+        setInterval(() => moveCarousel(1), 4000);
+    </script>
+}
