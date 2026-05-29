@@ -15,6 +15,7 @@
     <div class="es-logo">Elder<span>Sense</span></div>
     <div class="es-nav-links">
         <a href="#como-funciona">Como funciona</a>
+        <a asp-page="/Kits">Kits</a>
         <a href="#planos">Planos</a>
         <a href="#contacto">Contacto</a>
         @if (User.Identity!.IsAuthenticated)
@@ -44,41 +45,41 @@
         </div>
     </div>
 
-    <!-- Carrossel de produtos à direita -->
-    <div class="carousel">
-        <div class="carousel-track" id="carouselTrack">
+    <!-- Carrossel de produtos à direita — prefixo es- para evitar conflito com Bootstrap -->
+    <div class="es-carousel">
+        <div class="es-carousel-track" id="esCarouselTrack">
 
-            <!-- Slide 1 — Hub -->
-            <div class="carousel-slide">
-                <div class="carousel-img">
-                    <img src="~/images/Hub.png" alt="Hub ElderSense" />
+            <!-- Slide 1 -->
+            <div class="es-carousel-slide">
+                <div class="es-carousel-img">
+                    <img src="~/images/FotoCarrosel1.jpeg" alt="ElderSense 1" />
                 </div>
             </div>
 
-            <!-- Slide 2 — Pulseira -->
-            <div class="carousel-slide">
-                <div class="carousel-img">
-                    <img src="~/images/Pulseira.png" alt="Pulseira ElderSense" />
+            <!-- Slide 2 -->
+            <div class="es-carousel-slide">
+                <div class="es-carousel-img">
+                    <img src="~/images/FotoCarrosel2.jpeg" alt="ElderSense 2" />
                 </div>
             </div>
 
-            <!-- Slide 3 — Sensor -->
-            <div class="carousel-slide">
-                <div class="carousel-img">
-                    <img src="~/images/Sensor.png" alt="Sensor ElderSense" />
+            <!-- Slide 3 -->
+            <div class="es-carousel-slide">
+                <div class="es-carousel-img">
+                    <img src="~/images/FotoCarrosel3.jpeg" alt="ElderSense 3" />
                 </div>
             </div>
         </div>
 
         <!-- Controlos do carrossel -->
-        <div class="carousel-controls">
-            <button class="carousel-btn" onclick="moveCarousel(-1)">&#8592;</button>
-            <div class="carousel-dots">
-                <div class="carousel-dot active" onclick="goTo(0)"></div>
-                <div class="carousel-dot" onclick="goTo(1)"></div>
-                <div class="carousel-dot" onclick="goTo(2)"></div>
+        <div class="es-carousel-controls">
+            <button class="es-carousel-btn" onclick="moveCarousel(-1)">&#8592;</button>
+            <div class="es-carousel-dots">
+                <div class="es-carousel-dot active" onclick="goTo(0)"></div>
+                <div class="es-carousel-dot" onclick="goTo(1)"></div>
+                <div class="es-carousel-dot" onclick="goTo(2)"></div>
             </div>
-            <button class="carousel-btn" onclick="moveCarousel(1)">&#8594;</button>
+            <button class="es-carousel-btn" onclick="moveCarousel(1)">&#8594;</button>
         </div>
     </div>
 
@@ -224,25 +225,22 @@
         const total = 3;
 
         function updateCarousel() {
-            document.getElementById('carouselTrack').style.transform = `translateX(-${current * 100}%)`;
-            document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+            document.getElementById('esCarouselTrack').style.transform = `translateX(-${current * 100}%)`;
+            document.querySelectorAll('.es-carousel-dot').forEach((dot, i) => {
                 dot.classList.toggle('active', i === current);
             });
         }
 
-        /* Move o carrossel para a direção indicada */
         function moveCarousel(dir) {
             current = (current + dir + total) % total;
             updateCarousel();
         }
 
-        /* Vai diretamente para um slide específico */
         function goTo(index) {
             current = index;
             updateCarousel();
         }
 
-        /* Avança automaticamente a cada 4 segundos */
         setInterval(() => moveCarousel(1), 4000);
     </script>
 }

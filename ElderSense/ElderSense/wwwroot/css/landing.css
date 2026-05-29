@@ -11,7 +11,6 @@
 
 /* ==================== NAVEGAÇÃO ==================== */
 
-/* Barra de navegação fixa no topo */
 .es-nav {
     display: flex;
     align-items: center;
@@ -24,7 +23,6 @@
     z-index: 100;
 }
 
-/* Logo com destaque na segunda parte do nome */
 .es-logo {
     font-size: 18px;
     font-weight: 500;
@@ -36,7 +34,6 @@
         color: #1D9E75;
     }
 
-/* Links de navegação */
 .es-nav-links {
     display: flex;
     gap: 1.5rem;
@@ -53,7 +50,6 @@
             color: #1a1a1a;
         }
 
-/* Botão de entrada na navbar */
 .es-btn-nav {
     font-size: 13px;
     padding: 6px 16px;
@@ -65,11 +61,69 @@
     text-decoration: none;
 }
 
+/* ==================== BOTÕES ==================== */
+
+.es-btn-primary {
+    background: #1D9E75;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+    .es-btn-primary:hover {
+        background: #0F6E56;
+        color: #fff;
+    }
+
+.es-btn-outline {
+    padding: 10px 24px;
+    border-radius: 8px;
+    border: 0.5px solid #ccc;
+    background: transparent;
+    color: #1a1a1a;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+    .es-btn-outline:hover {
+        background: #f5f5f5;
+        color: #1a1a1a;
+    }
+
+.es-hero-btns {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* ==================== BADGE ==================== */
+
+.es-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #E1F5EE;
+    color: #0F6E56;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    width: fit-content;
+}
+
 /* ==================== HERO COM CARROSSEL ==================== */
 
-/* Layout em duas colunas — texto e carrossel lado a lado */
 .hero-wrap {
-    display: grid;
+    display: grid !important;
     grid-template-columns: 1fr 1fr;
     max-width: 1200px;
     margin: 0 auto;
@@ -78,7 +132,6 @@
     align-items: center;
 }
 
-/* Lado esquerdo — texto */
 .hero-text {
     display: flex;
     flex-direction: column;
@@ -92,7 +145,6 @@
         color: #1a1a1a;
     }
 
-        /* Destaque em verde no título */
         .hero-text h1 em {
             color: #1D9E75;
             font-style: normal;
@@ -107,77 +159,43 @@
 
 /* ==================== CARROSSEL ==================== */
 
-/* Contentor do carrossel — esconde slides fora da área visível */
-.carousel {
+/* Contentor principal — sem border-radius aqui para não cortar os slides */
+.es-carousel {
     position: relative;
     width: 100%;
     overflow: hidden;
 }
 
-/* Faixa deslizante */
-.carousel-track {
+/* Faixa com todos os slides em linha */
+.es-carousel-track {
     display: flex;
     transition: transform 0.4s ease;
-    will-change: transform;
 }
 
-/* Slide individual */
-.carousel-slide {
-    min-width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    flex-shrink: 0;
+/* Cada slide ocupa 100% da largura do contentor */
+.es-carousel-slide {
+    flex: 0 0 100%;
+    width: 100%;
 }
 
-/* Imagem do produto */
-.carousel-img {
-    position: relative;
+/* Área da imagem — border-radius aplicado aqui para arredondar todos os cantos */
+.es-carousel-img {
     width: 100%;
     height: 320px;
-    border-radius: 16px;
     overflow: hidden;
-    background: #f5f5f5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: 16px;
 }
 
-    .carousel-img img {
-        max-width: 100%;
-        max-height: 100%;
-        width: auto;
-        height: auto;
-        object-fit: contain;
+    .es-carousel-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        border-radius: 16px;
     }
 
-/* Legenda sobreposta na parte inferior da imagem */
-.carousel-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(transparent, rgba(0,0,0,0.6));
-    padding: 2rem 1.25rem 1.25rem;
-    text-align: center;
-}
-
-    .carousel-caption h3 {
-        font-size: 15px;
-        font-weight: 500;
-        color: #fff;
-        margin-bottom: 4px;
-    }
-
-    .carousel-caption p {
-        font-size: 13px;
-        color: rgba(255,255,255,0.8);
-        line-height: 1.5;
-    }
-
-/* Controlos do carrossel */
-.carousel-controls {
+/* Controlos abaixo do carrossel */
+.es-carousel-controls {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -186,7 +204,7 @@
 }
 
 /* Botões de navegação */
-.carousel-btn {
+.es-carousel-btn {
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -200,19 +218,19 @@
     color: #666;
 }
 
-    .carousel-btn:hover {
+    .es-carousel-btn:hover {
         background: #f5f5f5;
     }
 
 /* Pontos de navegação */
-.carousel-dots {
+.es-carousel-dots {
     display: flex;
     gap: 6px;
     align-items: center;
 }
 
 /* Ponto individual */
-.carousel-dot {
+.es-carousel-dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
@@ -221,8 +239,8 @@
     transition: all 0.2s;
 }
 
-    /* Ponto ativo */
-    .carousel-dot.active {
+    /* Ponto do slide ativo */
+    .es-carousel-dot.active {
         background: #1D9E75;
         width: 18px;
         border-radius: 999px;
@@ -230,14 +248,12 @@
 
 /* ==================== SECÇÕES ==================== */
 
-/* Contentor padrão de cada secção */
 .es-section {
     padding: 4rem 2rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* Etiqueta colorida acima do título */
 .es-section-label {
     font-size: 12px;
     font-weight: 500;
@@ -247,7 +263,6 @@
     margin-bottom: 0.75rem;
 }
 
-/* Título de secção */
 .es-section h2 {
     font-size: 26px;
     font-weight: 500;
@@ -255,14 +270,12 @@
     margin-bottom: 1rem;
 }
 
-/* Texto de secção */
 .es-section p {
     font-size: 15px;
     color: #666;
     line-height: 1.7;
 }
 
-/* Linha divisória entre secções */
 .es-divider {
     border: none;
     border-top: 0.5px solid #e5e5e5;
