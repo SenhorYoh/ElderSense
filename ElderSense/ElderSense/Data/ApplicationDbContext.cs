@@ -13,12 +13,35 @@ namespace ElderSense.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder); 
+            base.OnModelCreating(builder);
 
-            // Configura o Enum para ser guardado como String na Base de Dados
+            // Guarda o Enum como String na Base de Dados
             builder.Entity<Utilizador>()
                 .Property(u => u.Tipo)
                 .HasConversion<string>();
+
+            // Resolve cascade paths em DadosMonitorizacao -> Sensor
+            builder.Entity<DadosMonitorizacao>()
+                .HasOne(d => d.Sensor)
+                .WithMany()
+                .HasForeignKey(d => d.FKSensor)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configura o M:N entre Alerta e DadosMonitorizacao sem cascade paths
+            builder.Entity<Alerta>()
+                .HasMany(a => a.ListadeDados)
+                .WithMany(d => d.ListadeAlertas)
+                .UsingEntity<Dictionary<string, object>>(
+                    "AlertaDadosMonitorizacao",
+                    j => j.HasOne<DadosMonitorizacao>()
+                          .WithMany()
+                          .HasForeignKey("ListadeDadosId")
+                          .OnDelete(DeleteBehavior.Restrict),
+                    j => j.HasOne<Alerta>()
+                          .WithMany()
+                          .HasForeignKey("ListadeAlertasId")
+                          .OnDelete(DeleteBehavior.Cascade)
+                );
         }
     }
 }

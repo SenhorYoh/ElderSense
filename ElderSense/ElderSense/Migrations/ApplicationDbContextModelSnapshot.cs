@@ -48,8 +48,9 @@ namespace ElderSense.Migrations
                     b.Property<DateTime>("DataHora")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FKUtilizador")
-                        .HasColumnType("int");
+                    b.Property<string>("FKUtilizador")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Mensagem")
                         .IsRequired()
@@ -57,6 +58,8 @@ namespace ElderSense.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FKUtilizador");
 
                     b.ToTable("Alertas");
                 });
@@ -75,8 +78,9 @@ namespace ElderSense.Migrations
                     b.Property<int>("FKSensor")
                         .HasColumnType("int");
 
-                    b.Property<int>("FKUtilizador")
-                        .HasColumnType("int");
+                    b.Property<string>("FKUtilizador")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Tipo")
                         .IsRequired()
@@ -89,6 +93,10 @@ namespace ElderSense.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FKSensor");
+
+                    b.HasIndex("FKUtilizador");
 
                     b.ToTable("DadosMonitorizacao");
                 });
@@ -104,8 +112,9 @@ namespace ElderSense.Migrations
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<int>("FKUtilizador")
-                        .HasColumnType("int");
+                    b.Property<string>("FKUtilizador")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Localizacao")
                         .IsRequired()
@@ -113,6 +122,8 @@ namespace ElderSense.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FKUtilizador");
 
                     b.ToTable("Sensores");
                 });
@@ -377,8 +388,49 @@ namespace ElderSense.Migrations
                     b.HasOne("ElderSense.Data.Model.DadosMonitorizacao", null)
                         .WithMany()
                         .HasForeignKey("ListadeDadosId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ElderSense.Data.Model.Alerta", b =>
+                {
+                    b.HasOne("ElderSense.Data.Model.Utilizador", "Utilizador")
+                        .WithMany()
+                        .HasForeignKey("FKUtilizador")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Utilizador");
+                });
+
+            modelBuilder.Entity("ElderSense.Data.Model.DadosMonitorizacao", b =>
+                {
+                    b.HasOne("ElderSense.Data.Model.Sensor", "Sensor")
+                        .WithMany()
+                        .HasForeignKey("FKSensor")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ElderSense.Data.Model.Utilizador", "Utilizador")
+                        .WithMany()
+                        .HasForeignKey("FKUtilizador")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sensor");
+
+                    b.Navigation("Utilizador");
+                });
+
+            modelBuilder.Entity("ElderSense.Data.Model.Sensor", b =>
+                {
+                    b.HasOne("ElderSense.Data.Model.Utilizador", "Utilizador")
+                        .WithMany()
+                        .HasForeignKey("FKUtilizador")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Utilizador");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
