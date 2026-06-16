@@ -1,4 +1,30 @@
 ﻿@page
 @model ElderSense.Pages.Sensores.CreateModel
+
 @{
+    ViewData["Title"] = "Adicionar Sensor";
+}
+
+<h1>Adicionar Sensor</h1>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="Sensor.Localizacao" class="form-control" placeholder="Ex: Sala" />
+        <label asp-for="Sensor.Localizacao">Localização</label>
+        <span asp-validation-for="Sensor.Localizacao" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="Sensor.Estado" class="form-check-input" />
+        <label asp-for="Sensor.Estado" class="form-check-label">Ativo</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
