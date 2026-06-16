@@ -21,6 +21,8 @@
             }
             else
             {
+                <!-- campo hidden para manter o email entre os dois passos do formulário -->
+                <input type="hidden" asp-for="Input.Email" />
                 <div class="form-floating mb-3">
                     <input asp-for="Input.Password" class="form-control" placeholder="password" />
                     <label asp-for="Input.Password">Password</label>
@@ -29,7 +31,7 @@
             }
 
             <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Seguinte</button>
-            
+
             <div class="mt-3 text-center">
                 <a id="forgot-password" asp-page="./ForgotPassword">Esqueceu-se da password?</a>
             </div>
