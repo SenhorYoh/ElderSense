@@ -1,4 +1,27 @@
-﻿@page
+﻿@page "{id}"
 @model ElderSense.Pages.Utilizadores.DeleteModel
+
 @{
+    ViewData["Title"] = "Apagar Utilizador";
 }
+
+<h1>Apagar Utilizador</h1>
+
+<p class="text-danger">Tens a certeza que queres apagar este utilizador?</p>
+
+<dl class="row">
+    <dt class="col-sm-2">Nome</dt>
+    <dd class="col-sm-10">@Model.Utilizador.Nome</dd>
+
+    <dt class="col-sm-2">Email</dt>
+    <dd class="col-sm-10">@Model.Utilizador.Email</dd>
+
+    <dt class="col-sm-2">Tipo</dt>
+    <dd class="col-sm-10">@Model.Utilizador.Tipo</dd>
+</dl>
+
+<form method="post">
+    <input type="hidden" asp-for="Utilizador.Id" />
+    <button type="submit" class="btn btn-danger">Apagar</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+</form>
