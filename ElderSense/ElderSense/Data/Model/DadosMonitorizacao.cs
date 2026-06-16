@@ -8,40 +8,43 @@ namespace ElderSense.Data.Model
     /// </summary>
     public class DadosMonitorizacao
     {
-
         [Key]
         public int Id { get; set; }
 
-        //data e hora do registo
+        // data e hora do registo
         public DateTime DataHora { get; set; } = DateTime.Now;
 
-        //ex: movimento, porta
+        // ex: movimento, porta
         [StringLength(50)]
         public string Tipo { get; set; } = "";
 
-        //ex: aberta, ausente 2h
+        // ex: aberta, ausente 2h
         [StringLength(100)]
         public string Valor { get; set; } = "";
 
         /// <summary>
-        /// Relacionamento 1-N obrigatório com a classe Utilizador
+        /// Relacionamento 1-N obrigatório com a classe Utilizador (Regra 4)
         /// </summary>
         [Display(Name = "Responsável")]
         [ForeignKey(nameof(Utilizador))]
-        public int FKUtilizador { get; set; }
+        public string FKUtilizador { get; set; } = "";
+
+        // navigation property para o Utilizador
+        public Utilizador Utilizador { get; set; } = null!;
 
         /// <summary>
-        /// Relacionamento 1-N obrigatório com a classe Sensor
+        /// Relacionamento 1-N obrigatório com a classe Sensor (Regra 4)
         /// </summary>
-
         [Display(Name = "Sensor")]
         [ForeignKey(nameof(Sensor))]
         public int FKSensor { get; set; }
 
+        // navigation property para o Sensor
+        public Sensor Sensor { get; set; } = null!;
+
         /// <summary>
-        /// RELACIONAMENTO N:M COM Alerta
+        /// Relacionamento M:N com Alerta (Regra 6)
         /// </summary>
         public ICollection<Alerta> ListadeAlertas { get; set; } = [];
-
     }
 }
