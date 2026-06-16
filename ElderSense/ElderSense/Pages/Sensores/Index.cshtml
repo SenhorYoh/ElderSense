@@ -1,4 +1,37 @@
 ﻿@page
 @model ElderSense.Pages.Sensores.IndexModel
+
 @{
+    ViewData["Title"] = "Sensores";
 }
+
+<h1>Sensores</h1>
+
+<p>
+    <a asp-page="Create">Adicionar Sensor</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Localização</th>
+            <th>Estado</th>
+            <th>Responsável</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sensor in Model.Sensores)
+        {
+            <tr>
+                <td>@sensor.Localizacao</td>
+                <td>@(sensor.Estado ? "Ativo" : "Inativo")</td>
+                <td>@sensor.Utilizador.Nome</td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@sensor.Id">Editar</a> |
+                    <a asp-page="Delete" asp-route-id="@sensor.Id">Apagar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
