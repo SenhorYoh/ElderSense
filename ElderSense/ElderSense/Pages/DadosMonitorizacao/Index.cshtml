@@ -1,0 +1,32 @@
+﻿@page
+@model ElderSense.Pages.DadosMonitorizacao.IndexModel
+
+@{
+    ViewData["Title"] = "Dados de Monitorização";
+}
+
+<h1>Dados de Monitorização</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Data/Hora</th>
+            <th>Tipo</th>
+            <th>Valor</th>
+            <th>Sensor</th>
+            <th>Idoso</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var dado in Model.Dados)
+        {
+            <tr>
+                <td>@dado.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@dado.Tipo</td>
+                <td>@dado.Valor</td>
+                <td>@dado.Sensor.Localizacao</td>
+                <td>@dado.Utilizador.Nome</td>
+            </tr>
+        }
+    </tbody>
+</table>
