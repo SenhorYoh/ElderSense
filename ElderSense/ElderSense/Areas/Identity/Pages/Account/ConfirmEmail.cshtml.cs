@@ -18,10 +18,12 @@ namespace ElderSense.Areas.Identity.Pages.Account
     public class ConfirmEmailModel : PageModel
     {
         private readonly UserManager<Utilizador> _userManager;
+        private readonly SignInManager<Utilizador> _signInManager;
 
-        public ConfirmEmailModel(UserManager<Utilizador> userManager)
+        public ConfirmEmailModel(UserManager<Utilizador> userManager, SignInManager<Utilizador> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         /// <summary>
@@ -40,12 +42,23 @@ namespace ElderSense.Areas.Identity.Pages.Account
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{userId}'.");
+                return NotFound($"Não foi possível carregar o utilizador com o ID '{userId}'.");
             }
+
+
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
+            StatusMessage = result.Succeeded ? "Obrigado por confirmares o email!" : "Erro ao confirmar email, tente novamente";
+
+            if (result.Succeeded)
+            {
+                // 2. FAZ O LOGIN AUTOMÁTICO AQUI
+                await _signInManager.SignInAsync(user, isPersistent: false);
+
+                // 3. REDIRECIONA PARA A HOME
+                return RedirectToPage("/Index");
+            }
             return Page();
         }
     }
