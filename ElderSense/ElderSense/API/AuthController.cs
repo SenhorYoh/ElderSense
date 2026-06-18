@@ -33,9 +33,9 @@ namespace ElderSense.API
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] ApiLoginModel login) // Mudado o nome para evitar conflitos
+        public async Task<IActionResult> Login([FromBody] ApiLoginModel login) 
         {
-            // O teu professor usou login.Username, mas como o Identity usa o Email para o login, procuramos por Email:
+            
             var user = await _userManager.FindByEmailAsync(login.Username);
             if (user == null) return Unauthorized();
 
@@ -53,7 +53,7 @@ namespace ElderSense.API
                 new Claim(ClaimTypes.Name, username)
             };
 
-            // Certifica-te de que tens "Jwt:Key" configurado no appsettings.json ou nos Secrets!
+            
             var jwtKey = _config["Jwt:Key"];
             if (string.IsNullOrEmpty(jwtKey))
             {
@@ -74,7 +74,7 @@ namespace ElderSense.API
         }
     }
 
-    // Criamos a classe aqui em baixo para o controlador saber o que receber no JSON do Postman/Frontend
+    
     public class ApiLoginModel
     {
         public string Username { get; set; } = string.Empty;

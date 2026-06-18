@@ -1,6 +1,7 @@
 using ElderSense.Data;
 using ElderSense.Data.Model;
 using ElderSense.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -15,19 +16,40 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+// configuração do identity base (Cookies do site)
 builder.Services.AddDefaultIdentity<Utilizador>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddAuthentication()
+///<summary>
+///configuração unificada de autenticação (Google + JWT)
+///Se alguém aceder as páginas normais (Razor Pages, usa o esquema de cookies do Identity.
+///Se vier uma requisição para a API, valida o cabeçalho bearer (JWT)
+///</summary>
+builder.Services.AddAuthentication(options =>
+{
+    // Por padrão, o site usa cookies. A API vai pedir explicitamente o "Bearer" (JWT)
+    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+})
     .AddGoogle(options =>
     {
-        ///<summary>
-        ///Configuração da autenticação com a conta google
-        ///estes dados não podem ir para o github, estando na pasta privada
-        ///</summary>
-;
-        options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? string.Empty; ;
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? string.Empty; ;
+    })
+    .AddJwtBearer("Bearer", options => // Configuração JWT para a API
+    {
+        var jwtSettings = builder.Configuration.GetSection("Jwt");
+        var key = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? "ChaveSuperSecretaComMaisDe32Caracteres");
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(key)
+        };
     });
 
 builder.Services.AddRazorPages();
@@ -43,6 +65,8 @@ builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 builder.Services.ConfigureApplicationCookie(o => {
     o.ExpireTimeSpan = TimeSpan.FromDays(5);
     o.SlidingExpiration = true;
+    o.LoginPath = "/Identity/Account/Login";
+    o.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
 // *******************************************************************
@@ -52,26 +76,7 @@ builder.Services.ConfigureApplicationCookie(o => {
 // using Microsoft.IdentityModel.Tokens;
 // *******************************************************************
 // JWT Settings
-var jwtSettings = builder.Configuration.GetSection("Jwt");
-var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
 
-builder.Services.AddAuthentication(options => { })
-   .AddCookie("Cookies", options => {
-       options.LoginPath = "/Identity/Account/Login";
-       options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-   })
-   .AddJwtBearer("Bearer", options => {
-       options.TokenValidationParameters = new TokenValidationParameters
-       {
-           ValidateIssuer = true,
-           ValidateAudience = true,
-           ValidateLifetime = true,
-           ValidateIssuerSigningKey = true,
-           ValidIssuer = jwtSettings["Issuer"],
-           ValidAudience = jwtSettings["Audience"],
-           IssuerSigningKey = new SymmetricSecurityKey(key)
-       };
-   });
 
 // configuração do JWT
 builder.Services.AddScoped<TokenService>();
@@ -106,5 +111,8 @@ app.UseAuthorization();
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
+
+app.MapRazorPages().WithStaticAssets();
+app.MapControllers();
 
 app.Run();

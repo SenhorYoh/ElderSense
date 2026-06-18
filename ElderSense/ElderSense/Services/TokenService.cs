@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using ElderSense.Data.Model;
 
 namespace ElderSense.Services
 {
@@ -19,13 +20,13 @@ namespace ElderSense.Services
         public string GenerateToken(IdentityUser user)
         {
             var jwtSettings = _config.GetSection("Jwt");
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? "ChaveSuperSecretaComMaisDe32Caracteres"));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
             {
            new Claim(JwtRegisteredClaimNames.Sub, user.Id),   // User ID
-           new Claim(JwtRegisteredClaimNames.Email, user.Email),  // User Email - não será nulo pq é usado como UserName
+           new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),  
            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
        };
 
