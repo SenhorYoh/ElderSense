@@ -22,8 +22,8 @@ namespace ElderSense.Pages.DadosMonitorizacao
         public async Task OnGetAsync()
         {
             Dados = await _context.DadosMonitorizacao
-                .Include(d => d.Utilizador)
-                .Include(d => d.Sensor)
+                .Include(d => d.FKUtilizador)
+                .Include(d => d.FKSensor)
                 .OrderByDescending(d => d.DataHora)
                 .ToListAsync();
         }

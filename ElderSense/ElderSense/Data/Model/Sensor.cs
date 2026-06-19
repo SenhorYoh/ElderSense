@@ -28,6 +28,7 @@ namespace ElderSense.Data.Model
         public string FKUtilizador { get; set; } = "";
 
         // navigation property para o Utilizador
+        [ForeignKey("FKUtilizador")]
         public Utilizador Utilizador { get; set; } = null!;
     }
 }
