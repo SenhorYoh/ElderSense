@@ -1,4 +1,5 @@
 ﻿using ElderSense.Data;
+using ElderSense.Data.Model; // Adicionado para reconhecer o teu 'Utilizador'
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -15,13 +16,13 @@ namespace ElderSense.API
     public class AuthController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<Utilizador> _userManager; // CORREÇÃO: Utilizador em vez de IdentityUser
+        private readonly SignInManager<Utilizador> _signInManager; // CORREÇÃO: Utilizador em vez de IdentityUser
         private readonly IConfiguration _config;
 
         public AuthController(ApplicationDbContext context,
-           UserManager<IdentityUser> userManager,
-           SignInManager<IdentityUser> signInManager,
+           UserManager<Utilizador> userManager, // CORREÇÃO
+           SignInManager<Utilizador> signInManager, // CORREÇÃO
            IConfiguration config)
         {
             _context = context;
@@ -30,12 +31,11 @@ namespace ElderSense.API
             _config = config;
         }
 
-
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel login)
+        public async Task<IActionResult> Login([FromBody] ApiLoginModel login) 
         {
-
+            
             var user = await _userManager.FindByEmailAsync(login.Username);
             if (user == null) return Unauthorized();
 
@@ -47,14 +47,20 @@ namespace ElderSense.API
             return Ok(new { token });
         }
 
-
         private string GenerateJwtToken(string username)
         {
             var claims = new[] {
-         new Claim(ClaimTypes.Name, username)
-     };
+                new Claim(ClaimTypes.Name, username)
+            };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(s: _config["Jwt:Key"]));
+            
+            var jwtKey = _config["Jwt:Key"];
+            if (string.IsNullOrEmpty(jwtKey))
+            {
+                throw new Exception("A chave Jwt:Key não foi configurada.");
+            }
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
@@ -66,6 +72,12 @@ namespace ElderSense.API
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+    }
 
+    
+    public class ApiLoginModel
+    {
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
     }
 }

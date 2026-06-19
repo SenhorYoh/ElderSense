@@ -141,8 +141,29 @@ namespace ElderSense.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    string assunto = "ElderSense - Confirme a sua conta 🚀";
+
+                    string corpoEmail = $@"
+                    <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;'>
+                        <h2 style='color: #0d6efd; text-align: center;'>Bem-vindo à ElderSense!</h2>
+                        <p>Olá,</p>
+                        <p>Obrigado por se registar na nossa plataforma de monitorização. Para começar a utilizar a sua conta em segurança, por favor confirme o seu endereço de email clicando no botão abaixo:</p>
+        
+                        <div style='text-align: center; margin: 30px 0;'>
+                            <a href='{HtmlEncoder.Default.Encode(callbackUrl)}' 
+                               style='background-color: #0d6efd; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;'>
+                               Confirmar Conta
+                            </a>
+                        </div>
+        
+                        <p style='font-size: 12px; color: #666;'>Se o botão não funcionar, copie e cole o seguinte link no seu navegador:</p>
+                        <p style='font-size: 12px; color: #0d6efd; word-break: break-all;'>{callbackUrl}</p>
+                        <hr style='border: 0; border-top: 1px solid #eee; margin-top: 30px;' />
+                        <p style='font-size: 11px; color: #999; text-align: center;'>Este é un email automático da ElderSense. Por favor, não responda a esta mensagem.</p>
+                    </div>";
+
+                    // 3. Envia o email com o teu assunto e corpo personalizados
+                    await _emailSender.SendEmailAsync(Input.Email, assunto, corpoEmail);
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

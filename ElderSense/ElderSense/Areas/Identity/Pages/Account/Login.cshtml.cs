@@ -56,17 +56,17 @@ namespace ElderSense.Areas.Identity.Pages.Account
         public class InputModel
         {
 
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "O email é obrigatório.")]
+            [EmailAddress(ErrorMessage = "Formato de email inválido.")]
             public string Email { get; set; }
 
    
-            [Required]
+            [Required(ErrorMessage = "A password é obrigatória.")]
             [DataType(DataType.Password)]
             public string? Password { get; set; } //opcional no primeiro passo
 
     
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Lembrar-me")]
             public bool RememberMe { get; set; }
         }
 
