@@ -29,7 +29,7 @@ namespace ElderSense.Data
             // 1. UTILIZADOR -> SENSORES (Cascade)
             // Se o Utilizador for apagado, os seus sensores são apagados automaticamente
             builder.Entity<Sensor>()
-                .HasOne<Utilizador>()
+                .HasOne<Utilizador>(s => s.Utilizador)
                 .WithMany()
                 .HasForeignKey(s => s.FKUtilizador)
                 .OnDelete(DeleteBehavior.Cascade);

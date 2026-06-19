@@ -24,7 +24,6 @@ namespace ElderSense.Data.Model
         /// Relacionamento 1-N com a classe Utilizador (Regra 4)
         /// </summary>
         [Display(Name = "Responsável")]
-        [ForeignKey(nameof(Utilizador))]
         public string FKUtilizador { get; set; } = "";
 
         // navigation property para o Utilizador

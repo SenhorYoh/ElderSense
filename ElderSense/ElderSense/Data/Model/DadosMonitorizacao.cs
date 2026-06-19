@@ -26,8 +26,6 @@ namespace ElderSense.Data.Model
         /// Relacionamento 1-N obrigatório com a classe Utilizador (Regra 4)
         /// </summary>
         [Display(Name = "Responsável")]
-        [ForeignKey(nameof(Utilizador))]
-
         public string FKUtilizador { get; set; } = "";
 
         // navigation property para o Utilizador
@@ -38,7 +36,6 @@ namespace ElderSense.Data.Model
         /// Relacionamento 1-N obrigatório com a classe Sensor (Regra 4)
         /// </summary>
         [Display(Name = "Sensor")]
-        [ForeignKey(nameof(Sensor))]
         public int FKSensor { get; set; }
 
         // navigation property para o Sensor
