@@ -1,5 +1,5 @@
 using System;
-using System.Threading.Tasks; // 🌟 GARANTE QUE ESTE USING ESTÁ AQUI
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +7,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using ElderSense.Data;
 using ElderSense.Data.Model;
 
+
+
 namespace ElderSense.Pages.Sensores
 {
+
+    /// <summary>
+    /// Página de criação dos sensores. Apenas um utilizador logado pode criar
+    /// </summary>
     [Authorize]
     public class CreateModel : PageModel
     {
@@ -41,6 +47,7 @@ namespace ElderSense.Pages.Sensores
 
             // 2. Associa o sensor ao ID do utilizador (Garante que na classe 'Sensor' a propriedade se chama 'FKUtilizador')
             Sensor.FKUtilizador = user.Id;
+            Sensor.Utilizador = null!; //limpa qualquer lixo invisivel 
 
             // 3. Remove as validações automáticas do ModelState que costumam bloquear o formulário
             ModelState.Remove("Sensor.Utilizador");
