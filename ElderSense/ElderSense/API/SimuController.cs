@@ -66,7 +66,6 @@ namespace ElderSense.Services
                 // 3. Adiciona o registo formatado à base de dados
                 _context.DadosMonitorizacao.Add(novoRegisto);
 
-                _context.DadosMonitorizacao.Add(novoRegisto);
 
                 // Vai buscar todos os dados deste sensor, ordenados do mais recente para o mais antigo.
                 // O .Skip(50) ignora os 50 mais recentes e seleciona todos os que sobrarem (o "lixo" antigo).
