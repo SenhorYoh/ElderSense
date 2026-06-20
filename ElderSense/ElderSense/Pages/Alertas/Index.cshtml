@@ -26,3 +26,22 @@
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        // cria a ligação ao Hub do SignalR
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/alertaHub")
+            .build();
+
+        // define o que fazer quando o servidor enviar a mensagem "NovoAlerta"
+        connection.on("NovoAlerta", function (mensagem) {
+            alert("Novo alerta recebido: " + mensagem);
+        });
+
+        // inicia a ligação
+        connection.start().catch(function (err) {
+            console.error(err.toString());
+        });
+    </script>
+}
