@@ -1,6 +1,6 @@
 using ElderSense.Data;
 using ElderSense.Data.Model;
-using ElderSense.Hub;
+using ElderSense.Hubs;
 using ElderSense.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;

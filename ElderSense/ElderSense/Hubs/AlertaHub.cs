@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace ElderSense.Hub
+namespace ElderSense.Hubs
 {
     /// <summary>
     /// Hub do SignalR responsável por notificar os clientes ligados
