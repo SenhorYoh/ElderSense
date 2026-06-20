@@ -37,7 +37,7 @@ namespace ElderSense.Data
             // 2. UTILIZADOR -> DADOS MONITORIZAÇÃO (Cascade)
             // Se o Utilizador for apagado, os seus dados de saúde são apagados automaticamente
             builder.Entity<DadosMonitorizacao>()
-                .HasOne<Utilizador>()
+                .HasOne<Utilizador>(d => d.Utilizador)
                 .WithMany()
                 .HasForeignKey(d => d.FKUtilizador)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -45,7 +45,7 @@ namespace ElderSense.Data
             // 3. SENSOR -> DADOS MONITORIZAÇÃO (NoAction - Crucial para quebrar o ciclo!)
             // Isto impede o SQL Server de entrar em loop, mas garante que se o USER for apagado, TUDO desaparece.
             builder.Entity<DadosMonitorizacao>()
-                .HasOne<Sensor>()
+                .HasOne<Sensor>(d => d.Sensor)
                 .WithMany()
                 .HasForeignKey(d => d.FKSensor)
                 .OnDelete(DeleteBehavior.NoAction);
