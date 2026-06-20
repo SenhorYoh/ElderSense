@@ -4,6 +4,7 @@ using ElderSense.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElderSense.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260619170945_ConfigurarCascadeTotalElderSense")]
+    partial class ConfigurarCascadeTotalElderSense
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,10 +85,17 @@ namespace ElderSense.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("SensorId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Tipo")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UtilizadorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Valor")
                         .IsRequired()
@@ -97,6 +107,10 @@ namespace ElderSense.Migrations
                     b.HasIndex("FKSensor");
 
                     b.HasIndex("FKUtilizador");
+
+                    b.HasIndex("SensorId");
+
+                    b.HasIndex("UtilizadorId");
 
                     b.ToTable("DadosMonitorizacao");
                 });
@@ -121,9 +135,15 @@ namespace ElderSense.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("UtilizadorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("FKUtilizador");
+
+                    b.HasIndex("UtilizadorId");
 
                     b.ToTable("Sensores");
                 });
@@ -405,15 +425,27 @@ namespace ElderSense.Migrations
 
             modelBuilder.Entity("ElderSense.Data.Model.DadosMonitorizacao", b =>
                 {
-                    b.HasOne("ElderSense.Data.Model.Sensor", "Sensor")
+                    b.HasOne("ElderSense.Data.Model.Sensor", null)
                         .WithMany()
                         .HasForeignKey("FKSensor")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("ElderSense.Data.Model.Utilizador", "Utilizador")
+                    b.HasOne("ElderSense.Data.Model.Utilizador", null)
                         .WithMany()
                         .HasForeignKey("FKUtilizador")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ElderSense.Data.Model.Sensor", "Sensor")
+                        .WithMany()
+                        .HasForeignKey("SensorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ElderSense.Data.Model.Utilizador", "Utilizador")
+                        .WithMany()
+                        .HasForeignKey("UtilizadorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -424,9 +456,15 @@ namespace ElderSense.Migrations
 
             modelBuilder.Entity("ElderSense.Data.Model.Sensor", b =>
                 {
-                    b.HasOne("ElderSense.Data.Model.Utilizador", "Utilizador")
+                    b.HasOne("ElderSense.Data.Model.Utilizador", null)
                         .WithMany()
                         .HasForeignKey("FKUtilizador")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ElderSense.Data.Model.Utilizador", "Utilizador")
+                        .WithMany()
+                        .HasForeignKey("UtilizadorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

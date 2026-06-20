@@ -1,0 +1,39 @@
+﻿@page
+@model ElderSense.Pages.Utilizadores.IndexModel
+
+@{
+    ViewData["Title"] = "Utilizadores";
+}
+
+<h1>Utilizadores</h1>
+
+<p>
+    <a asp-page="Create">Adicionar Utilizador</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Tipo</th>
+            <th>Telefone</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var utilizador in Model.Utilizadores)
+        {
+            <tr>
+                <td>@utilizador.Nome</td>
+                <td>@utilizador.Email</td>
+                <td>@utilizador.Tipo</td>
+                <td>@utilizador.Telefone</td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@utilizador.Id">Editar</a> |
+                    <a asp-page="Delete" asp-route-id="@utilizador.Id">Apagar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

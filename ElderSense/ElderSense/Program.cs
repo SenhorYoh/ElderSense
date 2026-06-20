@@ -20,6 +20,12 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<Utilizador>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+// Regista a lógica que cria os sensores e limpa o lixo
+builder.Services.AddScoped<SimuController>();
+
+// 2. Regista o robô invisível que corre em segundo plano a cada 1 minuto
+builder.Services.AddHostedService<SimuWorker>();
+
 ///<summary>
 ///configuração unificada de autenticação (Google + JWT)
 ///Se alguém aceder as páginas normais (Razor Pages, usa o esquema de cookies do Identity.

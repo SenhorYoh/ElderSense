@@ -1,0 +1,28 @@
+﻿@page
+@model ElderSense.Pages.Alertas.IndexModel
+
+@{
+    ViewData["Title"] = "Alertas";
+}
+
+<h1>Alertas</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Data/Hora</th>
+            <th>Mensagem</th>
+            <th>Idoso</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var alerta in Model.Alertas)
+        {
+            <tr>
+                <td>@alerta.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@alerta.Mensagem</td>
+                <td>@alerta.FKUtilizador</td> <!--antes FKUtilizador.Nome -->
+            </tr>
+        }
+    </tbody>
+</table>

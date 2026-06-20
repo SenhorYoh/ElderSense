@@ -1,0 +1,50 @@
+﻿@page "{id}"
+@model ElderSense.Pages.Utilizadores.EditModel
+
+@{
+    ViewData["Title"] = "Editar Utilizador";
+}
+
+<h1>Editar Utilizador</h1>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <input type="hidden" asp-for="Utilizador.Id" />
+
+    <div class="form-floating mb-3">
+        <input asp-for="Utilizador.Nome" class="form-control" placeholder="Nome" />
+        <label asp-for="Utilizador.Nome">Nome</label>
+        <span asp-validation-for="Utilizador.Nome" class="text-danger"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="Utilizador.Email" class="form-control" placeholder="Email" />
+        <label asp-for="Utilizador.Email">Email</label>
+        <span asp-validation-for="Utilizador.Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="Utilizador.DataNascimento" class="form-control" type="date" min="1900-01-01" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        <label asp-for="Utilizador.DataNascimento">Data de Nascimento</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <select asp-for="Utilizador.Tipo" class="form-control"
+                asp-items="Html.GetEnumSelectList<ElderSense.Data.Model.TipoUtilizador>()">
+        </select>
+        <label asp-for="Utilizador.Tipo">Tipo</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="Utilizador.Telefone" class="form-control" placeholder="Telefone" />
+        <label asp-for="Utilizador.Telefone">Telefone</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
