@@ -1,11 +1,11 @@
 ﻿using ElderSense.Data.Model;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace ElderSense.Data
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext(options){
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext(options)
+    {
 
         public DbSet<Utilizador> Utilizadores { get; set; }
         public DbSet<Alerta> Alertas { get; set; }
@@ -14,7 +14,7 @@ namespace ElderSense.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder); 
+            base.OnModelCreating(builder);
 
             // Configura o Enum para ser guardado como String na Base de Dados
             builder.Entity<Utilizador>()
@@ -49,6 +49,22 @@ namespace ElderSense.Data
                 .WithMany()
                 .HasForeignKey(d => d.FKSensor)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            // 4. Configura o M:N entre Alerta e DadosMonitorizacao sem cascade paths
+            builder.Entity<Alerta>()
+                .HasMany(a => a.ListadeDados)
+                .WithMany(d => d.ListadeAlertas)
+                .UsingEntity<Dictionary<string, object>>(
+                    "AlertaDadosMonitorizacao",
+                    j => j.HasOne<DadosMonitorizacao>()
+                          .WithMany()
+                          .HasForeignKey("ListadeDadosId")
+                          .OnDelete(DeleteBehavior.Restrict),
+                    j => j.HasOne<Alerta>()
+                          .WithMany()
+                          .HasForeignKey("ListadeAlertasId")
+                          .OnDelete(DeleteBehavior.Cascade)
+                );
         }
     }
 }

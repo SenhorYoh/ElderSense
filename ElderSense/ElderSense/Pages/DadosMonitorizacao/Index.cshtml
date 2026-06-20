@@ -14,7 +14,7 @@
             <th>Tipo</th>
             <th>Valor</th>
             <th>Sensor</th>
-            <th>Dono</th>
+            <th>Idoso</th>
         </tr>
     </thead>
     <tbody>
@@ -24,8 +24,8 @@
                 <td>@dado.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
                 <td>@dado.Tipo</td>
                 <td>@dado.Valor</td>
-                <td>@dado.FKSensor</td>
-                <td>@dado.FKUtilizador</td>
+                <td>@dado.Sensor.Localizacao</td>
+                <td>@dado.Utilizador.Nome</td>
             </tr>
         }
     </tbody>

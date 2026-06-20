@@ -7,11 +7,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using ElderSense.Data;
 using ElderSense.Data.Model;
 
-
-
 namespace ElderSense.Pages.Sensores
 {
-
     /// <summary>
     /// Página de criação dos sensores. Apenas um utilizador logado pode criar
     /// </summary>

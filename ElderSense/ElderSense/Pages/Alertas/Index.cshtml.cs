@@ -22,7 +22,7 @@ namespace ElderSense.Pages.Alertas
         public async Task OnGetAsync()
         {
             Alertas = await _context.Alertas
-                .Include(a => a.FKUtilizador)
+                .Include(a => a.Utilizador)
                 .OrderByDescending(a => a.DataHora)
                 .ToListAsync();
         }

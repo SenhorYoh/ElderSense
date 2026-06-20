@@ -6,26 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ElderSense.Migrations
 {
     /// <inheritdoc />
-    public partial class SetupInicialIdentity : Migration
+    public partial class EstruturaInicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Alertas",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DataHora = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Mensagem = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    FKUtilizador = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Alertas", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -48,7 +33,7 @@ namespace ElderSense.Migrations
                     Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     Nome = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DataNascimento = table.Column<DateOnly>(type: "date", nullable: true),
-                    Tipo = table.Column<int>(type: "int", nullable: true),
+                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Telefone = table.Column<string>(type: "nvarchar(17)", maxLength: 17, nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -71,44 +56,6 @@ namespace ElderSense.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sensores",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Localizacao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Estado = table.Column<bool>(type: "bit", nullable: false),
-                    FKUtilizador = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Sensores", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DadosMonitorizacao",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    DataHora = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Tipo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Valor = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    FKUtilizador = table.Column<int>(type: "int", nullable: false),
-                    FKSensor = table.Column<int>(type: "int", nullable: false),
-                    AlertaId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DadosMonitorizacao", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DadosMonitorizacao_Alertas_AlertaId",
-                        column: x => x.AlertaId,
-                        principalTable: "Alertas",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -125,6 +72,27 @@ namespace ElderSense.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Alertas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DataHora = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Mensagem = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FKUtilizador = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Alertas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Alertas_AspNetUsers_FKUtilizador",
+                        column: x => x.FKUtilizador,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -215,6 +183,27 @@ namespace ElderSense.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Sensores",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Localizacao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Estado = table.Column<bool>(type: "bit", nullable: false),
+                    FKUtilizador = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sensores", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sensores_AspNetUsers_FKUtilizador",
+                        column: x => x.FKUtilizador,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UtilizadorUtilizador",
                 columns: table => new
                 {
@@ -236,6 +225,69 @@ namespace ElderSense.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateTable(
+                name: "DadosMonitorizacao",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DataHora = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Tipo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Valor = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FKUtilizador = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FKSensor = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DadosMonitorizacao", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DadosMonitorizacao_AspNetUsers_FKUtilizador",
+                        column: x => x.FKUtilizador,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DadosMonitorizacao_Sensores_FKSensor",
+                        column: x => x.FKSensor,
+                        principalTable: "Sensores",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AlertaDadosMonitorizacao",
+                columns: table => new
+                {
+                    ListadeAlertasId = table.Column<int>(type: "int", nullable: false),
+                    ListadeDadosId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AlertaDadosMonitorizacao", x => new { x.ListadeAlertasId, x.ListadeDadosId });
+                    table.ForeignKey(
+                        name: "FK_AlertaDadosMonitorizacao_Alertas_ListadeAlertasId",
+                        column: x => x.ListadeAlertasId,
+                        principalTable: "Alertas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AlertaDadosMonitorizacao_DadosMonitorizacao_ListadeDadosId",
+                        column: x => x.ListadeDadosId,
+                        principalTable: "DadosMonitorizacao",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AlertaDadosMonitorizacao_ListadeDadosId",
+                table: "AlertaDadosMonitorizacao",
+                column: "ListadeDadosId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Alertas_FKUtilizador",
+                table: "Alertas",
+                column: "FKUtilizador");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -277,9 +329,19 @@ namespace ElderSense.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DadosMonitorizacao_AlertaId",
+                name: "IX_DadosMonitorizacao_FKSensor",
                 table: "DadosMonitorizacao",
-                column: "AlertaId");
+                column: "FKSensor");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DadosMonitorizacao_FKUtilizador",
+                table: "DadosMonitorizacao",
+                column: "FKUtilizador");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sensores_FKUtilizador",
+                table: "Sensores",
+                column: "FKUtilizador");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UtilizadorUtilizador_ListadeIdososId",
@@ -290,6 +352,9 @@ namespace ElderSense.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AlertaDadosMonitorizacao");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -306,19 +371,19 @@ namespace ElderSense.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "DadosMonitorizacao");
-
-            migrationBuilder.DropTable(
-                name: "Sensores");
-
-            migrationBuilder.DropTable(
                 name: "UtilizadorUtilizador");
+
+            migrationBuilder.DropTable(
+                name: "Alertas");
+
+            migrationBuilder.DropTable(
+                name: "DadosMonitorizacao");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Alertas");
+                name: "Sensores");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

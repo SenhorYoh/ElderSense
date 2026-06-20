@@ -388,8 +388,49 @@ namespace ElderSense.Migrations
                     b.HasOne("ElderSense.Data.Model.DadosMonitorizacao", null)
                         .WithMany()
                         .HasForeignKey("ListadeDadosId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ElderSense.Data.Model.Alerta", b =>
+                {
+                    b.HasOne("ElderSense.Data.Model.Utilizador", "Utilizador")
+                        .WithMany()
+                        .HasForeignKey("FKUtilizador")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Utilizador");
+                });
+
+            modelBuilder.Entity("ElderSense.Data.Model.DadosMonitorizacao", b =>
+                {
+                    b.HasOne("ElderSense.Data.Model.Sensor", "Sensor")
+                        .WithMany()
+                        .HasForeignKey("FKSensor")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ElderSense.Data.Model.Utilizador", "Utilizador")
+                        .WithMany()
+                        .HasForeignKey("FKUtilizador")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Sensor");
+
+                    b.Navigation("Utilizador");
+                });
+
+            modelBuilder.Entity("ElderSense.Data.Model.Sensor", b =>
+                {
+                    b.HasOne("ElderSense.Data.Model.Utilizador", "Utilizador")
+                        .WithMany()
+                        .HasForeignKey("FKUtilizador")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Utilizador");
                 });
 
             modelBuilder.Entity("ElderSense.Data.Model.Alerta", b =>
