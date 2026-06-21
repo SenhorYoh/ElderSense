@@ -1,5 +1,7 @@
 ﻿using ElderSense.Data;
 using ElderSense.Data.Model;
+using ElderSense.Hubs;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ElderSense.Services
@@ -12,10 +14,12 @@ namespace ElderSense.Services
     public class SimuController
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHubContext<AlertaHub> _hubContext;
 
-        public SimuController(ApplicationDbContext context)
+        public SimuController(ApplicationDbContext context, IHubContext<AlertaHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
         }
 
         public async Task InjetarDadosDeTesteAsync()
@@ -53,8 +57,15 @@ namespace ElderSense.Services
                 else if (sensor.Localizacao.Contains("Pulseira"))
                 {
                     novoRegisto.Tipo = "Frequência Cardíaca";
-                    // Gera um ritmo cardíaco normal (ex: entre 60 e 90 bpm)
-                    novoRegisto.Valor = random.Next(60, 91).ToString() + " bpm";
+                    // Gera um ritmo cardíaco, ocasionalmente fora do normal para testar os alertas
+                    int bpm = random.Next(40, 121);
+                    novoRegisto.Valor = bpm.ToString() + " bpm";
+
+                    // 2.1 Verifica se o valor é anómalo (fora do intervalo normal 50-100 bpm)
+                    if (bpm < 50 || bpm > 100)
+                    {
+                        await CriarAlertaAsync(sensor.FKUtilizador, $"Frequência cardíaca fora do normal: {bpm} bpm");
+                    }
                 }
                 else
                 {
@@ -85,6 +96,25 @@ namespace ElderSense.Services
 
             // 3. Executa a inserção dos novos e a limpeza dos antigos tudo de uma vez
             await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Cria um Alerta na base de dados e notifica em tempo real os clientes ligados via SignalR
+        /// </summary>
+        private async Task CriarAlertaAsync(string fkUtilizador, string mensagem)
+        {
+            var novoAlerta = new Alerta
+            {
+                DataHora = DateTime.Now,
+                Mensagem = mensagem,
+                FKUtilizador = fkUtilizador
+            };
+
+            _context.Alertas.Add(novoAlerta);
+            await _context.SaveChangesAsync();
+
+            // Notifica todos os clientes ligados ao Hub que há um alerta novo
+            await _hubContext.Clients.All.SendAsync("NovoAlerta", mensagem);
         }
     }
 }
