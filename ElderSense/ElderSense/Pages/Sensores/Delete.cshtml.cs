@@ -39,14 +39,33 @@ namespace ElderSense.Pages.Sensores
 
             if (sensor != null)
             {
-                // apaga primeiro os dados de monitorização associados a este sensor,
-                // já que a relação Sensor -> DadosMonitorizacao não tem cascade automático
+                // vai buscar os dados de monitorização associados a este sensor
                 var dadosAssociados = await _context.DadosMonitorizacao
                                                      .Where(d => d.FKSensor == sensor.Id)
                                                      .ToListAsync();
 
                 if (dadosAssociados.Any())
                 {
+                    // remove primeiro as ligações na tabela junction M:N (Alerta <-> DadosMonitorizacao)
+                    // para qualquer Alerta que esteja ligado a estes dados específicos
+                    var idsDados = dadosAssociados.Select(d => d.Id).ToList();
+
+                    var alertasLigados = await _context.Alertas
+                                                        .Include(a => a.ListadeDados)
+                                                        .Where(a => a.ListadeDados.Any(d => idsDados.Contains(d.Id)))
+                                                        .ToListAsync();
+
+                    foreach (var alerta in alertasLigados)
+                    {
+                        // remove apenas a ligação aos dados deste sensor, mantém o alerta
+                        var dadosParaRemover = alerta.ListadeDados.Where(d => idsDados.Contains(d.Id)).ToList();
+                        foreach (var dado in dadosParaRemover)
+                        {
+                            alerta.ListadeDados.Remove(dado);
+                        }
+                    }
+
+                    // agora já pode apagar os dados de monitorização sem violar a tabela junction
                     _context.DadosMonitorizacao.RemoveRange(dadosAssociados);
                 }
 
