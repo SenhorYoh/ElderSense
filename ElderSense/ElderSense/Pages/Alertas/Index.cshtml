@@ -7,7 +7,7 @@
 
 <h1>Alertas</h1>
 
-<table class="table">
+<table class="table" id="tabela-alertas">
     <thead>
         <tr>
             <th>Data/Hora</th>
@@ -26,3 +26,37 @@
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        // cria a ligação ao Hub do SignalR
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/alertaHub")
+            .build();
+
+        // define o que fazer quando o servidor enviar a mensagem "NovoAlerta"
+        connection.on("NovoAlerta", function (mensagem, nomeIdoso) {
+            // formata a data/hora atual no mesmo formato usado pelo servidor
+            const agora = new Date();
+            const dataFormatada = agora.toLocaleDateString("pt-PT") + " " +
+                agora.toLocaleTimeString("pt-PT", { hour: "2-digit", minute: "2-digit" });
+
+            // cria a nova linha da tabela
+            const novaLinha = document.createElement("tr");
+            novaLinha.innerHTML = `
+                <td>${dataFormatada}</td>
+                <td>${mensagem}</td>
+                <td>${nomeIdoso}</td>
+            `;
+
+            // insere a nova linha no topo da tabela
+            const corpoTabela = document.querySelector("#tabela-alertas tbody");
+            corpoTabela.insertBefore(novaLinha, corpoTabela.firstChild);
+        });
+
+        // inicia a ligação
+        connection.start().catch(function (err) {
+            console.error(err.toString());
+        });
+    </script>
+}

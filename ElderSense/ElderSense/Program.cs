@@ -1,5 +1,6 @@
 using ElderSense.Data;
 using ElderSense.Data.Model;
+using ElderSense.Hubs;
 using ElderSense.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -60,6 +61,8 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddRazorPages();
 
+// Regista o SignalR para permitir notificações em tempo real
+builder.Services.AddSignalR();
 
 ///<summary>
 ///O utilizador não pode fazer login até confirmar o seu email 
@@ -117,5 +120,8 @@ app.UseAuthorization();
 app.MapStaticAssets();
 app.MapRazorPages().WithStaticAssets();
 app.MapControllers();
+
+// Mapeia o endpoint do Hub - é aqui que o browser se vai ligar para receber notificações em tempo real
+app.MapHub<AlertaHub>("/alertaHub");
 
 app.Run();

@@ -19,6 +19,14 @@
         <span asp-validation-for="Sensor.Localizacao" class="text-danger"></span>
     </div>
 
+    <div class="form-floating mb-3">
+        <select asp-for="Sensor.Tipo" class="form-control"
+                asp-items="Html.GetEnumSelectList<ElderSense.Data.Model.TipoSensor>()">
+        </select>
+        <label asp-for="Sensor.Tipo">Tipo de Sensor</label>
+        <span asp-validation-for="Sensor.Tipo" class="text-danger"></span>
+    </div>
+
     <div class="form-check mb-3">
         <input asp-for="Sensor.Estado" class="form-check-input" />
         <label asp-for="Sensor.Estado" class="form-check-label">Ativo</label>

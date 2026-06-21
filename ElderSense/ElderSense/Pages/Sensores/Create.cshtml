@@ -11,9 +11,34 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
     <div class="form-floating mb-3">
-        <input asp-for="Sensor.Localizacao" class="form-control" placeholder="Ex: Sala" />
-        <label asp-for="Sensor.Localizacao">Localização</label>
-        <span asp-validation-for="Sensor.Localizacao" class="text-danger"></span>
+        <select id="tipoSensor" asp-for="Sensor.Tipo" class="form-control"
+                asp-items="Html.GetEnumSelectList<ElderSense.Data.Model.TipoSensor>()">
+            <option value="">Selecione o tipo...</option>
+        </select>
+        <label asp-for="Sensor.Tipo">Tipo de Sensor</label>
+        <span asp-validation-for="Sensor.Tipo" class="text-danger"></span>
+    </div>
+
+    <div id="grupoLocalizacao">
+        <div class="form-floating mb-3">
+            <select id="localizacaoPredefinida" class="form-control">
+                <option value="">Selecione a localização...</option>
+                <option value="Cozinha">Cozinha</option>
+                <option value="Sala">Sala</option>
+                <option value="Quarto">Quarto</option>
+                <option value="Casa de Banho">Casa de Banho</option>
+                <option value="Entrada">Entrada</option>
+                <option value="Garagem">Garagem</option>
+                <option value="Outro">Outro (escrever)</option>
+            </select>
+            <label for="localizacaoPredefinida">Localização</label>
+        </div>
+
+        <div class="form-floating mb-3" id="grupoLocalizacaoTexto" style="display: none;">
+            <input asp-for="Sensor.Localizacao" class="form-control" placeholder="Ex: Quarto 2" />
+            <label asp-for="Sensor.Localizacao">Especificar Localização</label>
+            <span asp-validation-for="Sensor.Localizacao" class="text-danger"></span>
+        </div>
     </div>
 
     <div class="form-check mb-3">
@@ -27,4 +52,43 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        const tipoSensor = document.getElementById("tipoSensor");
+        const grupoLocalizacao = document.getElementById("grupoLocalizacao");
+        const localizacaoPredefinida = document.getElementById("localizacaoPredefinida");
+        const grupoLocalizacaoTexto = document.getElementById("grupoLocalizacaoTexto");
+        const inputLocalizacao = document.querySelector("[name='Sensor.Localizacao']");
+
+        // O enum TipoSensor gera value="0" para Beacon e value="1" para Pulseira
+        const VALOR_PULSEIRA = "1";
+
+        // mostra ou esconde o campo de localização com base no tipo de sensor escolhido
+        function atualizarVisibilidadeLocalizacao() {
+            if (tipoSensor.value === VALOR_PULSEIRA) {
+                grupoLocalizacao.style.display = "none";
+                inputLocalizacao.value = "Corpo do idoso"; // valor fixo, sem sentido editar
+            } else {
+                grupoLocalizacao.style.display = "block";
+                if (inputLocalizacao.value === "Corpo do idoso") {
+                    inputLocalizacao.value = "";
+                }
+            }
+        }
+
+        // quando o utilizador escolhe uma localização predefinida, copia para o campo real
+        localizacaoPredefinida.addEventListener("change", function () {
+            if (this.value === "Outro") {
+                grupoLocalizacaoTexto.style.display = "block";
+                inputLocalizacao.value = "";
+            } else {
+                grupoLocalizacaoTexto.style.display = "none";
+                inputLocalizacao.value = this.value;
+            }
+        });
+
+        tipoSensor.addEventListener("change", atualizarVisibilidadeLocalizacao);
+
+        // estado inicial ao carregar a página
+        atualizarVisibilidadeLocalizacao();
+    </script>
 }

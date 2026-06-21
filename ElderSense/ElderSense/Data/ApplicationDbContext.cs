@@ -21,6 +21,11 @@ namespace ElderSense.Data
                 .Property(u => u.Tipo)
                 .HasConversion<string>();
 
+            // Configura o Enum do Sensor (Beacon/Pulseira) para ser guardado como String na Base de Dados
+            builder.Entity<Sensor>()
+                .Property(s => s.Tipo)
+                .HasConversion<string>();
+
             ///<summary>
             ///Aqui tem-se a lógica de apagamento em cascata. Se um utilizador for eliminado do sistema,
             ///todos os dados associados também devem ser apagados 
