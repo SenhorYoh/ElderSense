@@ -34,49 +34,63 @@ namespace ElderSense.Services
 
             foreach (var sensor in sensoresAtivos)
             {
-                // 1. CRIAR O DADO NOVO ASSOCIADO AO SENSOR EXISTENTE
-                var novoRegisto = new DadosMonitorizacao
+                // 1. Decide que tipo(s) de dado gerar com base no hardware físico do sensor
+                if (sensor.Tipo == TipoSensor.Beacon)
                 {
-                    DataHora = DateTime.Now,
-                    FKSensor = sensor.Id,
-                    FKUtilizador = sensor.FKUtilizador,
-                };
+                    // Um Beacon só sabe registar quando deteta a passagem da pulseira/tag por perto.
+                    // Não regista "ausência" - simplesmente não gera registo nenhum se não houver passagem.
+                    bool detetado = random.Next(0, 100) < 40; // 40% de hipótese de deteção neste ciclo
 
-                // 2. Decide que tipo de dado gerar com base no hardware físico simulado
-                if (sensor.Localizacao.Contains("Porta"))
-                {
-                    novoRegisto.Tipo = "Abertura";
+                    if (!detetado)
+                    {
+                        continue; // não passou por aqui neste ciclo, não há nada a registar
+                    }
 
-                    novoRegisto.Valor = random.Next(0, 2) == 0 ? "Aberta" : "Fechada";
+                    var registoPassagem = new DadosMonitorizacao
+                    {
+                        DataHora = DateTime.Now,
+                        FKSensor = sensor.Id,
+                        FKUtilizador = sensor.FKUtilizador,
+                        Tipo = "Passagem",
+                        Valor = "Detetado"
+                    };
+
+                    _context.DadosMonitorizacao.Add(registoPassagem);
                 }
-                else if (sensor.Localizacao.Contains("Cama") || sensor.Localizacao.Contains("Quarto"))
+                else if (sensor.Tipo == TipoSensor.Pulseira)
                 {
-                    novoRegisto.Tipo = "Movimento";
-                    novoRegisto.Valor = "Detetado";
-                }
-                else if (sensor.Localizacao.Contains("Pulseira"))
-                {
-                    novoRegisto.Tipo = "Frequência Cardíaca";
-                    // Gera um ritmo cardíaco, ocasionalmente fora do normal para testar os alertas
+                    // A pulseira está no corpo do idoso, por isso gera dois sinais vitais em simultâneo:
+                    // temperatura corporal e frequência cardíaca
+
+                    // 2.1 Temperatura corporal
+                    var registoTemperatura = new DadosMonitorizacao
+                    {
+                        DataHora = DateTime.Now,
+                        FKSensor = sensor.Id,
+                        FKUtilizador = sensor.FKUtilizador,
+                        Tipo = "Temperatura Corporal",
+                        Valor = (random.Next(350, 380) / 10.0).ToString("0.0") + " ºC"
+                    };
+                    _context.DadosMonitorizacao.Add(registoTemperatura);
+
+                    // 2.2 Frequência cardíaca, ocasionalmente fora do normal para testar os alertas
                     int bpm = random.Next(40, 121);
-                    novoRegisto.Valor = bpm.ToString() + " bpm";
+                    var registoBpm = new DadosMonitorizacao
+                    {
+                        DataHora = DateTime.Now,
+                        FKSensor = sensor.Id,
+                        FKUtilizador = sensor.FKUtilizador,
+                        Tipo = "Frequência Cardíaca",
+                        Valor = bpm.ToString() + " bpm"
+                    };
+                    _context.DadosMonitorizacao.Add(registoBpm);
 
-                    // 2.1 Verifica se o valor é anómalo (fora do intervalo normal 50-100 bpm)
+                    // Verifica se o valor é anómalo (fora do intervalo normal 50-100 bpm)
                     if (bpm < 50 || bpm > 100)
                     {
-                        await CriarAlertaAsync(sensor.FKUtilizador, $"Frequência cardíaca fora do normal: {bpm} bpm", novoRegisto);
+                        await CriarAlertaAsync(sensor.FKUtilizador, $"Frequência cardíaca fora do normal: {bpm} bpm", registoBpm);
                     }
                 }
-                else
-                {
-                    // Um valor padrão (ex: temperatura ambiente) caso a localização não seja nenhuma das de cima
-                    novoRegisto.Tipo = "Temperatura";
-                    novoRegisto.Valor = random.Next(18, 26).ToString() + " ºC";
-                }
-
-                // 3. Adiciona o registo formatado à base de dados
-                _context.DadosMonitorizacao.Add(novoRegisto);
-
 
                 // Vai buscar todos os dados deste sensor, ordenados do mais recente para o mais antigo.
                 // O .Skip(50) ignora os 50 mais recentes e seleciona todos os que sobrarem (o "lixo" antigo).
@@ -94,7 +108,7 @@ namespace ElderSense.Services
                 }
             }
 
-            // 3. Executa a inserção dos novos e a limpeza dos antigos tudo de uma vez
+            // Executa a inserção dos novos e a limpeza dos antigos tudo de uma vez
             await _context.SaveChangesAsync();
         }
 
