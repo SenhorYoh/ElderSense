@@ -64,7 +64,7 @@ namespace ElderSense.Services
                     // 2.1 Verifica se o valor é anómalo (fora do intervalo normal 50-100 bpm)
                     if (bpm < 50 || bpm > 100)
                     {
-                        await CriarAlertaAsync(sensor.FKUtilizador, $"Frequência cardíaca fora do normal: {bpm} bpm");
+                        await CriarAlertaAsync(sensor.FKUtilizador, $"Frequência cardíaca fora do normal: {bpm} bpm", novoRegisto);
                     }
                 }
                 else
@@ -99,9 +99,11 @@ namespace ElderSense.Services
         }
 
         /// <summary>
-        /// Cria um Alerta na base de dados e notifica em tempo real os clientes ligados via SignalR
+        /// Cria um Alerta na base de dados, associa-o ao registo de dados que o despoletou
+        /// (relacionamento M:N Alerta-DadosMonitorizacao), e notifica em tempo real os clientes
+        /// ligados via SignalR
         /// </summary>
-        private async Task CriarAlertaAsync(string fkUtilizador, string mensagem)
+        private async Task CriarAlertaAsync(string fkUtilizador, string mensagem, DadosMonitorizacao dadoOrigem)
         {
             var novoAlerta = new Alerta
             {
@@ -109,6 +111,9 @@ namespace ElderSense.Services
                 Mensagem = mensagem,
                 FKUtilizador = fkUtilizador
             };
+
+            // associa o alerta ao registo de dados que o causou (preenche a tabela junction M:N)
+            novoAlerta.ListadeDados.Add(dadoOrigem);
 
             _context.Alertas.Add(novoAlerta);
             await _context.SaveChangesAsync();
