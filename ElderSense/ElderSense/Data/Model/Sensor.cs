@@ -6,6 +6,16 @@ using ElderSense.Data.Model;
 namespace ElderSense.Data.Model
 {
     /// <summary>
+    /// lista dos tipos de hardware físico simulado,
+    /// cada tipo tem capacidades diferentes de deteção
+    /// </summary>
+    public enum TipoSensor
+    {
+        Beacon,   //0 - deteta presença/localização
+        Pulseira, //1 - deteta sinais vitais (temperatura corporal, bpm)
+    }
+
+    /// <summary>
     /// classe dedicada aos sensores e suas informações
     /// </summary>
     public class Sensor
@@ -17,6 +27,10 @@ namespace ElderSense.Data.Model
         [Display(Name = "Localização")]
         public string Localizacao { get; set; } = "";
 
+        [Display(Name = "Tipo de Sensor")]
+        [Required(ErrorMessage = "O {0} é obrigatório")]
+        public TipoSensor Tipo { get; set; }
+
         [Display(Name = "Estado")]
         public bool Estado { get; set; }
 
@@ -24,10 +38,10 @@ namespace ElderSense.Data.Model
         /// Relacionamento 1-N com a classe Utilizador (Regra 4)
         /// </summary>
         [Display(Name = "Responsável")]
-        [ForeignKey(nameof(Utilizador))]
         public string FKUtilizador { get; set; } = "";
 
         // navigation property para o Utilizador
+        [ForeignKey("FKUtilizador")]
         public Utilizador Utilizador { get; set; } = null!;
     }
 }
