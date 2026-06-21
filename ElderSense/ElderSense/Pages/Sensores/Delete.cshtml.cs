@@ -46,10 +46,9 @@ namespace ElderSense.Pages.Sensores
 
                 if (dadosAssociados.Any())
                 {
-                    // remove primeiro as ligações na tabela junction M:N (Alerta <-> DadosMonitorizacao)
-                    // para qualquer Alerta que esteja ligado a estes dados específicos
                     var idsDados = dadosAssociados.Select(d => d.Id).ToList();
 
+                    // vai buscar todos os Alertas ligados a estes dados específicos
                     var alertasLigados = await _context.Alertas
                                                         .Include(a => a.ListadeDados)
                                                         .Where(a => a.ListadeDados.Any(d => idsDados.Contains(d.Id)))
@@ -57,11 +56,17 @@ namespace ElderSense.Pages.Sensores
 
                     foreach (var alerta in alertasLigados)
                     {
-                        // remove apenas a ligação aos dados deste sensor, mantém o alerta
+                        // remove a ligação aos dados deste sensor
                         var dadosParaRemover = alerta.ListadeDados.Where(d => idsDados.Contains(d.Id)).ToList();
                         foreach (var dado in dadosParaRemover)
                         {
                             alerta.ListadeDados.Remove(dado);
+                        }
+
+                        // se o alerta ficou sem qualquer dado associado, deixa de ter sentido mantê-lo
+                        if (!alerta.ListadeDados.Any())
+                        {
+                            _context.Alertas.Remove(alerta);
                         }
                     }
 
