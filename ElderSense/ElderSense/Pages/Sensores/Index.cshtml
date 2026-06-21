@@ -15,6 +15,7 @@
     <thead>
         <tr>
             <th>Localização</th>
+            <th>Tipo</th>
             <th>Estado</th>
             <th>Responsável</th>
             <th>Ações</th>
@@ -25,6 +26,7 @@
         {
             <tr>
                 <td>@sensor.Localizacao</td>
+                <td>@sensor.Tipo</td>
                 <td>@(sensor.Estado ? "Ativo" : "Inativo")</td>
                 <td>@sensor.Utilizador.Nome</td>
                 <td>
