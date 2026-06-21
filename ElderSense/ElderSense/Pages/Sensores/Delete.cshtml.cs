@@ -3,6 +3,7 @@ using ElderSense.Data.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace ElderSense.Pages.Sensores
 {
@@ -38,6 +39,17 @@ namespace ElderSense.Pages.Sensores
 
             if (sensor != null)
             {
+                // apaga primeiro os dados de monitorização associados a este sensor,
+                // já que a relação Sensor -> DadosMonitorizacao não tem cascade automático
+                var dadosAssociados = await _context.DadosMonitorizacao
+                                                     .Where(d => d.FKSensor == sensor.Id)
+                                                     .ToListAsync();
+
+                if (dadosAssociados.Any())
+                {
+                    _context.DadosMonitorizacao.RemoveRange(dadosAssociados);
+                }
+
                 _context.Sensores.Remove(sensor);
                 await _context.SaveChangesAsync();
             }
