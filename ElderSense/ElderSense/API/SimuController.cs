@@ -100,8 +100,8 @@ namespace ElderSense.Services
 
         /// <summary>
         /// Cria um Alerta na base de dados, associa-o ao registo de dados que o despoletou
-        /// (relacionamento M:N Alerta-DadosMonitorizacao), e notifica em tempo real os clientes
-        /// ligados via SignalR
+        /// (relacionamento M:N Alerta-DadosMonitorizacao), vai buscar o nome do idoso associado,
+        /// e notifica em tempo real os clientes ligados via SignalR (mensagem + nome do idoso)
         /// </summary>
         private async Task CriarAlertaAsync(string fkUtilizador, string mensagem, DadosMonitorizacao dadoOrigem)
         {
@@ -118,8 +118,12 @@ namespace ElderSense.Services
             _context.Alertas.Add(novoAlerta);
             await _context.SaveChangesAsync();
 
+            // vai buscar o nome do idoso para incluir na notificação
+            var idoso = await _context.Utilizadores.FindAsync(fkUtilizador);
+            var nomeIdoso = idoso?.Nome ?? "Desconhecido";
+
             // Notifica todos os clientes ligados ao Hub que há um alerta novo
-            await _hubContext.Clients.All.SendAsync("NovoAlerta", mensagem);
+            await _hubContext.Clients.All.SendAsync("NovoAlerta", mensagem, nomeIdoso);
         }
     }
 }
