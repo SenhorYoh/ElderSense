@@ -63,14 +63,38 @@
         const VALOR_PULSEIRA = "1";
 
         // mostra ou esconde o campo de localização com base no tipo de sensor escolhido
+                // mostra ou esconde o campo de localização com base no tipo de sensor escolhido
         function atualizarVisibilidadeLocalizacao() {
             if (tipoSensor.value === VALOR_PULSEIRA) {
                 grupoLocalizacao.style.display = "none";
-                inputLocalizacao.value = "Corpo do idoso"; // valor fixo, sem sentido editar
+                inputLocalizacao.value = "Corpo do idoso"; // valor fixo
             } else {
                 grupoLocalizacao.style.display = "block";
+
                 if (inputLocalizacao.value === "Corpo do idoso") {
                     inputLocalizacao.value = "";
+                }
+
+                // 🌟 NOVA LÓGICA DE MEMÓRIA (POSTBACK)
+                if (inputLocalizacao.value !== "") {
+                    // Verifica se o texto guardado bate certo com alguma opção do dropdown
+                    let opcaoExiste = Array.from(localizacaoPredefinida.options).some(
+                        opt => opt.value === inputLocalizacao.value && opt.value !== "Outro" && opt.value !== ""
+                    );
+
+                    if (opcaoExiste) {
+                        // Se for "Sala", "Cozinha", etc., seleciona essa opção no dropdown e esconde o texto
+                        localizacaoPredefinida.value = inputLocalizacao.value;
+                        grupoLocalizacaoTexto.style.display = "none";
+                    } else {
+                        // Se for um texto livre (ex: "banana" ou "Quarto 2"), força o dropdown para "Outro" e mostra a caixa!
+                        localizacaoPredefinida.value = "Outro";
+                        grupoLocalizacaoTexto.style.display = "block";
+                    }
+                } else {
+                    // Estado limpo inicial
+                    localizacaoPredefinida.value = "";
+                    grupoLocalizacaoTexto.style.display = "none";
                 }
             }
         }

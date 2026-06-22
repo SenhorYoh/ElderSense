@@ -10,7 +10,7 @@ using ElderSense.Data.Model;
 namespace ElderSense.Pages.Sensores
 {
     /// <summary>
-    /// Página de criação dos sensores. Apenas um utilizador logado pode criar
+    /// Página de criação dos sensores. Apenas um utilizador logado e do tipo Cuidador pode criar
     /// </summary>
     [Authorize]
     public class CreateModel : PageModel
@@ -49,6 +49,33 @@ namespace ElderSense.Pages.Sensores
             // 3. Remove as validações automáticas do ModelState que costumam bloquear o formulário
             ModelState.Remove("Sensor.Utilizador");
             ModelState.Remove("Sensor.FKUtilizador"); // Remove esta também, já que a preenchemos via código e não via HTML
+
+            /// <summary>
+            /// Validação da localização do beacon inserido pelo utilizador
+            /// O utilizador deve especificar o local com 'quarto', 'cozinha' etc
+            /// para que o sistema envie os dados corretos associados a estes comôdos
+            /// Exemplo de local correto 'Quarto2', 'quarto da amália'
+            /// Exemplo de local incorreto 'banana', 'torneira'
+            /// </summary>
+            if (Sensor.Tipo == TipoSensor.Beacon)
+            {
+                if (string.IsNullOrWhiteSpace(Sensor.Localizacao))
+                {
+                    ModelState.AddModelError("Sensor.Localizacao", "Por favor, especifique a localização do Beacon.");
+                }
+                else
+                {
+                    var palavrasPermitidas = new[] { "cozinha", "sala", "quarto", "casa de banho", "entrada", "garagem" };
+                    var textoInserido = Sensor.Localizacao.ToLower();
+
+                    bool localizacaoValida = palavrasPermitidas.Any(palavra => textoInserido.Contains(palavra));
+
+                    if (!localizacaoValida)
+                    {
+                        ModelState.AddModelError("Sensor.Localizacao", "A localização tem de conter uma divisão válida (ex: Quarto, Sala, Cozinha, Garagem, etc.).");
+                    }
+                }
+            }
 
             if (!ModelState.IsValid)
             {
