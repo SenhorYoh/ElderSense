@@ -5,6 +5,8 @@
     ViewData["Title"] = "Adicionar Sensor";
 }
 
+<!--PÁGINA DE CRIAÇÃO DE SENSORES-->
+
 <h1>Adicionar Sensor</h1>
 
 <form method="post">
@@ -63,7 +65,6 @@
         const VALOR_PULSEIRA = "1";
 
         // mostra ou esconde o campo de localização com base no tipo de sensor escolhido
-                // mostra ou esconde o campo de localização com base no tipo de sensor escolhido
         function atualizarVisibilidadeLocalizacao() {
             if (tipoSensor.value === VALOR_PULSEIRA) {
                 grupoLocalizacao.style.display = "none";
@@ -75,7 +76,7 @@
                     inputLocalizacao.value = "";
                 }
 
-                // 🌟 NOVA LÓGICA DE MEMÓRIA (POSTBACK)
+  
                 if (inputLocalizacao.value !== "") {
                     // Verifica se o texto guardado bate certo com alguma opção do dropdown
                     let opcaoExiste = Array.from(localizacaoPredefinida.options).some(

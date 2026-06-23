@@ -18,6 +18,7 @@ namespace ElderSense.Pages.Sensores
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Utilizador> _userManager;
 
+
         public CreateModel(ApplicationDbContext context, UserManager<Utilizador> userManager)
         {
             _context = context;

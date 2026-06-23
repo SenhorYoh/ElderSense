@@ -70,6 +70,14 @@ namespace ElderSense.Data
                           .HasForeignKey("ListadeAlertasId")
                           .OnDelete(DeleteBehavior.Cascade)
                 );
+
+            // Diz ao EF Core para não apagar o Sensor automaticamente se o perfil do Idoso for apagado,
+            // evitando o erro "multiple cascade paths". O apagamento em cascata fica só no FKUtilizador (Cuidador).
+            builder.Entity<Sensor>()
+            .HasOne(s => s.IdosoAssociado)
+            .WithMany()
+            .HasForeignKey(s => s.FKIdoso)
+            .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
