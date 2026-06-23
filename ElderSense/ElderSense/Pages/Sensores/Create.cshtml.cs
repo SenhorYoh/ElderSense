@@ -47,8 +47,7 @@ namespace ElderSense.Pages.Sensores
             // Se o cuidador tiver idosos na sua rede, preenche o dropdown
             if (cuidador != null && cuidador.ListadeIdosos.Any())
             {
-                // NOTA: Usa "UserName" ou o nome da propriedade que guarda o Nome do utilizador
-                ListaIdosos = new SelectList(cuidador.ListadeIdosos, "Id", "UserName");
+                ListaIdosos = new SelectList(cuidador.ListadeIdosos, "Id", "Nome");
             }
             else
             {
@@ -119,7 +118,7 @@ namespace ElderSense.Pages.Sensores
             if (!ModelState.IsValid)
             {
 
-                ListaIdosos = new SelectList(cuidador.ListadeIdosos ?? new List<Utilizador>(), "Id", "UserName");
+                ListaIdosos = new SelectList(cuidador.ListadeIdosos ?? new List<Utilizador>(), "Id", "Nome");
 
                 return Page();
             }
