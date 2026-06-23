@@ -1,9 +1,13 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using ElderSense.Data;
 using ElderSense.Data.Model;
 
@@ -18,7 +22,6 @@ namespace ElderSense.Pages.Sensores
         private readonly ApplicationDbContext _context;
         private readonly UserManager<Utilizador> _userManager;
 
-
         public CreateModel(ApplicationDbContext context, UserManager<Utilizador> userManager)
         {
             _context = context;
@@ -28,8 +31,31 @@ namespace ElderSense.Pages.Sensores
         [BindProperty]
         public Sensor Sensor { get; set; } = new();
 
-        public void OnGet()
+        // Lista para alimentar o dropdown de Idosos no HTML
+        public SelectList ListaIdosos { get; set; } = default!;
+
+        public bool BloqueiaInsercao { get; set; } = false;
+        public async Task OnGetAsync()
         {
+            var userId = _userManager.GetUserId(User);
+
+            // Vai buscar o cuidador e a sua lista de idosos
+            var cuidador = await _context.Set<Utilizador>()
+                .Include(u => u.ListadeIdosos)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            // Se o cuidador tiver idosos na sua rede, preenche o dropdown
+            if (cuidador != null && cuidador.ListadeIdosos.Any())
+            {
+                // NOTA: Usa "UserName" ou o nome da propriedade que guarda o Nome do utilizador
+                ListaIdosos = new SelectList(cuidador.ListadeIdosos, "Id", "UserName");
+            }
+            else
+            {
+                // Se não tiver idosos, cria uma lista vazia para não dar erro no ecrã
+                ListaIdosos = new SelectList(new List<Utilizador>(), "Id", "UserName");
+                BloqueiaInsercao = true;
+            }
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -38,25 +64,37 @@ namespace ElderSense.Pages.Sensores
             var user = await _userManager.GetUserAsync(User);
 
             // Segurança extra: se a sessão expirou ou o user é nulo, manda para o Login
-            if (user == null)
+            if (user == null) {return Challenge();}
+
+            // Impede que gravem sensores forçando o código HTML
+            var cuidador = await _context.Set<Utilizador>().Include(u => u.ListadeIdosos).FirstOrDefaultAsync(u => u.Id == user.Id);
+            if (cuidador == null || !cuidador.ListadeIdosos.Any())
             {
-                return Challenge();
+                BloqueiaInsercao = true;
+                ModelState.AddModelError(string.Empty, "O ElderSense requer pelo menos um idoso associado para registar hardware.");
+                return Page();
             }
 
-            // 2. Associa o sensor ao ID do utilizador (Garante que na classe 'Sensor' a propriedade se chama 'FKUtilizador')
+            // 2. Associa o sensor ao ID do utilizador e limpa a navegação
             Sensor.FKUtilizador = user.Id;
-            Sensor.Utilizador = null!; //limpa qualquer lixo invisivel 
+            Sensor.Utilizador = null!;
+            Sensor.IdosoAssociado = null!; // Limpa lixo do novo relacionamento
 
-            // 3. Remove as validações automáticas do ModelState que costumam bloquear o formulário
+            // 3. Remove as validações automáticas do ModelState
             ModelState.Remove("Sensor.Utilizador");
-            ModelState.Remove("Sensor.FKUtilizador"); // Remove esta também, já que a preenchemos via código e não via HTML
+            ModelState.Remove("Sensor.FKUtilizador");
+            ModelState.Remove("Sensor.IdosoAssociado");
+
+            /// <summary>
+            /// Validação da Pulseira: Garante que está associada ao pulso de alguém
+            /// </summary>
+            if (Sensor.Tipo == TipoSensor.Pulseira && string.IsNullOrEmpty(Sensor.FKIdoso))
+            {
+                ModelState.AddModelError("Sensor.FKIdoso", "Uma pulseira tem de estar associada a um idoso.");
+            }
 
             /// <summary>
             /// Validação da localização do beacon inserido pelo utilizador
-            /// O utilizador deve especificar o local com 'quarto', 'cozinha' etc
-            /// para que o sistema envie os dados corretos associados a estes comôdos
-            /// Exemplo de local correto 'Quarto2', 'quarto da amália'
-            /// Exemplo de local incorreto 'banana', 'torneira'
             /// </summary>
             if (Sensor.Tipo == TipoSensor.Beacon)
             {
@@ -80,6 +118,12 @@ namespace ElderSense.Pages.Sensores
 
             if (!ModelState.IsValid)
             {
+                var cuidador = await _context.Set<Utilizador>()
+                    .Include(u => u.ListadeIdosos)
+                    .FirstOrDefaultAsync(u => u.Id == user.Id);
+
+                ListaIdosos = new SelectList(cuidador?.ListadeIdosos ?? new List<Utilizador>(), "Id", "UserName");
+
                 return Page();
             }
 

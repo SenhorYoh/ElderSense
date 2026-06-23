@@ -9,48 +9,71 @@
 
 <h1>Adicionar Sensor</h1>
 
-<form method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-    <div class="form-floating mb-3">
-        <select id="tipoSensor" asp-for="Sensor.Tipo" class="form-control"
-                asp-items="Html.GetEnumSelectList<ElderSense.Data.Model.TipoSensor>()">
-            <option value="">Selecione o tipo...</option>
-        </select>
-        <label asp-for="Sensor.Tipo">Tipo de Sensor</label>
-        <span asp-validation-for="Sensor.Tipo" class="text-danger"></span>
+@if (Model.BloqueiaInsercao)
+{
+    <div class="alert alert-warning mt-4 shadow-sm">
+        <h4 class="alert-heading"><i class="bi bi-exclamation-triangle-fill"></i> Atenção!</h4>
+        <p>Para que o sistema de monitorização funcione corretamente, é obrigatório ter um perfil de Idoso associado à sua conta de Cuidador.</p>
+        <hr>
+        <p class="mb-0">
+            <a href="#" class="btn btn-warning fw-bold">Associar Idoso Agora</a>
+            <a asp-page="Index" class="btn btn-outline-secondary ms-2">Voltar</a>
+        </p>
     </div>
+}
+else
+{
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <div id="grupoLocalizacao">
         <div class="form-floating mb-3">
-            <select id="localizacaoPredefinida" class="form-control">
-                <option value="">Selecione a localização...</option>
-                <option value="Cozinha">Cozinha</option>
-                <option value="Sala">Sala</option>
-                <option value="Quarto">Quarto</option>
-                <option value="Casa de Banho">Casa de Banho</option>
-                <option value="Entrada">Entrada</option>
-                <option value="Garagem">Garagem</option>
-                <option value="Outro">Outro (escrever)</option>
+            <select id="tipoSensor" asp-for="Sensor.Tipo" class="form-control"
+                    asp-items="Html.GetEnumSelectList<ElderSense.Data.Model.TipoSensor>()">
+                <option value="">Selecione o tipo...</option>
             </select>
-            <label for="localizacaoPredefinida">Localização</label>
+            <label asp-for="Sensor.Tipo">Tipo de Sensor</label>
+            <span asp-validation-for="Sensor.Tipo" class="text-danger"></span>
         </div>
 
-        <div class="form-floating mb-3" id="grupoLocalizacaoTexto" style="display: none;">
-            <input asp-for="Sensor.Localizacao" class="form-control" placeholder="Ex: Quarto 2" />
-            <label asp-for="Sensor.Localizacao">Especificar Localização</label>
-            <span asp-validation-for="Sensor.Localizacao" class="text-danger"></span>
+        <div id="grupoIdoso" class="form-floating mb-3" style="display: none;">
+            <select id="selectIdoso" asp-for="Sensor.FKIdoso" class="form-control" asp-items="Model.ListaIdosos">
+                <option value="">Selecione o idoso...</option>
+            </select>
+            <label asp-for="Sensor.FKIdoso">Associar a Idoso</label>
+            <span asp-validation-for="Sensor.FKIdoso" class="text-danger"></span>
         </div>
-    </div>
 
-    <div class="form-check mb-3">
-        <input asp-for="Sensor.Estado" class="form-check-input" />
-        <label asp-for="Sensor.Estado" class="form-check-label">Ativo</label>
-    </div>
+        <div id="grupoLocalizacao">
+            <div class="form-floating mb-3">
+                <select id="localizacaoPredefinida" class="form-control">
+                    <option value="">Selecione a localização...</option>
+                    <option value="Cozinha">Cozinha</option>
+                    <option value="Sala">Sala</option>
+                    <option value="Quarto">Quarto</option>
+                    <option value="Casa de Banho">Casa de Banho</option>
+                    <option value="Entrada">Entrada</option>
+                    <option value="Garagem">Garagem</option>
+                    <option value="Outro">Outro (escrever)</option>
+                </select>
+                <label for="localizacaoPredefinida">Localização</label>
+            </div>
 
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
-</form>
+            <div class="form-floating mb-3" id="grupoLocalizacaoTexto" style="display: none;">
+                <input asp-for="Sensor.Localizacao" class="form-control" placeholder="Ex: Quarto 2" />
+                <label asp-for="Sensor.Localizacao">Especificar Localização</label>
+                <span asp-validation-for="Sensor.Localizacao" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="Sensor.Estado" class="form-check-input" />
+            <label asp-for="Sensor.Estado" class="form-check-label">Ativo</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+}
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -61,6 +84,10 @@
         const grupoLocalizacaoTexto = document.getElementById("grupoLocalizacaoTexto");
         const inputLocalizacao = document.querySelector("[name='Sensor.Localizacao']");
 
+        // 🌟 NOVAS VARIÁVEIS PARA O IDOSO
+        const grupoIdoso = document.getElementById("grupoIdoso");
+        const selectIdoso = document.getElementById("selectIdoso");
+
         // O enum TipoSensor gera value="0" para Beacon e value="1" para Pulseira
         const VALOR_PULSEIRA = "1";
 
@@ -69,14 +96,22 @@
             if (tipoSensor.value === VALOR_PULSEIRA) {
                 grupoLocalizacao.style.display = "none";
                 inputLocalizacao.value = "Corpo do idoso"; // valor fixo
+
+                // 🌟 SE FOR PULSEIRA: Mostra o dropdown do Idoso
+                if (grupoIdoso) grupoIdoso.style.display = "block";
             } else {
                 grupoLocalizacao.style.display = "block";
+
+                // 🌟 SE FOR BEACON: Esconde o dropdown e limpa o valor
+                if (grupoIdoso) {
+                    grupoIdoso.style.display = "none";
+                    if (selectIdoso) selectIdoso.value = "";
+                }
 
                 if (inputLocalizacao.value === "Corpo do idoso") {
                     inputLocalizacao.value = "";
                 }
 
-  
                 if (inputLocalizacao.value !== "") {
                     // Verifica se o texto guardado bate certo com alguma opção do dropdown
                     let opcaoExiste = Array.from(localizacaoPredefinida.options).some(
@@ -88,7 +123,7 @@
                         localizacaoPredefinida.value = inputLocalizacao.value;
                         grupoLocalizacaoTexto.style.display = "none";
                     } else {
-                        // Se for um texto livre (ex: "banana" ou "Quarto 2"), força o dropdown para "Outro" e mostra a caixa!
+                        // Se for um texto livre (ex: "banana" ou "Quarto 2"), força o dropdown para "Outro" e mostra a caixa
                         localizacaoPredefinida.value = "Outro";
                         grupoLocalizacaoTexto.style.display = "block";
                     }
