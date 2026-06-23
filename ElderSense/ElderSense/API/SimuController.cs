@@ -32,19 +32,15 @@ namespace ElderSense.Services
 
             var random = new Random();
 
+            // ==========================================
+            // FASE 1: CRIAR E GRAVAR OS DADOS NOVOS
+            // ==========================================
             foreach (var sensor in sensoresAtivos)
             {
-                // 1. Decide que tipo(s) de dado gerar com base no hardware físico do sensor
                 if (sensor.Tipo == TipoSensor.Beacon)
                 {
-                    // Um Beacon só sabe registar quando deteta a passagem da pulseira/tag por perto.
-                    // Não regista "ausência" - simplesmente não gera registo nenhum se não houver passagem.
-                    bool detetado = random.Next(0, 100) < 40; // 40% de hipótese de deteção neste ciclo
-
-                    if (!detetado)
-                    {
-                        continue; // não passou por aqui neste ciclo, não há nada a registar
-                    }
+                    bool detetado = random.Next(0, 100) < 40;
+                    if (!detetado) continue;
 
                     var registoPassagem = new DadosMonitorizacao
                     {
@@ -54,15 +50,10 @@ namespace ElderSense.Services
                         Tipo = "Passagem",
                         Valor = "Detetado"
                     };
-
                     _context.DadosMonitorizacao.Add(registoPassagem);
                 }
                 else if (sensor.Tipo == TipoSensor.Pulseira)
                 {
-                    // A pulseira está no corpo do idoso, por isso gera dois sinais vitais em simultâneo:
-                    // temperatura corporal e frequência cardíaca
-
-                    // 2.1 Temperatura corporal
                     var registoTemperatura = new DadosMonitorizacao
                     {
                         DataHora = DateTime.Now,
@@ -73,7 +64,6 @@ namespace ElderSense.Services
                     };
                     _context.DadosMonitorizacao.Add(registoTemperatura);
 
-                    // 2.2 Frequência cardíaca, ocasionalmente fora do normal para testar os alertas
                     int bpm = random.Next(40, 121);
                     var registoBpm = new DadosMonitorizacao
                     {
@@ -85,30 +75,47 @@ namespace ElderSense.Services
                     };
                     _context.DadosMonitorizacao.Add(registoBpm);
 
-                    // Verifica se o valor é anómalo (fora do intervalo normal 50-100 bpm)
                     if (bpm < 50 || bpm > 100)
                     {
                         await CriarAlertaAsync(sensor.FKUtilizador, $"Frequência cardíaca fora do normal: {bpm} bpm", registoBpm);
                     }
                 }
+            }
 
-                // Vai buscar todos os dados deste sensor, ordenados do mais recente para o mais antigo.
-                // O .Skip(50) ignora os 50 mais recentes e seleciona todos os que sobrarem (o "lixo" antigo).
-                var limiteDeRegistos = 50;
+            //Grava os dados novos na base de dados para a contagem ficar certa!
+            await _context.SaveChangesAsync();
+
+
+            // ==========================================
+            // FASE 2: LIMPAR O LIXO (Garante 10 por sensor)
+            // ==========================================
+            foreach (var sensor in sensoresAtivos)
+            {
+                var limiteDeRegistos = 10;
                 var dadosAntigos = await _context.DadosMonitorizacao
-                                                 .Where(d => d.FKSensor == sensor.Id)
-                                                 .OrderByDescending(d => d.DataHora)
-                                                 .Skip(limiteDeRegistos)
-                                                 .ToListAsync();
+                .Include(d => d.ListadeAlertas)
+                .Where(d => d.FKSensor == sensor.Id)
+                .OrderByDescending(d => d.DataHora)
+                .Skip(limiteDeRegistos)
+                .ToListAsync();
 
-                // Se encontrou dados antigos além do limite, apaga-os da BD
+                Console.WriteLine($"Sensor {sensor.Id}: Total antigos para apagar = {dadosAntigos.Count}");
+
                 if (dadosAntigos.Any())
                 {
+                    //CORTAR AS LIGAÇÕES ANTES DE APAGAR
+                    foreach (var dado in dadosAntigos)
+                    {
+                        // Isto apaga apenas a ligação na tabela intermédia, libertando os dados
+                        dado.ListadeAlertas.Clear();
+                    }
+
+                    // apaga os dados com permissão do SQL Server
                     _context.DadosMonitorizacao.RemoveRange(dadosAntigos);
                 }
             }
 
-            // Executa a inserção dos novos e a limpeza dos antigos tudo de uma vez
+            //Executa a limpeza final
             await _context.SaveChangesAsync();
         }
 

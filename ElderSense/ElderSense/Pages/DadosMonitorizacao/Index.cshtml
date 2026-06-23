@@ -25,7 +25,7 @@
                 <td>@dado.Tipo</td>
                 <td>@dado.Valor</td>
                 <td>@dado.Sensor.Localizacao</td>
-                <td>@dado.Utilizador.Nome</td>
+                <td>@(dado.Sensor.IdosoAssociado?.Nome ?? "Geral (Casa)")</td>
             </tr>
         }
     </tbody>

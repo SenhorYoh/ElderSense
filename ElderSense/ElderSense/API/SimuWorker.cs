@@ -51,7 +51,7 @@ namespace ElderSense.Services
                 }
 
                 // Envia os dados de 1 em 1 minuto 
-                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);
             }
         }
     }

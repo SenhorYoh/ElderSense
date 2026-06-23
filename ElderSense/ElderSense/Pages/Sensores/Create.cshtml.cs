@@ -118,11 +118,8 @@ namespace ElderSense.Pages.Sensores
 
             if (!ModelState.IsValid)
             {
-                var cuidador = await _context.Set<Utilizador>()
-                    .Include(u => u.ListadeIdosos)
-                    .FirstOrDefaultAsync(u => u.Id == user.Id);
 
-                ListaIdosos = new SelectList(cuidador?.ListadeIdosos ?? new List<Utilizador>(), "Id", "UserName");
+                ListaIdosos = new SelectList(cuidador.ListadeIdosos ?? new List<Utilizador>(), "Id", "UserName");
 
                 return Page();
             }
