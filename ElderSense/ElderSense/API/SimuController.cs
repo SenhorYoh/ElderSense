@@ -25,8 +25,8 @@ namespace ElderSense.Services
         public async Task InjetarDadosDeTesteAsync()
         {
             var sensoresAtivos = await _context.Sensores
-                                               .Where(s => s.Estado == true)
-                                               .ToListAsync();
+                                   .Where(s => s.Estado == true)
+                                   .ToListAsync();
 
             if (!sensoresAtivos.Any()) return;
 
@@ -42,11 +42,25 @@ namespace ElderSense.Services
                     bool detetado = random.Next(0, 100) < 40;
                     if (!detetado) continue;
 
+                    //escolhe um idoso associado ao cuidador
+                    string idDonoDado = sensor.FKUtilizador; // Por defeito, fica o Cuidador caso não haja idosos
+
+                    var cuidador = await _context.Set<Utilizador>()
+                                 .Include(u => u.ListadeIdosos)
+                                 .FirstOrDefaultAsync(u => u.Id == sensor.FKUtilizador);
+
+                    // Se o cuidador existir e tiver idosos na lista, faz o sorteio
+                    if (cuidador != null && cuidador.ListadeIdosos.Any())
+                    {
+                        var listaIdosos = cuidador.ListadeIdosos.ToList();
+                        idDonoDado = listaIdosos[random.Next(listaIdosos.Count)].Id; // Sorteia um e guarda o ID
+                    }
+
                     var registoPassagem = new DadosMonitorizacao
                     {
                         DataHora = DateTime.Now,
                         FKSensor = sensor.Id,
-                        FKUtilizador = sensor.FKUtilizador,
+                        FKUtilizador = idDonoDado,
                         Tipo = "Passagem",
                         Valor = "Detetado"
                     };
@@ -54,11 +68,15 @@ namespace ElderSense.Services
                 }
                 else if (sensor.Tipo == TipoSensor.Pulseira)
                 {
+                    // Para a pulseira, usamos o idoso que está associado a ela de forma fixa
+                    // (Se por algum motivo falhar, usa o do Cuidador)
+                    string DonoPulseira = sensor.FKIdoso ?? sensor.FKUtilizador;
+
                     var registoTemperatura = new DadosMonitorizacao
                     {
                         DataHora = DateTime.Now,
                         FKSensor = sensor.Id,
-                        FKUtilizador = sensor.FKUtilizador,
+                        FKUtilizador = DonoPulseira,
                         Tipo = "Temperatura Corporal",
                         Valor = (random.Next(350, 380) / 10.0).ToString("0.0") + " ºC"
                     };
@@ -69,7 +87,7 @@ namespace ElderSense.Services
                     {
                         DataHora = DateTime.Now,
                         FKSensor = sensor.Id,
-                        FKUtilizador = sensor.FKUtilizador,
+                        FKUtilizador = DonoPulseira,
                         Tipo = "Frequência Cardíaca",
                         Valor = bpm.ToString() + " bpm"
                     };
@@ -99,7 +117,6 @@ namespace ElderSense.Services
                 .Skip(limiteDeRegistos)
                 .ToListAsync();
 
-                Console.WriteLine($"Sensor {sensor.Id}: Total antigos para apagar = {dadosAntigos.Count}");
 
                 if (dadosAntigos.Any())
                 {
