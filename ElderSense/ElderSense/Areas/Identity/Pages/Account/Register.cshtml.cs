@@ -132,6 +132,9 @@ namespace ElderSense.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
+                    //o utilizador é do tipo cuidador por padrão
+                    await _userManager.AddToRoleAsync(user, "Cuidador");
+
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

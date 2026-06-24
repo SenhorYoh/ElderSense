@@ -29,16 +29,6 @@
                 <span asp-validation-for="Input.DataNascimento" class="text-danger"></span>
             </div>
 
-            <!-- Tipo de Utilizador (Enum) -->
-            <div class="form-floating mb-3">
-                <select asp-for="Input.Tipo" class="form-control"
-                        asp-items="Html.GetEnumSelectList<ElderSense.Data.Model.TipoUtilizador>()">
-                    <option value="">Selecione o tipo...</option>
-                </select>
-                <label asp-for="Input.Tipo">Tipo de Perfil</label>
-                <span asp-validation-for="Input.Tipo" class="text-danger"></span>
-            </div>
-
             <!-- Email (Pode vir preenchido do Login) -->
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="nome@exemplo.com" />

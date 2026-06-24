@@ -7,7 +7,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ElderSense.Pages.Sensores
 {
-    [Authorize]
+
+    /// <summary>
+    /// Página de deletar sensores. Apenas um utilizador logado e do tipo Cuidador pode deletar
+    /// </summary>
+    [Authorize(Roles = "Cuidador")]
     public class DeleteModel : PageModel
     {
         private readonly ApplicationDbContext _context;

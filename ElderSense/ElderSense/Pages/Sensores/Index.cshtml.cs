@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ElderSense.Pages.Sensores
 {
+    /// <summary>
+    /// Página de visualização dos sensores. Os dois tipos de utilizadores podem visualizar
+    /// </summary>
     [Authorize]
     public class IndexModel : PageModel
     {

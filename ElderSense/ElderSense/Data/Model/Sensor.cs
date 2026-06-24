@@ -34,6 +34,10 @@ namespace ElderSense.Data.Model
         [Display(Name = "Estado")]
         public bool Estado { get; set; }
 
+        // ==========================================
+        // 1. O DONO DO SENSOR (O CUIDADOR)
+        // ==========================================
+
         /// <summary>
         /// Relacionamento 1-N com a classe Utilizador (Regra 4)
         /// </summary>
@@ -43,5 +47,14 @@ namespace ElderSense.Data.Model
         // navigation property para o Utilizador
         [ForeignKey("FKUtilizador")]
         public Utilizador Utilizador { get; set; } = null!;
+
+        // ==========================================
+        // 2. A QUEM A PULSEIRA PERTENCE (IDOSO)
+        // ==========================================
+        [Display(Name = "Idoso")]
+        public string? FKIdoso { get; set; }
+
+        [ForeignKey("FKIdoso")]
+        public Utilizador? IdosoAssociado { get; set; }
     }
 }

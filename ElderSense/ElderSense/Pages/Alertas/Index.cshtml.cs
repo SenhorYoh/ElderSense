@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ElderSense.Pages.Alertas
 {
+    /// <summary>
+    /// Página de visualização dos Alertas. Os dois tipos de utilizadores podem consultas as informações
+    /// </summary>
     [Authorize]
     public class IndexModel : PageModel
     {
