@@ -19,6 +19,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // configuração do identity base (Cookies do site)
 builder.Services.AddDefaultIdentity<Utilizador>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Regista a lógica que cria os sensores e limpa o lixo
@@ -98,6 +99,25 @@ builder.Services.AddControllers()
                 .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
+
+
+//cria as roles automaticamente no arranque
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    // Lista das Roles que o teu sistema precisa
+    string[] roles = { "Cuidador", "Idoso" };
+
+    foreach (var role in roles)
+    {
+        // Se a Role não existir na base de dados, ele cria-a
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
