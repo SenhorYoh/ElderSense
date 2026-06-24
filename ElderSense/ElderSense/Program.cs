@@ -137,6 +137,9 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+// Captura códigos de erro HTTP (404, 403, etc.) e redireciona para uma página própria
+app.UseStatusCodePagesWithReExecute("/Erro/{0}");
+
 app.UseAuthorization();
 
 app.MapStaticAssets();

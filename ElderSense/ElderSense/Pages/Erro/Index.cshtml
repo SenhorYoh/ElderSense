@@ -1,0 +1,23 @@
+﻿@page "{codigo:int}"
+@model ElderSense.Pages.Erro.IndexModel
+
+@{
+    ViewData["Title"] = "Erro " + Model.CodigoErro;
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8" />
+    <title>Erro @Model.CodigoErro - ElderSense</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body class="d-flex align-items-center justify-content-center" style="height: 100vh; background-color: #f8f9fa;">
+    <div class="text-center">
+        <h1 class="display-1 fw-bold text-secondary">@Model.CodigoErro</h1>
+        <p class="fs-4">@Model.Mensagem</p>
+        <a href="/" class="btn btn-primary mt-3">Voltar à página inicial</a>
+    </div>
+</body>
+</html>
