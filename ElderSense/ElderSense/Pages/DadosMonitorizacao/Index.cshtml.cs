@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ElderSense.Pages.DadosMonitorizacao
 {
+
+    /// <summary>
+    /// Página de visualização da monitorização dos dados. Os dois tipos de utilizadores podem visualizar
+    /// </summary>
     [Authorize]
     public class IndexModel : PageModel
     {

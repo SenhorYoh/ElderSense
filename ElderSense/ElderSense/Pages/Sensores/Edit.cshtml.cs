@@ -7,7 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ElderSense.Pages.Sensores
 {
-    [Authorize]
+
+    /// <summary>
+    /// Página de edição dos sensores. Apenas um utilizador logado e do tipo Cuidador pode edição
+    /// </summary>
+    /// 
+
+    [Authorize(Roles = "Cuidador")]
     public class EditModel : PageModel
     {
         private readonly ApplicationDbContext _context;

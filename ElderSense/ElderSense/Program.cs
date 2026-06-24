@@ -76,7 +76,9 @@ builder.Services.ConfigureApplicationCookie(o => {
     o.ExpireTimeSpan = TimeSpan.FromDays(5);
     o.SlidingExpiration = true;
     o.LoginPath = "/Identity/Account/Login";
-    o.AccessDeniedPath = "/Identity/Account/AccessDenied";
+
+    //Quando alguém aceder a uma página que não tem permissão, é redirecionado para aqui
+    o.AccessDeniedPath = "/AcessoNegado";
 });
 
 // *******************************************************************

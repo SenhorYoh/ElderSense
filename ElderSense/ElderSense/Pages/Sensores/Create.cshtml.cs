@@ -16,7 +16,7 @@ namespace ElderSense.Pages.Sensores
     /// <summary>
     /// Página de criação dos sensores. Apenas um utilizador logado e do tipo Cuidador pode criar
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Cuidador")]
     public class CreateModel : PageModel
     {
         private readonly ApplicationDbContext _context;
