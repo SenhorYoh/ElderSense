@@ -16,7 +16,7 @@
         <p>Para que o sistema de monitorização funcione corretamente, é obrigatório ter um perfil de Idoso associado à sua conta de Cuidador.</p>
         <hr>
         <p class="mb-0">
-            <a href="#" class="btn btn-warning fw-bold">Associar Idoso Agora</a>
+            <a asp-page="/AdicionarIdoso" class="btn btn-warning fw-bold">Associar Idoso Agora</a>
             <a asp-page="Index" class="btn btn-outline-secondary ms-2">Voltar</a>
         </p>
     </div>
@@ -35,12 +35,21 @@ else
             <span asp-validation-for="Sensor.Tipo" class="text-danger"></span>
         </div>
 
-        <div id="grupoIdoso" class="form-floating mb-3" style="display: none;">
-            <select id="selectIdoso" asp-for="Sensor.FKIdoso" class="form-control" asp-items="Model.ListaIdosos">
-                <option value="">Selecione o idoso...</option>
-            </select>
-            <label asp-for="Sensor.FKIdoso">Associar a Idoso</label>
-            <span asp-validation-for="Sensor.FKIdoso" class="text-danger"></span>
+        <div id="grupoIdoso" class="mb-3" style="display: none;">
+            <div class="form-floating">
+                <select id="selectIdoso" asp-for="Sensor.FKIdoso" class="form-control" asp-items="Model.ListaIdosos">
+                    <option value="">Selecione o idoso...</option>
+                </select>
+                <label asp-for="Sensor.FKIdoso">Associar a Idoso</label>
+            </div>
+
+            <div class="mt-1 text-end">
+                <a asp-page="/Utilizadores/AdicionarIdoso" class="text-decoration-none small fw-bold text-primary">
+                    <i class="bi bi-person-plus-fill"></i> Adicionar novo idoso
+                </a>
+            </div>
+
+            <span asp-validation-for="Sensor.FKIdoso" class="text-danger d-block mt-1"></span>
         </div>
 
         <div id="grupoLocalizacao">

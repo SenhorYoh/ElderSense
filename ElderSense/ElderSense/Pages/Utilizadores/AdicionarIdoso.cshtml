@@ -1,0 +1,39 @@
+﻿@page
+@model ElderSense.Pages.AdicionarIdosoModel
+@{
+    ViewData["Title"] = "Associar Novo Idoso";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-person-plus-fill"></i> Registar Perfil de Idoso</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Registe o nome do familiar ou paciente que irá utilizar o hardware de monitorização.
+                </p>
+
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Nome" class="form-control" placeholder="Nome Completo" />
+                        <label asp-for="Input.Nome"></label>
+                        <span asp-validation-for="Input.Nome" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">Criar e Associar Perfil</button>
+                        <a asp-page="/Sensores/Index" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
