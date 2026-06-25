@@ -56,6 +56,9 @@ namespace ElderSense.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             // 4. Configura o M:N entre Alerta e DadosMonitorizacao sem cascade paths
+            // ListadeAlertasId é Cascade (apagar o Alerta limpa a junção); ListadeDadosId é Restrict
+            // porque já existe um caminho cascade direto Utilizador -> Alerta, e dois caminhos cascade
+            // até Alerta dão erro "multiple cascade paths" no SQL Server.
             builder.Entity<Alerta>()
                 .HasMany(a => a.ListadeDados)
                 .WithMany(d => d.ListadeAlertas)
