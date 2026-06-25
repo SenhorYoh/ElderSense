@@ -26,7 +26,16 @@
             <tr>
                 <td>@sensor.Localizacao</td>
                 <td>@sensor.Tipo</td>
-                <td>@(sensor.Estado ? "Ativo" : "Inativo")</td>
+                <td>
+                    @if (sensor.Estado)
+                    {
+                        <span class="badge bg-success">Ativo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inativo</span>
+                    }
+                </td>
                 <td>
                     <a asp-page="Edit" asp-route-id="@sensor.Id">Editar</a> |
                     <a asp-page="Delete" asp-route-id="@sensor.Id">Apagar</a>
