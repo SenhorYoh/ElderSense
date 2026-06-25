@@ -15,7 +15,25 @@ a {
 .box-shadow {
     box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
-/* Navbar - links de navegação */
+
+/* Navbar - espaçamento geral */
+.navbar {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+/* Navbar - logo / marca */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #212529;
+}
+
+    .navbar-brand:hover {
+        color: #1D9E75;
+    }
+
+/* Navbar - links de navegação (Home, Sensores, Idosos, Alertas, Dados) */
 .navbar .nav-link {
     color: #495057;
     font-weight: 500;
@@ -31,4 +49,19 @@ a {
     .navbar .nav-link.active {
         color: #1D9E75;
         border-bottom: 2px solid #1D9E75;
+    }
+
+/* Navbar - área de sessão (Hello/Logout/Login/Register) */
+.navbar .navbar-nav .nav-link.btn-link {
+    border: none;
+    background: none;
+}
+
+/* Botão hamburger (mobile) */
+.navbar-toggler {
+    border: none;
+}
+
+    .navbar-toggler:focus {
+        box-shadow: 0 0 0 2px rgba(29, 158, 117, 0.25);
     }
