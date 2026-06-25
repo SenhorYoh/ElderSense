@@ -1,0 +1,238 @@
+﻿@page
+@model ElderSense.Pages.KitsModel
+@{
+    ViewData["Title"] = "Kits — ElderSense";
+    Layout = "_LayoutLanding";
+}
+
+<h2 class="sr-only">Kits ElderSense</h2>
+
+<!-- ==================== NAVEGAÇÃO ==================== -->
+<nav class="es-nav">
+    <a asp-page="/Index" class="es-logo">Elder<span>Sense</span></a>
+    <div class="es-nav-links">
+        <a asp-page="/Kits" class="es-nav-featured">Kits</a>
+        <a href="/#como-funciona">Como funciona</a>
+        <a href="/#planos">Planos</a>
+        <a href="/#contacto">Contacto</a>
+        @if (User.Identity!.IsAuthenticated)
+        {
+            <a asp-page="/Sensores/Index" class="es-btn-nav">Dashboard</a>
+        }
+        else
+        {
+            <a asp-page="/Account/Login" asp-area="Identity" class="es-btn-nav">Entrar</a>
+        }
+    </div>
+</nav>
+
+<!-- ==================== HERO DOS KITS ==================== -->
+<div class="kits-hero">
+    <div class="es-badge">
+        <i class="ti ti-package"></i> Hardware ElderSense
+    </div>
+    <h1>Escolha o kit <em>certo para si</em></h1>
+    <p>Todos os kits incluem instalação guiada, garantia de 2 anos e suporte técnico. Compatíveis com todos os planos de subscrição.</p>
+</div>
+
+<!-- ==================== CARDS DOS KITS ==================== -->
+<div class="kits-grid">
+
+    <!-- KIT 1 -->
+    <div class="kit-card" id="kit1">
+        <div class="kit-header">
+            <div class="kit-badge">Kit Essencial</div>
+            <h2>Kit 1</h2>
+            <div class="kit-price">€90<span> pagamento único</span></div>
+            <p class="kit-desc">Ideal para quem quer começar com o essencial — cobertura básica de rotina em casa.</p>
+        </div>
+        <div class="kit-items">
+            <div class="kit-section-label">O que inclui</div>
+            <div class="kit-item">
+                <div class="kit-item-icon"><i class="ti ti-device-watch"></i></div>
+                <div class="kit-item-info">
+                    <span class="kit-item-name">Pulseira BLE</span>
+                    <span class="kit-item-desc">Deteta presença e padrões de movimento do idoso</span>
+                </div>
+                <div class="kit-item-qty">×1</div>
+            </div>
+            <div class="kit-item">
+                <div class="kit-item-icon"><i class="ti ti-router"></i></div>
+                <div class="kit-item-info">
+                    <span class="kit-item-name">Hub ElderSense</span>
+                    <span class="kit-item-desc">Central de comunicação que conecta todos os dispositivos</span>
+                </div>
+                <div class="kit-item-qty">×1</div>
+            </div>
+            <div class="kit-item">
+                <div class="kit-item-icon"><i class="ti ti-bluetooth"></i></div>
+                <div class="kit-item-info">
+                    <span class="kit-item-name">Beacons BLE</span>
+                    <span class="kit-item-desc">Detetam presença em divisões específicas da casa</span>
+                </div>
+                <div class="kit-item-qty">×4</div>
+            </div>
+        </div>
+        <button class="es-btn-outline kit-btn" onclick="openModal('kit1')">
+            Ver detalhes <i class="ti ti-arrow-right"></i>
+        </button>
+    </div>
+
+    <!-- KIT 2 -->
+    <div class="kit-card kit-card--featured" id="kit2">
+        <div class="kit-header">
+            <div class="kit-badge kit-badge--featured">Mais completo</div>
+            <h2>Kit 2</h2>
+            <div class="kit-price">€130<span> pagamento único</span></div>
+            <p class="kit-desc">Cobertura total da casa com monitorização de tomadas inteligentes para detetar uso de eletrodomésticos.</p>
+        </div>
+        <div class="kit-items">
+            <div class="kit-section-label">O que inclui</div>
+            <div class="kit-item">
+                <div class="kit-item-icon"><i class="ti ti-device-watch"></i></div>
+                <div class="kit-item-info">
+                    <span class="kit-item-name">Pulseira BLE</span>
+                    <span class="kit-item-desc">Deteta presença e padrões de movimento do idoso</span>
+                </div>
+                <div class="kit-item-qty">×1</div>
+            </div>
+            <div class="kit-item">
+                <div class="kit-item-icon"><i class="ti ti-router"></i></div>
+                <div class="kit-item-info">
+                    <span class="kit-item-name">Hub ElderSense</span>
+                    <span class="kit-item-desc">Central de comunicação que conecta todos os dispositivos</span>
+                </div>
+                <div class="kit-item-qty">×1</div>
+            </div>
+            <div class="kit-item">
+                <div class="kit-item-icon"><i class="ti ti-bluetooth"></i></div>
+                <div class="kit-item-info">
+                    <span class="kit-item-name">Beacons BLE</span>
+                    <span class="kit-item-desc">Detetam presença em divisões específicas da casa</span>
+                </div>
+                <div class="kit-item-qty">×6</div>
+            </div>
+            <div class="kit-item kit-item--extra">
+                <div class="kit-item-icon"><i class="ti ti-plug"></i></div>
+                <div class="kit-item-info">
+                    <span class="kit-item-name">Tomadas Inteligentes</span>
+                    <span class="kit-item-desc">Monitorizam uso de eletrodomésticos (fogão, chaleira, etc.)</span>
+                </div>
+                <div class="kit-item-qty">×2</div>
+            </div>
+        </div>
+        <button class="es-btn-primary kit-btn" onclick="openModal('kit2')">
+            Ver detalhes <i class="ti ti-arrow-right"></i>
+        </button>
+    </div>
+
+</div>
+
+<!-- ==================== NOTA DE RODAPÉ ==================== -->
+<div class="kits-footer-note">
+    <i class="ti ti-info-circle"></i>
+    Todos os kits requerem uma subscrição ativa. <a href="/#planos">Ver planos →</a>
+</div>
+
+<!-- ==================== MODAL KIT 1 ==================== -->
+<div class="kit-modal" id="modal-kit1">
+    <div class="kit-modal-box">
+        <button class="kit-modal-close" onclick="closeModal('kit1')">
+            <i class="ti ti-x"></i>
+        </button>
+        <div class="kit-modal-badge">Kit Essencial</div>
+        <h2>Kit 1 — Detalhes</h2>
+        <p class="kit-modal-desc">O Kit 1 foi desenhado para cobrir as divisões principais de uma casa de dimensão média. Com 4 beacons estrategicamente colocados, o sistema consegue detetar a rotina diária com precisão suficiente para identificar desvios relevantes.</p>
+        <div class="kit-modal-specs">
+            <div class="kit-modal-spec">
+                <span class="spec-label">Cobertura recomendada</span>
+                <span class="spec-value">Até 4 divisões</span>
+            </div>
+            <div class="kit-modal-spec">
+                <span class="spec-label">Tipo de casa</span>
+                <span class="spec-value">T1 / T2</span>
+            </div>
+            <div class="kit-modal-spec">
+                <span class="spec-label">Conectividade</span>
+                <span class="spec-value">Bluetooth Low Energy + Wi-Fi</span>
+            </div>
+            <div class="kit-modal-spec">
+                <span class="spec-label">Garantia</span>
+                <span class="spec-value">2 anos</span>
+            </div>
+            <div class="kit-modal-spec">
+                <span class="spec-label">Instalação</span>
+                <span class="spec-value">Guiada pela app (sem técnico)</span>
+            </div>
+        </div>
+        <div class="kit-modal-actions">
+            <a href="/#planos" class="es-btn-primary">Ver planos compatíveis</a>
+            <button class="es-btn-outline" onclick="closeModal('kit1')">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MODAL KIT 2 ==================== -->
+<div class="kit-modal" id="modal-kit2">
+    <div class="kit-modal-box">
+        <button class="kit-modal-close" onclick="closeModal('kit2')">
+            <i class="ti ti-x"></i>
+        </button>
+        <div class="kit-modal-badge kit-modal-badge--featured">Mais completo</div>
+        <h2>Kit 2 — Detalhes</h2>
+        <p class="kit-modal-desc">O Kit 2 oferece cobertura total da casa, incluindo monitorização de eletrodomésticos através das tomadas inteligentes. Permite detetar se o idoso preparou o pequeno-almoço, usou o fogão ou realizou as rotinas habituais — sem câmaras nem microfones.</p>
+        <div class="kit-modal-specs">
+            <div class="kit-modal-spec">
+                <span class="spec-label">Cobertura recomendada</span>
+                <span class="spec-value">Até 6 divisões</span>
+            </div>
+            <div class="kit-modal-spec">
+                <span class="spec-label">Tipo de casa</span>
+                <span class="spec-value">T2 / T3 / T4</span>
+            </div>
+            <div class="kit-modal-spec">
+                <span class="spec-label">Conectividade</span>
+                <span class="spec-value">Bluetooth Low Energy + Wi-Fi</span>
+            </div>
+            <div class="kit-modal-spec">
+                <span class="spec-label">Tomadas inteligentes</span>
+                <span class="spec-value">Zigbee / Wi-Fi (compatível)</span>
+            </div>
+            <div class="kit-modal-spec">
+                <span class="spec-label">Garantia</span>
+                <span class="spec-value">2 anos</span>
+            </div>
+            <div class="kit-modal-spec">
+                <span class="spec-label">Instalação</span>
+                <span class="spec-value">Guiada pela app (sem técnico)</span>
+            </div>
+        </div>
+        <div class="kit-modal-actions">
+            <a href="/#planos" class="es-btn-primary">Ver planos compatíveis</a>
+            <button class="es-btn-outline" onclick="closeModal('kit2')">Fechar</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openModal(kit) {
+            document.getElementById('modal-' + kit).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(kit) {
+            document.getElementById('modal-' + kit).classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.kit-modal').forEach(modal => {
+            modal.addEventListener('click', function (e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+    </script>
+}

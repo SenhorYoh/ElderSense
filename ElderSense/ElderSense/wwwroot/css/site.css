@@ -16,3 +16,15 @@ html {
     position: relative;
     min-height: 100%;
 }
+
+/* Esconde o texto de acessibilidade visualmente mas mantém para leitores de ecrã */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+}

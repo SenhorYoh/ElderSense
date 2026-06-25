@@ -1,0 +1,35 @@
+﻿
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Título da página definido em cada view -->
+    <title>@ViewData["Title"]</title>
+
+    <!-- Folhas de estilo base -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/landing.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/kits.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ElderSense.styles.css" asp-append-version="true" />
+
+    <!-- Ícones Tabler usados na landing page -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@latest/tabler-icons.min.css" />
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="es-body">
+
+    <!-- Conteúdo da página sem navbar nem container do Bootstrap -->
+    @RenderBody()
+
+    <!-- Scripts base -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,10 +1,246 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    /* Define o título e o layout exclusivo da landing page */
+    ViewData["Title"] = "ElderSense";
+    Layout = "_LayoutLanding";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!--Nota: O "es" das classes significa ElderSense-->
+<!-- Texto oculto para leitores de ecrã (acessibilidade) -->
+<h2 class="sr-only">Landing page ElderSense</h2>
+
+<!-- ==================== NAVEGAÇÃO ==================== -->
+<nav class="es-nav">
+    <div class="es-logo">Elder<span>Sense</span></div>
+    <div class="es-nav-links">
+        <a asp-page="/Kits" class="es-nav-featured">Kits</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#planos">Planos</a>
+        <a href="#contacto">Contacto</a>
+        @if (User.Identity!.IsAuthenticated)
+        {
+            <a asp-page="/Sensores/Index" class="es-btn-nav">Dashboard</a>
+        }
+        else
+        {
+            <a asp-page="/Account/Login" asp-area="Identity" class="es-btn-nav">Entrar</a>
+        }
+    </div>
+</nav>
+
+<!-- ==================== HERO COM CARROSSEL ==================== -->
+<div class="hero-wrap">
+
+    <!-- Texto do hero à esquerda -->
+    <div class="hero-text">
+        <div class="es-badge">
+            <i class="ti ti-shield-check"></i> Sem câmaras. Sem microfones.
+        </div>
+        <h1>Tranquilidade para a família,<br><em>autonomia para o idoso.</em></h1>
+        <p>O ElderSense monitoriza a rotina do seu familiar em casa, detetando desvios e enviando alertas apenas quando é necessário — sem vigilância invasiva.</p>
+        <div class="es-hero-btns">
+            <a href="#planos" class="es-btn-primary">Ver planos <i class="ti ti-arrow-right"></i></a>
+            <a href="#como-funciona" class="es-btn-outline">Como funciona</a>
+        </div>
+    </div>
+
+    <!-- Carrossel de produtos à direita — prefixo es- para evitar conflito com Bootstrap -->
+    <div class="es-carousel">
+        <div class="es-carousel-track" id="esCarouselTrack">
+
+            <!-- Slide 1 -->
+            <div class="es-carousel-slide">
+                <div class="es-carousel-img">
+                    <img src="~/images/FotoCarrosel1.jpeg" alt="ElderSense 1" />
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="es-carousel-slide">
+                <div class="es-carousel-img">
+                    <img src="~/images/FotoCarrosel2.jpeg" alt="ElderSense 2" />
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="es-carousel-slide">
+                <div class="es-carousel-img">
+                    <img src="~/images/FotoCarrosel3.jpeg" alt="ElderSense 3" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Controlos do carrossel -->
+        <div class="es-carousel-controls">
+            <button class="es-carousel-btn" onclick="moveCarousel(-1)">&#8592;</button>
+            <div class="es-carousel-dots">
+                <div class="es-carousel-dot active" onclick="goTo(0)"></div>
+                <div class="es-carousel-dot" onclick="goTo(1)"></div>
+                <div class="es-carousel-dot" onclick="goTo(2)"></div>
+            </div>
+            <button class="es-carousel-btn" onclick="moveCarousel(1)">&#8594;</button>
+        </div>
+    </div>
+
+</div><!-- fim do hero-wrap -->
+
+<hr class="es-divider">
+
+<!-- ==================== PROPOSTA DE VALOR ==================== -->
+<section class="es-section" id="proposta">
+    <div class="es-section-label">Proposta de valor</div>
+    <h2>Tecnologia que cuida sem invadir</h2>
+    <p>Em vez de câmaras ou interações constantes, o ElderSense interpreta padrões de comportamento e emite alertas apenas quando existe um desvio relevante face à rotina esperada.</p>
+    <div class="es-cards">
+        <div class="es-card">
+            <div class="es-card-icon"><i class="ti ti-heart"></i></div>
+            <h3>Para o cuidador</h3>
+            <p>Reduz ansiedade e centraliza a informação. Sabe quando deve intervir.</p>
+        </div>
+        <div class="es-card">
+            <div class="es-card-icon"><i class="ti ti-user"></i></div>
+            <h3>Para o idoso</h3>
+            <p>Preserva a autonomia, privacidade e dignidade no dia a dia.</p>
+        </div>
+        <div class="es-card">
+            <div class="es-card-icon"><i class="ti ti-bell"></i></div>
+            <h3>Alertas inteligentes</h3>
+            <p>Notificações contextualizadas, sem ruído desnecessário ou falsos alarmes.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="es-divider">
+
+<!-- ==================== COMO FUNCIONA ==================== -->
+<section class="es-section" id="como-funciona">
+    <div class="es-section-label">Como funciona</div>
+    <h2>Simples para si. Invisível para o idoso.</h2>
+    <div class="es-how">
+        <div class="es-step">
+            <div class="es-step-num">1</div>
+            <div class="es-step-content">
+                <h4>Escolhe um plano e recebe os sensores</h4>
+                <p>Sensores discretos instalados em casa captam movimentos e padrões de rotina sem câmaras ou microfones.</p>
+            </div>
+        </div>
+        <div class="es-step">
+            <div class="es-step-num">2</div>
+            <div class="es-step-content">
+                <h4>Configura a rotina habitual</h4>
+                <p>Define horários de refeições, medicação e atividades. O sistema aprende o que é normal para o seu familiar.</p>
+            </div>
+        </div>
+        <div class="es-step">
+            <div class="es-step-num">3</div>
+            <div class="es-step-content">
+                <h4>Recebe alertas apenas quando importa</h4>
+                <p>Quando algo foge ao padrão habitual, recebe uma notificação com contexto — sem alarmes constantes.</p>
+            </div>
+        </div>
+        <div class="es-step">
+            <div class="es-step-num">4</div>
+            <div class="es-step-content">
+                <h4>Acompanha tudo na plataforma web e app</h4>
+                <p>Dashboard com rotina diária, histórico de alertas e estado dos sensores, acessível em qualquer dispositivo.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="es-divider">
+
+<!-- ==================== PLANOS ==================== -->
+<section class="es-section" id="planos">
+    <div class="es-section-label">Planos</div>
+    <h2>Escolha o plano certo para a sua família</h2>
+    <p>Todos os planos incluem acesso à plataforma web, app móvel e suporte técnico. Sem contratos de longo prazo.</p>
+    <div class="es-pricing">
+        <div class="es-plan">
+            <h3>Básico</h3>
+            <div class="es-plan-price">€14,99 <span>/ mês</span></div>
+            <p class="es-plan-desc">Para famílias que querem um primeiro nível de acompanhamento.</p>
+            <ul class="es-plan-features">
+                <li><i class="ti ti-check"></i> 2 sensores incluídos</li>
+                <li><i class="ti ti-check"></i> Alertas por email</li>
+                <li><i class="ti ti-check"></i> Dashboard básico</li>
+                <li><i class="ti ti-check"></i> 1 cuidador</li>
+            </ul>
+            <a href="#" class="es-btn-outline" style="width:100%; text-align:center; margin-top:auto;">Começar</a>
+        </div>
+        <div class="es-plan featured">
+            <div class="es-plan-badge">Mais popular</div>
+            <h3>Familiar</h3>
+            <div class="es-plan-price">€24,99 <span>/ mês</span></div>
+            <p class="es-plan-desc">Para famílias que querem acompanhamento completo e tranquilidade total.</p>
+            <ul class="es-plan-features">
+                <li><i class="ti ti-check"></i> 5 sensores incluídos</li>
+                <li><i class="ti ti-check"></i> Alertas push + email</li>
+                <li><i class="ti ti-check"></i> Dashboard completo</li>
+                <li><i class="ti ti-check"></i> Até 3 cuidadores</li>
+                <li><i class="ti ti-check"></i> Insights de rotina</li>
+            </ul>
+            <a href="#" class="es-btn-primary" style="width:100%; text-align:center; margin-top:auto;">Escolher plano</a>
+        </div>
+        <div class="es-plan">
+            <h3>Institucional</h3>
+            <div class="es-plan-price">Sob consulta</div>
+            <p class="es-plan-desc">Para IPSS, lares e serviços de apoio domiciliário com múltiplos utentes.</p>
+            <ul class="es-plan-features">
+                <li><i class="ti ti-check"></i> Sensores ilimitados</li>
+                <li><i class="ti ti-check"></i> Painel de gestão</li>
+                <li><i class="ti ti-check"></i> Relatórios avançados</li>
+                <li><i class="ti ti-check"></i> Suporte dedicado</li>
+            </ul>
+            <a href="#contacto" class="es-btn-outline" style="width:100%; text-align:center; margin-top:auto;">Falar connosco</a>
+        </div>
+    </div>
+</section>
+
+<hr class="es-divider">
+
+<!-- ==================== CONFIANÇA / CONTACTO ==================== -->
+<section class="es-section" id="contacto">
+    <div class="es-trust">
+        <div class="es-trust-item">
+            <i class="ti ti-lock"></i>
+            <p>Sem câmaras nem microfones. Privacidade garantida.</p>
+        </div>
+        <div class="es-trust-item">
+            <i class="ti ti-wifi"></i>
+            <p>Sensores IoT discretos e fáceis de instalar.</p>
+        </div>
+        <div class="es-trust-item">
+            <i class="ti ti-device-mobile"></i>
+            <p>App móvel e plataforma web incluídas.</p>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        /* Lógica do carrossel de produtos */
+        let current = 0;
+        const total = 3;
+
+        function updateCarousel() {
+            document.getElementById('esCarouselTrack').style.transform = `translateX(-${current * 100}%)`;
+            document.querySelectorAll('.es-carousel-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === current);
+            });
+        }
+
+        function moveCarousel(dir) {
+            current = (current + dir + total) % total;
+            updateCarousel();
+        }
+
+        function goTo(index) {
+            current = index;
+            updateCarousel();
+        }
+
+        setInterval(() => moveCarousel(1), 4000);
+    </script>
+}
