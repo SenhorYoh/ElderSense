@@ -2,11 +2,19 @@
 @model RegisterModel
 
 @{
-    //carregar css
-    Layout = "/Pages/Shared/_Layout.cshtml";
+    Layout = "_LayoutLanding";
 }
 
-<h1>@ViewData["Title"]</h1>
+<nav class="es-nav">
+    <a asp-page="/Index" class="es-logo">Elder<span>Sense</span></a>
+    <div class="es-nav-links">
+        <a asp-page="/Kits" class="es-nav-featured">Kits</a>
+        <a href="/#como-funciona">Como funciona</a>
+        <a href="/#planos">Planos</a>
+        <a href="/#contacto">Contacto</a>
+        <a asp-page="/Account/Login" asp-area="Identity" class="es-btn-nav">Entrar</a>
+    </div>
+</nav>
 
 <div class="login-container-vertical">
     <section>
