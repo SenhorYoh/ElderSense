@@ -1,8 +1,19 @@
 ﻿@page
 @model LoginModel
+@{
+    Layout = "_LayoutLanding";
+}
 
+<nav class="es-nav">
+    <a asp-page="/Index" class="es-logo">Elder<span>Sense</span></a>
+    <div class="es-nav-links">
+        <a asp-page="/Kits" class="es-nav-featured">Kits</a>
+        <a href="/#como-funciona">Como funciona</a>
+        <a href="/#planos">Planos</a>
+        <a href="/#contacto">Contacto</a>
+    </div>
+</nav>
 
-<h1>@ViewData["Title"]</h1>
 <div class="login-container-vertical">
     <section>
         <form id="account" method="post">
@@ -31,9 +42,9 @@
             }
 
             <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">
-              @(Model.ShowPassword ? "Entrar" : "Seguinte")
+                @(Model.ShowPassword ? "Entrar" : "Seguinte")
             </button>
-            
+
             <div class="mt-3 text-center">
                 <a id="forgot-password" asp-page="./ForgotPassword">Esqueceu-se da password?</a>
             </div>
