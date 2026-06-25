@@ -25,34 +25,33 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
 
-                        @if (User.IsInRole("Cuidador"))
+                        @if (User.Identity?.IsAuthenticated == true)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Sensores/Index">Sensores</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Utilizadores/Index">Idosos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Alertas/Index">Alertas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/DadosMonitorizacao/Index">Dados</a>
-                            </li>
+                            @if (User.IsInRole("Cuidador"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Sensores/Index">Sensores</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Utilizadores/Index">Idosos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Alertas/Index">Alertas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/DadosMonitorizacao/Index">Dados</a>
+                                </li>
+                            }
+                            else if (User.IsInRole("Idoso"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/Alertas/Index">Os meus Alertas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-page="/DadosMonitorizacao/Index">Os meus Dados</a>
+                                </li>
+                            }
                         }
-                        else if (User.IsInRole("Idoso"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Alertas/Index">Os meus Alertas</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/DadosMonitorizacao/Index">Os meus Dados</a>
-                            </li>
-                        }
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
