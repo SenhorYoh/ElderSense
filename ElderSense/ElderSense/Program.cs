@@ -61,6 +61,7 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddRazorPages();
+builder.Services.AddControllers(); //ativa o suporte para a API
 
 // Regista o SignalR para permitir notificações em tempo real
 builder.Services.AddSignalR();
@@ -141,7 +142,7 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 app.MapRazorPages().WithStaticAssets();
-app.MapControllers();
+app.MapControllers(); //diz ao servidor para escutar as rotas api
 
 // Mapeia o endpoint do Hub - é aqui que o browser se vai ligar para receber notificações em tempo real
 app.MapHub<AlertaHub>("/alertaHub");
