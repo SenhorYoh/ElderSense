@@ -76,17 +76,21 @@
     color: #6c757d;
 }
 
-/* Botão principal do formulário */
-.login-container-vertical .btn-primary {
+/* Botão principal (login, registo, CRUD) */
+.btn-primary {
     background-color: #1D9E75;
     border-color: #1D9E75;
     border-radius: 0.5rem;
-    padding: 0.6rem 1rem;
-    font-weight: 600;
     transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-    .login-container-vertical .btn-primary:hover {
+    .btn-primary:hover {
         background-color: #178060;
         border-color: #178060;
     }
+
+/* Checkbox - cor quando marcado */
+.form-check-input:checked {
+    background-color: #1D9E75;
+    border-color: #1D9E75;
+}
