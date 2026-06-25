@@ -15,3 +15,20 @@ a {
 .box-shadow {
     box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
+/* Navbar - links de navegação */
+.navbar .nav-link {
+    color: #495057;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-bottom-color 0.2s ease;
+}
+
+    .navbar .nav-link:hover {
+        color: #1D9E75;
+    }
+
+    .navbar .nav-link.active {
+        color: #1D9E75;
+        border-bottom: 2px solid #1D9E75;
+    }

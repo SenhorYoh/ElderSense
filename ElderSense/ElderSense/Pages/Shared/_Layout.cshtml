@@ -33,7 +33,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark @(paginaAtual == "/Index" ? "active" : "")" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link @(paginaAtual == "/Index" ? "active" : "")" asp-area="" asp-page="/Index">Home</a>
                         </li>
 
                         @if (User.Identity?.IsAuthenticated == true)
@@ -41,25 +41,25 @@
                             @if (User.IsInRole("Cuidador"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark @ClasseAtiva("/Sensores")" asp-area="" asp-page="/Sensores/Index">Sensores</a>
+                                    <a class="nav-link @ClasseAtiva("/Sensores")" asp-area="" asp-page="/Sensores/Index">Sensores</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark @ClasseAtiva("/Utilizadores")" asp-area="" asp-page="/Utilizadores/Index">Idosos</a>
+                                    <a class="nav-link @ClasseAtiva("/Utilizadores")" asp-area="" asp-page="/Utilizadores/Index">Idosos</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark @ClasseAtiva("/Alertas")" asp-area="" asp-page="/Alertas/Index">Alertas</a>
+                                    <a class="nav-link @ClasseAtiva("/Alertas")" asp-area="" asp-page="/Alertas/Index">Alertas</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark @ClasseAtiva("/DadosMonitorizacao")" asp-area="" asp-page="/DadosMonitorizacao/Index">Dados</a>
+                                    <a class="nav-link @ClasseAtiva("/DadosMonitorizacao")" asp-area="" asp-page="/DadosMonitorizacao/Index">Dados</a>
                                 </li>
                             }
                             else if (User.IsInRole("Idoso"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark @ClasseAtiva("/Alertas")" asp-area="" asp-page="/Alertas/Index">Os meus Alertas</a>
+                                    <a class="nav-link @ClasseAtiva("/Alertas")" asp-area="" asp-page="/Alertas/Index">Os meus Alertas</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark @ClasseAtiva("/DadosMonitorizacao")" asp-area="" asp-page="/DadosMonitorizacao/Index">Os meus Dados</a>
+                                    <a class="nav-link @ClasseAtiva("/DadosMonitorizacao")" asp-area="" asp-page="/DadosMonitorizacao/Index">Os meus Dados</a>
                                 </li>
                             }
                         }
