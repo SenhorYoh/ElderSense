@@ -5,7 +5,27 @@
     ViewData["Title"] = "Sensores";
 }
 
-<h1>Sensores</h1>
+<div class="db-header">
+    <h1>Sensores</h1>
+    <p>Estado e detalhes dos sensores instalados</p>
+</div>
+
+<div class="db-stats">
+    <div class="db-stats-item">
+        <div class="db-stats-label">Total</div>
+        <div class="db-stats-value">@Model.TotalSensores</div>
+    </div>
+    <div class="db-stats-divider"></div>
+    <div class="db-stats-item">
+        <div class="db-stats-label">Ativos</div>
+        <div class="db-stats-value success">@Model.SensoresAtivos</div>
+    </div>
+    <div class="db-stats-divider"></div>
+    <div class="db-stats-item">
+        <div class="db-stats-label">Inativos</div>
+        <div class="db-stats-value danger">@Model.SensoresInativos</div>
+    </div>
+</div>
 
 @if (User.IsInRole("Cuidador"))
 {

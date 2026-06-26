@@ -22,6 +22,11 @@ namespace ElderSense.Pages.Sensores
         // lista de sensores a mostrar na página
         public IList<Sensor> Sensores { get; set; } = [];
 
+        // estatísticas para o cabeçalho da página
+        public int TotalSensores => Sensores.Count;
+        public int SensoresAtivos => Sensores.Count(s => s.Estado);
+        public int SensoresInativos => Sensores.Count(s => !s.Estado);
+
         public async Task OnGetAsync()
         {
             // busca todos os sensores incluindo o utilizador associado
