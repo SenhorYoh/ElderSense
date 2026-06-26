@@ -30,3 +30,38 @@
 .badge.bg-success {
     background-color: #1D9E75 !important;
 }
+
+/* Botões de ação nas tabelas (Editar/Apagar) */
+.btn-acao {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.btn-acao-editar {
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    color: #495057;
+}
+
+    .btn-acao-editar:hover {
+        background-color: #f8f9fa;
+        color: #495057;
+    }
+
+.btn-acao-apagar {
+    border: 1px solid #E24B4A;
+    background-color: #fff;
+    color: #A32D2D;
+}
+
+    .btn-acao-apagar:hover {
+        background-color: #FCEBEB;
+        color: #A32D2D;
+    }

@@ -37,8 +37,12 @@
                     }
                 </td>
                 <td>
-                    <a asp-page="Edit" asp-route-id="@sensor.Id">Editar</a> |
-                    <a asp-page="Delete" asp-route-id="@sensor.Id">Apagar</a>
+                    <a asp-page="Edit" asp-route-id="@sensor.Id" class="btn-acao btn-acao-editar">
+                        <i class="ti ti-edit"></i> Editar
+                    </a>
+                    <a asp-page="Delete" asp-route-id="@sensor.Id" class="btn-acao btn-acao-apagar">
+                        <i class="ti ti-trash"></i> Apagar
+                    </a>
                 </td>
             </tr>
         }

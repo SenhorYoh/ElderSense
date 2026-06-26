@@ -37,3 +37,17 @@ body {
 main {
     flex: 1;
 }
+
+/* Fundo do dashboard - dá profundidade e destaca o conteúdo */
+body {
+    background-color: #F4F6F5;
+}
+
+/* Cartão branco que envolve o conteúdo principal de cada página do dashboard */
+.container.flex-grow-1 {
+    background-color: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.06);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
