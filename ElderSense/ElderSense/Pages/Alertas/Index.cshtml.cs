@@ -22,6 +22,11 @@ namespace ElderSense.Pages.Alertas
         // lista de alertas a mostrar, ordenada do mais recente para o mais antigo
         public IList<Alerta> Alertas { get; set; } = [];
 
+        // estatísticas para o cabeçalho da página
+        public int TotalAlertas => Alertas.Count;
+        public int AlertasHoje => Alertas.Count(a => a.DataHora.Date == DateTime.Today);
+        public int AlertasEstaSemana => Alertas.Count(a => a.DataHora >= DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + 1));
+
         public async Task OnGetAsync()
         {
             Alertas = await _context.Alertas

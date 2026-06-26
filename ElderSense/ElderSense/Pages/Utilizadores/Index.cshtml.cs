@@ -19,6 +19,11 @@ namespace ElderSense.Pages.Utilizadores
         // lista de utilizadores a mostrar na página
         public IList<Utilizador> Utilizadores { get; set; } = [];
 
+        // estatísticas para o cabeçalho da página
+        public int TotalUtilizadores => Utilizadores.Count;
+        public int TotalCuidadores => Utilizadores.Count(u => u.Tipo == TipoUtilizador.Cuidador);
+        public int TotalIdosos => Utilizadores.Count(u => u.Tipo == TipoUtilizador.Idoso);
+
         public async Task OnGetAsync()
         {
             // busca todos os utilizadores

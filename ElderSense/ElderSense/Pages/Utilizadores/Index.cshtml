@@ -5,7 +5,27 @@
     ViewData["Title"] = "Utilizadores";
 }
 
-<h1>Utilizadores</h1>
+<div class="db-header">
+    <h1>Utilizadores</h1>
+    <p>Cuidadores e idosos registados na plataforma</p>
+</div>
+
+<div class="db-stats">
+    <div class="db-stats-item">
+        <div class="db-stats-label">Total</div>
+        <div class="db-stats-value">@Model.TotalUtilizadores</div>
+    </div>
+    <div class="db-stats-divider"></div>
+    <div class="db-stats-item">
+        <div class="db-stats-label">Cuidadores</div>
+        <div class="db-stats-value success">@Model.TotalCuidadores</div>
+    </div>
+    <div class="db-stats-divider"></div>
+    <div class="db-stats-item">
+        <div class="db-stats-label">Idosos</div>
+        <div class="db-stats-value">@Model.TotalIdosos</div>
+    </div>
+</div>
 
 <p>
     <a asp-page="Create" class="btn-acao btn-acao-adicionar">
