@@ -49,7 +49,7 @@
 
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-success btn-lg">Criar e Enviar Convite</button>
-                        <a asp-page="/Sensores/Create" class="btn btn-outline-secondary">Cancelar</a>
+                        <a href="@(string.IsNullOrEmpty(Model.ReturnUrl) ? Url.Page("/Sensores/Create") : Model.ReturnUrl)" class="btn btn-outline-secondary">Cancelar</a>
                     </div>
                 </form>
             </div>

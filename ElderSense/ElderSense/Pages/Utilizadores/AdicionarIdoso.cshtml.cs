@@ -39,6 +39,10 @@ namespace ElderSense.Pages
         [BindProperty]
         public InputModel Input { get; set; } = new();
 
+        // de onde veio o utilizador, para saber para onde voltar depois de criar o idoso
+        [BindProperty(SupportsGet = true)]
+        public string? ReturnUrl { get; set; }
+
         // classe auxiliar só para apanhar os dados deste formulário
         public class InputModel
         {
@@ -99,7 +103,7 @@ namespace ElderSense.Pages
                 UserName = Input.Email,
                 Email = Input.Email,
                 EmailConfirmed = true,
-                Nome = Input.Nome 
+                Nome = Input.Nome
             };
 
             //cria a conta com a password fornecida
@@ -132,7 +136,12 @@ namespace ElderSense.Pages
 
                 TempData["MensagemSucesso"] = "Perfil de idoso associado com sucesso! O idoso recebeu um email informativo.";
 
-                // Manda o cuidador de volta para os sensores, onde o bloqueio amarelo já terá desaparecido!
+                // Volta para onde o cuidador veio; se não vier de lado nenhum, assume Sensores/Create
+                // (comportamento original, para o fluxo de bloqueio ao criar sensores)
+                if (!string.IsNullOrEmpty(ReturnUrl))
+                {
+                    return LocalRedirect(ReturnUrl);
+                }
                 return RedirectToPage("/Sensores/Create");
             }
 

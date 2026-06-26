@@ -197,3 +197,13 @@
     width: 1px;
     background: #e5e5e5;
 }
+
+.db-stats.single-item {
+    display: inline-flex;
+    padding: 1rem 2rem;
+}
+
+    .db-stats.single-item .db-stats-item {
+        flex: none;
+        text-align: left;
+    }

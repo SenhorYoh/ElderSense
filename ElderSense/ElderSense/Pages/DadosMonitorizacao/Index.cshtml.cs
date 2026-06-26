@@ -23,6 +23,11 @@ namespace ElderSense.Pages.DadosMonitorizacao
         // lista de dados de monitorização, mais recentes primeiro
         public IList<Data.Model.DadosMonitorizacao> Dados { get; set; } = [];
 
+        // estatísticas para o cabeçalho da página
+        public int TotalDados => Dados.Count;
+        public int DadosHoje => Dados.Count(d => d.DataHora.Date == DateTime.Today);
+        public int DadosEstaSemana => Dados.Count(d => d.DataHora >= DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + 1));
+
         public async Task OnGetAsync()
         {
             Dados = await _context.DadosMonitorizacao
