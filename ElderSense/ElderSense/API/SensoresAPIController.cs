@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ElderSense.Data;
-using ElderSense.Data.Model; // Garante que este é o namespace correto
+using ElderSense.Data.Model;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System;
 
@@ -47,6 +48,27 @@ namespace ElderSense.Controllers
 
             return Ok(new { mensagem = "Leitura guardada e associada ao idoso com sucesso!" });
         }
+
+
+        //  Devolve o histórico de leituras de um idoso específico
+        [HttpGet("historico/{idosoId}")]
+        public async Task<IActionResult> ObterHistorico(string idosoId)
+        {
+            // Vai à tabela DadosMonitorizacao procurar tudo o que pertence a este idoso
+            var historico = await _context.DadosMonitorizacao
+                                          .Where(d => d.FKUtilizador == idosoId)
+                                          .OrderByDescending(d => d.DataHora) // Mostra os mais recentes primeiro
+                                          .ToListAsync();
+
+            if (historico.Count == 0)
+            {
+                return NotFound(new { mensagem = "Nenhum dado encontrado para este idoso." });
+            }
+
+            return Ok(historico);
+        }
+
+        
     }
 
     // O formato do pacote JSON que a API vai aceitar
