@@ -7,6 +7,10 @@ using System;
 
 namespace ElderSense.Controllers
 {
+
+    /// <summary>
+    /// Classe da API. Tem as rotas necessárias para a comunicação com o hardware
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class SensoresApiController : ControllerBase
@@ -125,10 +129,9 @@ namespace ElderSense.Controllers
 
     }
 
-    // O formato do pacote JSON que a API vai aceitar
     public class DadosSensor
     {
-        public string IdosoId { get; set; } = string.Empty; // O ASP.NET Identity usa strings (GUIDs) para os IDs
+        public string IdosoId { get; set; } = string.Empty;
 
         public int SensorId { get; set; }
         public string Tipo { get; set; } = string.Empty;
