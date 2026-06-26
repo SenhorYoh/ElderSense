@@ -70,6 +70,7 @@ namespace ElderSense.Controllers
         }
 
         // GET: Verifica se o sensor está ativo/online com base na última leitura
+        //o hardware verifica se o sensor existe e está ativo 
         [HttpGet("estado/{sensorId}")]
         public async Task<IActionResult> VerificarEstadoSensor(int sensorId)
         {
@@ -89,7 +90,6 @@ namespace ElderSense.Controllers
                 });
             }
 
-            //Calcular quantos minutos passaram desde a última transmissão
             var tempoPassado = DateTime.Now - ultimaLeitura.DataHora;
             double minutosAusente = tempoPassado.TotalMinutes;
 
@@ -106,6 +106,18 @@ namespace ElderSense.Controllers
                 ultimoTipoDado = ultimaLeitura.Tipo,
                 ultimoValorDado = ultimaLeitura.Valor,
                 pacienteId = ultimaLeitura.FKUtilizador
+            });
+        }
+
+        //GET: Rota que verifica se a API está online
+        [HttpGet("ping")]
+        public IActionResult Ping()
+        {
+            return Ok(new
+            {
+                status = "Online",
+                mensagem = "Pong! A API do ElderSense está a escutar perfeitamente.",
+                horaServidor = DateTime.Now
             });
         }
 
