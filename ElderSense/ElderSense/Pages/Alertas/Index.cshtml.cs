@@ -25,7 +25,7 @@ namespace ElderSense.Pages.Alertas
         public async Task OnGetAsync()
         {
             Alertas = await _context.Alertas
-                .Include(a => a.Utilizador)
+                .Include(a => a.IdosoAssociado)
                 .OrderByDescending(a => a.DataHora)
                 .ToListAsync();
         }

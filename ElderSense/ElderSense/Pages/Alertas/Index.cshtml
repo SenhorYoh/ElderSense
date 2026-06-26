@@ -21,7 +21,7 @@
             <tr>
                 <td>@alerta.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
                 <td>@alerta.Mensagem</td>
-                <td>@alerta.Utilizador.Nome</td>
+                <td>@alerta.IdosoAssociado?.Nome</td>
             </tr>
         }
     </tbody>
