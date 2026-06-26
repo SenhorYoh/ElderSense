@@ -42,7 +42,8 @@
 
     .es-nav-links a {
         font-size: 14px;
-        color: #666;
+        font-weight: 500;
+        color: #495057;
         text-decoration: none;
     }
 
