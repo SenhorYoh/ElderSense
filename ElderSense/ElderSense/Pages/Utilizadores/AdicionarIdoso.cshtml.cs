@@ -99,7 +99,8 @@ namespace ElderSense.Pages
                 UserName = Input.Email,
                 Email = Input.Email,
                 EmailConfirmed = true,
-                Nome = Input.Nome 
+                Nome = Input.Nome,
+                Tipo = TipoUtilizador.Idoso
             };
 
             //cria a conta com a password fornecida
