@@ -65,3 +65,15 @@
         background-color: #FCEBEB;
         color: #A32D2D;
     }
+/* Botão "Adicionar" (ação principal de uma página de listagem) */
+.btn-acao-adicionar {
+    border: none;
+    background-color: #1D9E75;
+    color: #fff;
+    padding: 8px 18px;
+}
+
+    .btn-acao-adicionar:hover {
+        background-color: #178060;
+        color: #fff;
+    }

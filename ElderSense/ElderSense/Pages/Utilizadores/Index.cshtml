@@ -8,7 +8,9 @@
 <h1>Utilizadores</h1>
 
 <p>
-    <a asp-page="Create">Adicionar Utilizador</a>
+    <a asp-page="Create" class="btn-acao btn-acao-adicionar">
+        <i class="ti ti-plus"></i> Adicionar Utilizador
+    </a>
 </p>
 
 <table class="table">
@@ -30,8 +32,12 @@
                 <td>@utilizador.Tipo</td>
                 <td>@utilizador.Telefone</td>
                 <td>
-                    <a asp-page="Edit" asp-route-id="@utilizador.Id">Editar</a> |
-                    <a asp-page="Delete" asp-route-id="@utilizador.Id">Apagar</a>
+                    <a asp-page="Edit" asp-route-id="@utilizador.Id" class="btn-acao btn-acao-editar">
+                        <i class="ti ti-edit"></i> Editar
+                    </a>
+                    <a asp-page="Delete" asp-route-id="@utilizador.Id" class="btn-acao btn-acao-apagar">
+                        <i class="ti ti-trash"></i> Apagar
+                    </a>
                 </td>
             </tr>
         }
