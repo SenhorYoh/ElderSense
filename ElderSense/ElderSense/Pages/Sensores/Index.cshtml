@@ -7,11 +7,14 @@
 
 <h1>Sensores</h1>
 
-<p>
-    <a asp-page="Create" class="btn-acao btn-acao-adicionar">
-        <i class="ti ti-plus"></i> Adicionar Sensor
-    </a>
-</p>
+@if (User.IsInRole("Cuidador"))
+{
+    <p>
+        <a asp-page="Create" class="btn-acao btn-acao-adicionar">
+            <i class="ti ti-plus"></i> Adicionar Sensor
+        </a>
+    </p>
+}
 
 <table class="table">
     <thead>
@@ -19,7 +22,10 @@
             <th>Localização</th>
             <th>Tipo</th>
             <th>Estado</th>
-            <th>Ações</th>
+            @if (User.IsInRole("Cuidador"))
+            {
+                <th>Ações</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -38,14 +44,17 @@
                         <span class="badge bg-secondary">Inativo</span>
                     }
                 </td>
-                <td>
-                    <a asp-page="Edit" asp-route-id="@sensor.Id" class="btn-acao btn-acao-editar">
-                        <i class="ti ti-edit"></i> Editar
-                    </a>
-                    <a asp-page="Delete" asp-route-id="@sensor.Id" class="btn-acao btn-acao-apagar">
-                        <i class="ti ti-trash"></i> Apagar
-                    </a>
-                </td>
+                @if (User.IsInRole("Cuidador"))
+                {
+                    <td>
+                        <a asp-page="Edit" asp-route-id="@sensor.Id" class="btn-acao btn-acao-editar">
+                            <i class="ti ti-edit"></i> Editar
+                        </a>
+                        <a asp-page="Delete" asp-route-id="@sensor.Id" class="btn-acao btn-acao-apagar">
+                            <i class="ti ti-trash"></i> Apagar
+                        </a>
+                    </td>
+                }
             </tr>
         }
     </tbody>

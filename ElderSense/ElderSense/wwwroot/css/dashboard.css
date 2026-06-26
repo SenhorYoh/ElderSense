@@ -1,0 +1,131 @@
+﻿/* ==================== DASHBOARD - SIDEBAR ==================== */
+
+/* Estrutura principal — sidebar + conteúdo lado a lado */
+.db-wrap {
+    display: flex;
+    min-height: 100vh;
+}
+
+.db-sidebar {
+    width: 220px;
+    background: #fff;
+    border-right: 0.5px solid #e5e5e5;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.db-logo {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1a1a1a;
+    padding: 0 0.5rem 1.5rem;
+    border-bottom: 0.5px solid #e5e5e5;
+    margin-bottom: 0.5rem;
+    text-decoration: none;
+}
+
+    .db-logo span {
+        color: #1D9E75;
+    }
+
+.db-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #666;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+}
+
+    .db-nav-item:hover {
+        background: #f5f5f5;
+        color: #1a1a1a;
+    }
+
+    .db-nav-item.active {
+        background: #E1F5EE;
+        color: #0F6E56;
+        font-weight: 500;
+    }
+
+    .db-nav-item i {
+        font-size: 16px;
+    }
+
+.db-sidebar-footer {
+    margin-top: auto;
+    border-top: 0.5px solid #e5e5e5;
+    padding-top: 1rem;
+}
+
+.db-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+}
+
+.db-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #E1F5EE;
+    color: #0F6E56;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.db-user-info p {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.db-user-info span {
+    font-size: 11px;
+    color: #999;
+}
+
+.db-logout-btn {
+    color: #999;
+}
+
+    .db-logout-btn:hover {
+        background: #fff0f0;
+        color: #A32D2D;
+    }
+
+/* Conteúdo principal */
+.db-main {
+    flex: 1;
+    padding: 2rem;
+    min-width: 0;
+}
+
+.db-footer {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 0.5px solid #e5e5e5;
+    font-size: 13px;
+    color: #999;
+}
+
+    .db-footer a {
+        color: #999;
+        text-decoration: underline;
+    }

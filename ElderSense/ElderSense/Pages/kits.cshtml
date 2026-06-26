@@ -17,7 +17,14 @@
         <a href="/#contacto">Contacto</a>
         @if (User.Identity!.IsAuthenticated)
         {
-            <a asp-page="/Sensores/Index" class="es-btn-nav">Dashboard</a>
+            @if (User.IsInRole("Cuidador"))
+            {
+                <a asp-page="/Sensores/Index" class="es-btn-nav">Dashboard</a>
+            }
+            else
+            {
+                <a asp-page="/Alertas/Index" class="es-btn-nav">Dashboard</a>
+            }
         }
         else
         {

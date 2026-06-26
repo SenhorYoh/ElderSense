@@ -12,75 +12,101 @@
     <link rel="stylesheet" href="~/css/forms.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/tables.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/cards.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ElderSense.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@tabler/icons-webfont@@latest/tabler-icons.min.css" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body>
+<body class="db-body">
     @{
         var paginaAtual = ViewContext.RouteData.Values["page"]?.ToString();
 
         string ClasseAtiva(string pagina) => paginaAtual != null && paginaAtual.StartsWith(pagina) ? "active" : "";
+
+        var utilizadorAtual = await UserManager.GetUserAsync(User);
+        var nomeUtilizador = utilizadorAtual?.Nome ?? "Utilizador";
+        var partesNome = nomeUtilizador.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var iniciaisUtilizador = partesNome.Length >= 2
+            ? $"{partesNome[0][0]}{partesNome[^1][0]}".ToUpper()
+            : nomeUtilizador.Length > 0 ? nomeUtilizador[0].ToString().ToUpper() : "?";
     }
 
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Elder<span>Sense</span></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link @(paginaAtual == "/Index" ? "active" : "")" asp-area="" asp-page="/Index">Home</a>
-                        </li>
+    <div class="db-wrap">
 
-                        @if (User.Identity?.IsAuthenticated == true)
-                        {
-                            @if (User.IsInRole("Cuidador"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link @ClasseAtiva("/Sensores")" asp-area="" asp-page="/Sensores/Index">Sensores</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link @ClasseAtiva("/Utilizadores")" asp-area="" asp-page="/Utilizadores/Index">Utilizadores</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link @ClasseAtiva("/Alertas")" asp-area="" asp-page="/Alertas/Index">Alertas</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link @ClasseAtiva("/DadosMonitorizacao")" asp-area="" asp-page="/DadosMonitorizacao/Index">Dados</a>
-                                </li>
-                            }
-                            else if (User.IsInRole("Idoso"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link @ClasseAtiva("/Alertas")" asp-area="" asp-page="/Alertas/Index">Os meus Alertas</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link @ClasseAtiva("/DadosMonitorizacao")" asp-area="" asp-page="/DadosMonitorizacao/Index">Os meus Dados</a>
-                                </li>
-                            }
-                        }
-                    </ul>
-                    <partial name="_LoginPartial" />
+        <aside class="db-sidebar">
+            <a asp-area="" asp-page="/Index" class="db-logo">Elder<span>Sense</span></a>
+
+            <a asp-area="" asp-page="/Index" class="db-nav-item @(paginaAtual == "/Index" ? "active" : "")">
+                <i class="ti ti-home"></i> Home
+            </a>
+
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                @if (User.IsInRole("Cuidador"))
+                {
+                    <a asp-area="" asp-page="/Sensores/Index" class="db-nav-item @ClasseAtiva("/Sensores")">
+                        <i class="ti ti-wifi"></i> Sensores
+                    </a>
+                    <a asp-area="" asp-page="/Utilizadores/Index" class="db-nav-item @ClasseAtiva("/Utilizadores")">
+                        <i class="ti ti-users"></i> Utilizadores
+                    </a>
+                    <a asp-area="" asp-page="/Alertas/Index" class="db-nav-item @ClasseAtiva("/Alertas")">
+                        <i class="ti ti-bell"></i> Alertas
+                    </a>
+                    <a asp-area="" asp-page="/DadosMonitorizacao/Index" class="db-nav-item @ClasseAtiva("/DadosMonitorizacao")">
+                        <i class="ti ti-chart-bar"></i> Dados
+                    </a>
+                }
+                else if (User.IsInRole("Idoso"))
+                {
+                    <a asp-area="" asp-page="/Alertas/Index" class="db-nav-item @ClasseAtiva("/Alertas")">
+                        <i class="ti ti-bell"></i> Os meus Alertas
+                    </a>
+                    <a asp-area="" asp-page="/DadosMonitorizacao/Index" class="db-nav-item @ClasseAtiva("/DadosMonitorizacao")">
+                        <i class="ti ti-chart-bar"></i> Os meus Dados
+                    </a>
+                }
+            }
+
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <div class="db-sidebar-footer">
+                    <div class="db-user">
+                        <div class="db-avatar">@iniciaisUtilizador</div>
+                        <div class="db-user-info">
+                            <p>@nomeUtilizador</p>
+                            <span>@(User.IsInRole("Cuidador") ? "Cuidador" : User.IsInRole("Idoso") ? "Idoso" : "")</span>
+                        </div>
+                    </div>
+                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" style="width:100%;">
+                        <button type="submit" class="db-nav-item db-logout-btn">
+                            <i class="ti ti-logout"></i> Sair
+                        </button>
+                    </form>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container flex-grow-1">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+            }
+            else
+            {
+                <div class="db-sidebar-footer">
+                    <a asp-area="Identity" asp-page="/Account/Register" class="db-nav-item">
+                        <i class="ti ti-user-plus"></i> Registar
+                    </a>
+                    <a asp-area="Identity" asp-page="/Account/Login" class="db-nav-item">
+                        <i class="ti ti-login"></i> Entrar
+                    </a>
+                </div>
+            }
+        </aside>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - ElderSense - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
+        <main class="db-main">
+            @RenderBody()
+
+            <footer class="db-footer">
+                &copy; 2026 - ElderSense - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            </footer>
+        </main>
+
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
