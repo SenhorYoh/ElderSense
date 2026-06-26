@@ -8,8 +8,8 @@ namespace ElderSense.Data.Model
     /// </summary>
     public enum TipoUtilizador
     {
-        Idoso, //0
-        Cuidador, //1
+        Cuidador, //0
+        Idoso, //1
     }
 
     /// <summary>

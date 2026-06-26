@@ -121,7 +121,7 @@ namespace ElderSense.Areas.Identity.Pages.Account
                 var user = CreateUser();
 
                 user.Nome = Input.Nome; // Mapeia o nome do formulário para a classe
-                user.Tipo = Input.Tipo;         // Mapeia o tipo (Idoso/Cuidador)
+                user.Tipo = TipoUtilizador.Cuidador;         // Mapeia o tipo (Idoso/Cuidador)
                 user.Telefone = Input.Telefone; // Mapeia o telefone
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
