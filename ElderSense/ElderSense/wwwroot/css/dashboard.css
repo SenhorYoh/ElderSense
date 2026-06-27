@@ -1,5 +1,9 @@
 ﻿/* ==================== DASHBOARD - SIDEBAR ==================== */
 
+.db-nav-toggle {
+    display: none;
+}
+
 /* Estrutura principal — sidebar + conteúdo lado a lado */
 .db-wrap {
     display: flex;
@@ -17,6 +21,13 @@
     flex-shrink: 0;
 }
 
+.db-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .db-logo {
     font-size: 16px;
     font-weight: 500;
@@ -25,11 +36,20 @@
     border-bottom: 0.5px solid #e5e5e5;
     margin-bottom: 0.5rem;
     text-decoration: none;
+    display: block;
+    width: 100%;
 }
 
     .db-logo span {
         color: #1D9E75;
     }
+
+.db-sidebar-collapsible {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
 
 .db-nav-item {
     display: flex;
@@ -66,6 +86,7 @@
     margin-top: auto;
     border-top: 0.5px solid #e5e5e5;
     padding-top: 1rem;
+    width: 100%;
 }
 
 .db-user {
@@ -218,40 +239,72 @@
 
     .db-sidebar {
         width: 100%;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
         padding: 0.75rem 1rem;
-        gap: 8px;
         border-right: none;
         border-bottom: 0.5px solid #e5e5e5;
     }
 
     .db-logo {
-        width: 100%;
+        width: auto;
         border-bottom: none;
         margin-bottom: 0;
-        padding: 0 0 0.5rem;
+        padding: 0;
     }
 
+    .db-nav-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+        .db-nav-toggle span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: #1a1a1a;
+            border-radius: 1px;
+            position: relative;
+        }
+
+            .db-nav-toggle span::before, .db-nav-toggle span::after {
+                content: "";
+                position: absolute;
+                width: 20px;
+                height: 2px;
+                background: #1a1a1a;
+                border-radius: 1px;
+                left: 0;
+            }
+
+            .db-nav-toggle span::before {
+                top: -6px;
+            }
+
+            .db-nav-toggle span::after {
+                top: 6px;
+            }
+
+    .db-sidebar-collapsible {
+        display: none;
+        margin-top: 0.75rem;
+    }
+
+        .db-sidebar-collapsible.open {
+            display: flex;
+        }
+
     .db-nav-item {
-        width: auto;
-        padding: 6px 10px;
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .db-sidebar-footer {
-        width: 100%;
         margin-top: 0.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-top: 0.5px solid #e5e5e5;
         padding-top: 0.5rem;
-    }
-
-    .db-user {
-        padding: 0;
     }
 
     .db-main {

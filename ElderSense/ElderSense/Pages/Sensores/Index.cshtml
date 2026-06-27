@@ -36,46 +36,48 @@
     </p>
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Localização</th>
-            <th>Tipo</th>
-            <th>Estado</th>
-            @if (User.IsInRole("Cuidador"))
-            {
-                <th>Ações</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var sensor in Model.Sensores)
-        {
+<div class="table-wrapper-scroll">
+    <table class="table">
+        <thead>
             <tr>
-                <td>@sensor.Localizacao</td>
-                <td>@sensor.Tipo</td>
-                <td>
-                    @if (sensor.Estado)
-                    {
-                        <span class="badge bg-success">Ativo</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-secondary">Inativo</span>
-                    }
-                </td>
+                <th>Localização</th>
+                <th>Tipo</th>
+                <th>Estado</th>
                 @if (User.IsInRole("Cuidador"))
                 {
-                    <td>
-                        <a asp-page="Edit" asp-route-id="@sensor.Id" class="btn-acao btn-acao-editar">
-                            <i class="ti ti-edit"></i> Editar
-                        </a>
-                        <a asp-page="Delete" asp-route-id="@sensor.Id" class="btn-acao btn-acao-apagar">
-                            <i class="ti ti-trash"></i> Apagar
-                        </a>
-                    </td>
+                    <th>Ações</th>
                 }
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var sensor in Model.Sensores)
+            {
+                <tr>
+                    <td>@sensor.Localizacao</td>
+                    <td>@sensor.Tipo</td>
+                    <td>
+                        @if (sensor.Estado)
+                        {
+                            <span class="badge bg-success">Ativo</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Inativo</span>
+                        }
+                    </td>
+                    @if (User.IsInRole("Cuidador"))
+                    {
+                        <td>
+                            <a asp-page="Edit" asp-route-id="@sensor.Id" class="btn-acao btn-acao-editar">
+                                <i class="ti ti-edit"></i> Editar
+                            </a>
+                            <a asp-page="Delete" asp-route-id="@sensor.Id" class="btn-acao btn-acao-apagar">
+                                <i class="ti ti-trash"></i> Apagar
+                            </a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

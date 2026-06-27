@@ -34,68 +34,75 @@
     <div class="db-wrap">
 
         <aside class="db-sidebar">
-            <a asp-area="" asp-page="/Index" class="db-logo">Elder<span>Sense</span></a>
+            <div class="db-sidebar-header">
+                <a asp-area="" asp-page="/Index" class="db-logo">Elder<span>Sense</span></a>
+                <button class="db-nav-toggle" aria-label="Menu">
+                    <span></span>
+                </button>
+            </div>
 
-            <a asp-area="" asp-page="/Index" class="db-nav-item @(paginaAtual == "/Index" ? "active" : "")">
-                <i class="ti ti-home"></i> Home
-            </a>
+            <div class="db-sidebar-collapsible">
+                <a asp-area="" asp-page="/Index" class="db-nav-item @(paginaAtual == "/Index" ? "active" : "")">
+                    <i class="ti ti-home"></i> Home
+                </a>
 
-            @if (User.Identity?.IsAuthenticated == true)
-            {
-                @if (User.IsInRole("Cuidador"))
+                @if (User.Identity?.IsAuthenticated == true)
                 {
-                    <a asp-area="" asp-page="/Sensores/Index" class="db-nav-item @ClasseAtiva("/Sensores")">
-                        <i class="ti ti-wifi"></i> Sensores
-                    </a>
-                    <a asp-area="" asp-page="/Utilizadores/Index" class="db-nav-item @ClasseAtiva("/Utilizadores")">
-                        <i class="ti ti-users"></i> Idosos
-                    </a>
-                    <a asp-area="" asp-page="/Alertas/Index" class="db-nav-item @ClasseAtiva("/Alertas")">
-                        <i class="ti ti-bell"></i> Alertas
-                    </a>
-                    <a asp-area="" asp-page="/DadosMonitorizacao/Index" class="db-nav-item @ClasseAtiva("/DadosMonitorizacao")">
-                        <i class="ti ti-chart-bar"></i> Dados
-                    </a>
+                    @if (User.IsInRole("Cuidador"))
+                    {
+                        <a asp-area="" asp-page="/Sensores/Index" class="db-nav-item @ClasseAtiva("/Sensores")">
+                            <i class="ti ti-wifi"></i> Sensores
+                        </a>
+                        <a asp-area="" asp-page="/Utilizadores/Index" class="db-nav-item @ClasseAtiva("/Utilizadores")">
+                            <i class="ti ti-users"></i> Idosos
+                        </a>
+                        <a asp-area="" asp-page="/Alertas/Index" class="db-nav-item @ClasseAtiva("/Alertas")">
+                            <i class="ti ti-bell"></i> Alertas
+                        </a>
+                        <a asp-area="" asp-page="/DadosMonitorizacao/Index" class="db-nav-item @ClasseAtiva("/DadosMonitorizacao")">
+                            <i class="ti ti-chart-bar"></i> Dados
+                        </a>
+                    }
+                    else if (User.IsInRole("Idoso"))
+                    {
+                        <a asp-area="" asp-page="/Alertas/Index" class="db-nav-item @ClasseAtiva("/Alertas")">
+                            <i class="ti ti-bell"></i> Os meus Alertas
+                        </a>
+                        <a asp-area="" asp-page="/DadosMonitorizacao/Index" class="db-nav-item @ClasseAtiva("/DadosMonitorizacao")">
+                            <i class="ti ti-chart-bar"></i> Os meus Dados
+                        </a>
+                    }
                 }
-                else if (User.IsInRole("Idoso"))
-                {
-                    <a asp-area="" asp-page="/Alertas/Index" class="db-nav-item @ClasseAtiva("/Alertas")">
-                        <i class="ti ti-bell"></i> Os meus Alertas
-                    </a>
-                    <a asp-area="" asp-page="/DadosMonitorizacao/Index" class="db-nav-item @ClasseAtiva("/DadosMonitorizacao")">
-                        <i class="ti ti-chart-bar"></i> Os meus Dados
-                    </a>
-                }
-            }
 
-            @if (User.Identity?.IsAuthenticated == true)
-            {
-                <div class="db-sidebar-footer">
-                    <div class="db-user">
-                        <div class="db-avatar">@iniciaisUtilizador</div>
-                        <div class="db-user-info">
-                            <p>@nomeUtilizador</p>
-                            <span>@(User.IsInRole("Cuidador") ? "Cuidador" : User.IsInRole("Idoso") ? "Idoso" : "")</span>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <div class="db-sidebar-footer">
+                        <div class="db-user">
+                            <div class="db-avatar">@iniciaisUtilizador</div>
+                            <div class="db-user-info">
+                                <p>@nomeUtilizador</p>
+                                <span>@(User.IsInRole("Cuidador") ? "Cuidador" : User.IsInRole("Idoso") ? "Idoso" : "")</span>
+                            </div>
                         </div>
+                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" style="width:100%;">
+                            <button type="submit" class="db-nav-item db-logout-btn">
+                                <i class="ti ti-logout"></i> Sair
+                            </button>
+                        </form>
                     </div>
-                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" style="width:100%;">
-                        <button type="submit" class="db-nav-item db-logout-btn">
-                            <i class="ti ti-logout"></i> Sair
-                        </button>
-                    </form>
-                </div>
-            }
-            else
-            {
-                <div class="db-sidebar-footer">
-                    <a asp-area="Identity" asp-page="/Account/Register" class="db-nav-item">
-                        <i class="ti ti-user-plus"></i> Registar
-                    </a>
-                    <a asp-area="Identity" asp-page="/Account/Login" class="db-nav-item">
-                        <i class="ti ti-login"></i> Entrar
-                    </a>
-                </div>
-            }
+                }
+                else
+                {
+                    <div class="db-sidebar-footer">
+                        <a asp-area="Identity" asp-page="/Account/Register" class="db-nav-item">
+                            <i class="ti ti-user-plus"></i> Registar
+                        </a>
+                        <a asp-area="Identity" asp-page="/Account/Login" class="db-nav-item">
+                            <i class="ti ti-login"></i> Entrar
+                        </a>
+                    </div>
+                }
+            </div>
         </aside>
 
         <main class="db-main">
@@ -112,6 +119,16 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script>
+        const dbNavToggle = document.querySelector('.db-nav-toggle');
+        const dbCollapsible = document.querySelector('.db-sidebar-collapsible');
+        if (dbNavToggle && dbCollapsible) {
+        dbNavToggle.addEventListener('click', () => dbCollapsible.classList.toggle('open'));
+        dbCollapsible.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('click', () => dbCollapsible.classList.remove('open'));
+        });
+        }
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
