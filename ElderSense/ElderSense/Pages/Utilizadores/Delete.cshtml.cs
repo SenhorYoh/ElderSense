@@ -44,6 +44,23 @@ namespace ElderSense.Pages.Utilizadores
 
             if (utilizador != null)
             {
+                // apaga os alertas diretamente associados a este idoso (FKIdoso é NoAction por defeito,
+                // não pode ser cascade). Tem de vir antes dos Dados de Monitorização, já que um
+                // Alerta pode estar ligado a Dados deste idoso através da relação M:N.
+                var alertasDoIdoso = await _context.Alertas
+                    .Where(a => a.FKIdoso == utilizador.Id)
+                    .Include(a => a.ListadeDados)
+                    .ToListAsync();
+
+                foreach (var alerta in alertasDoIdoso)
+                {
+                    alerta.ListadeDados.Clear();
+                }
+                await _context.SaveChangesAsync();
+
+                _context.Alertas.RemoveRange(alertasDoIdoso);
+                await _context.SaveChangesAsync();
+
                 // vai buscar todos os dados de monitorização deste utilizador,
                 // já com a lista de alertas associados (relação M:N) carregada
                 var dados = await _context.DadosMonitorizacao
