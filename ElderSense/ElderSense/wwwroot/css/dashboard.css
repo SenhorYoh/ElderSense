@@ -21,6 +21,14 @@
     flex-shrink: 0;
 }
 
+.db-sidebar-collapsible {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    flex: 1;
+}
+
 .db-sidebar-header {
     display: flex;
     align-items: center;

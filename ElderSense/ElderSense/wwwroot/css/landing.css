@@ -580,4 +580,12 @@
     .es-trust {
         grid-template-columns: 1fr;
     }
+    .hero-text {
+        align-items: center;
+        text-align: center;
+    }
+
+        .hero-text p {
+            max-width: 100%;
+        }
 }
