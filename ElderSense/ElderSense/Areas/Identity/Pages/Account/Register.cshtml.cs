@@ -118,11 +118,26 @@ namespace ElderSense.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                // Calcula a idade e garante que o cuidador é maior de 18 anos
+                var hoje = DateOnly.FromDateTime(DateTime.Today);
+                var idade = hoje.Year - Input.DataNascimento.Year;
+                if (Input.DataNascimento > hoje.AddYears(-idade))
+                {
+                    idade--;
+                }
+
+                if (idade < 18)
+                {
+                    ModelState.AddModelError("Input.DataNascimento", "Tem de ter pelo menos 18 anos para criar uma conta.");
+                    return Page();
+                }
+
                 var user = CreateUser();
 
                 user.Nome = Input.Nome; // Mapeia o nome do formulário para a classe
                 user.Tipo = TipoUtilizador.Cuidador;         // Mapeia o tipo (Idoso/Cuidador)
                 user.Telefone = Input.Telefone; // Mapeia o telefone
+                user.DataNascimento = Input.DataNascimento; // Mapeia a data de nascimento
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

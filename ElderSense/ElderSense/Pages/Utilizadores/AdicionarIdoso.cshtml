@@ -25,6 +25,18 @@
                     </div>
 
                     <div class="form-floating mb-3">
+                        <input asp-for="Input.DataNascimento" class="form-control" type="date" min="1920-01-01" max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                        <label asp-for="Input.DataNascimento"></label>
+                        <span asp-validation-for="Input.DataNascimento" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Telefone" class="form-control" placeholder="912345678" />
+                        <label asp-for="Input.Telefone"></label>
+                        <span asp-validation-for="Input.Telefone" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
                         <input asp-for="Input.Email" class="form-control" autocomplete="username" placeholder="nome@exemplo.com" />
                         <label asp-for="Input.Email"></label>
                         <span asp-validation-for="Input.Email" class="text-danger"></span>

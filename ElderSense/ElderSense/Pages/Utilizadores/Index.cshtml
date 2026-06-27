@@ -23,32 +23,34 @@
     </a>
 </p>
 <div class="table-wrapper-scroll">
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Telefone</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var utilizador in Model.Utilizadores)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <td>@utilizador.Nome</td>
-                <td>@utilizador.Email</td>
-                <td>@utilizador.Telefone</td>
-                <td>
-                    <a asp-page="Edit" asp-route-id="@utilizador.Id" class="btn-acao btn-acao-editar">
-                        <i class="ti ti-edit"></i> Editar
-                    </a>
-                    <a asp-page="Delete" asp-route-id="@utilizador.Id" class="btn-acao btn-acao-apagar">
-                        <i class="ti ti-trash"></i> Apagar
-                    </a>
-                </td>
+                <th>Nome</th>
+                <th>Data de Nascimento</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Ações</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var utilizador in Model.Utilizadores)
+            {
+                <tr>
+                    <td>@utilizador.Nome</td>
+                    <td>@utilizador.DataNascimento.ToString("dd/MM/yyyy")</td>
+                    <td>@utilizador.Email</td>
+                    <td>@utilizador.Telefone</td>
+                    <td>
+                        <a asp-page="Edit" asp-route-id="@utilizador.Id" class="btn-acao btn-acao-editar">
+                            <i class="ti ti-edit"></i> Editar
+                        </a>
+                        <a asp-page="Delete" asp-route-id="@utilizador.Id" class="btn-acao btn-acao-apagar">
+                            <i class="ti ti-trash"></i> Apagar
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

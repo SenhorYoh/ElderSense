@@ -37,7 +37,7 @@ namespace ElderSense.Pages
         }
 
         [BindProperty]
-        public InputModel Input { get; set; } = new();
+        public InputModel Input { get; set; } = default!;
 
         // de onde veio o utilizador, para saber para onde voltar depois de criar o idoso
         [BindProperty(SupportsGet = true)]
@@ -50,6 +50,15 @@ namespace ElderSense.Pages
             [Display(Name = "Nome do Idoso")]
             [StringLength(50)]
             public string Nome { get; set; } = string.Empty;
+
+            [Required(ErrorMessage = "A data de nascimento é obrigatória.")]
+            [Display(Name = "Data de Nascimento")]
+            [DataType(DataType.Date)]
+            [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+            public DateOnly DataNascimento { get; set; }
+
+            [Display(Name = "Telefone (Opcional)")]
+            public string? Telefone { get; set; }
 
             [Required(ErrorMessage = "O email é obrigatório.")]
             [EmailAddress(ErrorMessage = "Email inválido.")]
@@ -79,6 +88,20 @@ namespace ElderSense.Pages
                 return Page();
             }
 
+            // Calcula a idade e garante que o idoso é maior de 18 anos
+            var hoje = DateOnly.FromDateTime(DateTime.Today);
+            var idade = hoje.Year - Input.DataNascimento.Year;
+            if (Input.DataNascimento > hoje.AddYears(-idade))
+            {
+                idade--;
+            }
+
+            if (idade < 18)
+            {
+                ModelState.AddModelError("Input.DataNascimento", "O idoso tem de ter pelo menos 18 anos.");
+                return Page();
+            }
+
             // Verifica  se o E-mail já existe na base de dados
             var emailJaExiste = await _userManager.FindByEmailAsync(Input.Email);
             if (emailJaExiste != null)
@@ -104,7 +127,9 @@ namespace ElderSense.Pages
                 Email = Input.Email,
                 EmailConfirmed = true,
                 Nome = Input.Nome,
-                Tipo = TipoUtilizador.Idoso
+                Tipo = TipoUtilizador.Idoso,
+                DataNascimento = Input.DataNascimento,
+                Telefone = Input.Telefone
             };
 
             //cria a conta com a password fornecida
