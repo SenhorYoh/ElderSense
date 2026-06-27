@@ -29,6 +29,13 @@ namespace ElderSense.Data.Model
         // navigation property para o Utilizador
         public Utilizador Utilizador { get; set; } = null!;
 
+        //idoso a quem pertence o alerta
+        [Display(Name = "Idoso")]
+        public string? FKIdoso { get; set; }
+
+        [ForeignKey("FKIdoso")]
+        public Utilizador? IdosoAssociado { get; set; }
+
         /// <summary>
         /// Relacionamento M:N com DadosMonitorizacao (Regra 6)
         /// </summary>

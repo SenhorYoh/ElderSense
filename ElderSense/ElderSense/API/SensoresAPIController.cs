@@ -51,6 +51,7 @@ namespace ElderSense.Controllers
             _context.DadosMonitorizacao.Add(novaLeitura);
             await _context.SaveChangesAsync();
 
+           
             return Ok(new { mensagem = "Leitura guardada e associada ao idoso com sucesso" });
         }
 

@@ -4,6 +4,7 @@ using ElderSense.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ElderSense.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260626165335_RelacaoIdosoAlerta")]
+    partial class RelacaoIdosoAlerta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace ElderSense.Migrations
 
                     b.HasIndex("ListadeDadosId");
 
-                    b.ToTable("AlertaDadosMonitorizacao", (string)null);
+                    b.ToTable("AlertaDadosMonitorizacao");
                 });
 
             modelBuilder.Entity("ElderSense.Data.Model.Alerta", b =>
@@ -66,7 +69,7 @@ namespace ElderSense.Migrations
 
                     b.HasIndex("FKUtilizador");
 
-                    b.ToTable("Alertas", (string)null);
+                    b.ToTable("Alertas");
                 });
 
             modelBuilder.Entity("ElderSense.Data.Model.DadosMonitorizacao", b =>
@@ -103,7 +106,7 @@ namespace ElderSense.Migrations
 
                     b.HasIndex("FKUtilizador");
 
-                    b.ToTable("DadosMonitorizacao", (string)null);
+                    b.ToTable("DadosMonitorizacao");
                 });
 
             modelBuilder.Entity("ElderSense.Data.Model.Sensor", b =>
@@ -139,7 +142,7 @@ namespace ElderSense.Migrations
 
                     b.HasIndex("FKUtilizador");
 
-                    b.ToTable("Sensores", (string)null);
+                    b.ToTable("Sensores");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -365,7 +368,7 @@ namespace ElderSense.Migrations
 
                     b.HasIndex("ListadeIdososId");
 
-                    b.ToTable("UtilizadorUtilizador", (string)null);
+                    b.ToTable("UtilizadorUtilizador");
                 });
 
             modelBuilder.Entity("ElderSense.Data.Model.Utilizador", b =>

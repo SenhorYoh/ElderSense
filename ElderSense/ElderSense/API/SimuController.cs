@@ -82,7 +82,7 @@ namespace ElderSense.Services
                     };
                     _context.DadosMonitorizacao.Add(registoTemperatura);
 
-                    int bpm = random.Next(40, 121);
+                    int bpm = random.Next(110, 121);
                     var registoBpm = new DadosMonitorizacao
                     {
                         DataHora = DateTime.Now,
@@ -99,6 +99,8 @@ namespace ElderSense.Services
                     }
                 }
             }
+
+
 
             //Grava os dados novos na base de dados para a contagem ficar certa!
             await _context.SaveChangesAsync();
@@ -141,13 +143,26 @@ namespace ElderSense.Services
         /// (relacionamento M:N Alerta-DadosMonitorizacao), vai buscar o nome do idoso associado,
         /// e notifica em tempo real os clientes ligados via SignalR (mensagem + nome do idoso)
         /// </summary>
-        private async Task CriarAlertaAsync(string fkUtilizador, string mensagem, DadosMonitorizacao dadoOrigem)
+        private async Task CriarAlertaAsync(string idCuidador, string mensagem, DadosMonitorizacao dadoOrigem)
         {
+
+            string idDoIdoso = dadoOrigem.FKUtilizador;
+
+            var idosoExiste = await _context.Utilizadores.AnyAsync(u => u.Id == idDoIdoso);
+
+            if (!idosoExiste)
+            {
+                // O idoso não existe na base de dados (foi apagado ou o ID está errado).
+                // Abortamos a operação silenciosamente para não rebentar o servidor com o Erro 547.
+                return;
+            }
+
             var novoAlerta = new Alerta
             {
                 DataHora = DateTime.Now,
                 Mensagem = mensagem,
-                FKUtilizador = fkUtilizador
+                FKIdoso = idDoIdoso,
+                FKUtilizador = idCuidador
             };
 
             // associa o alerta ao registo de dados que o causou (preenche a tabela junction M:N)
@@ -157,7 +172,7 @@ namespace ElderSense.Services
             await _context.SaveChangesAsync();
 
             // vai buscar o nome do idoso para incluir na notificação
-            var idoso = await _context.Utilizadores.FindAsync(fkUtilizador);
+            var idoso = await _context.Utilizadores.FindAsync(idDoIdoso);
             var nomeIdoso = idoso?.Nome ?? "Desconhecido";
 
             // Notifica todos os clientes ligados ao Hub que há um alerta novo
