@@ -10,6 +10,9 @@
 <!-- ==================== NAVEGAÇÃO ==================== -->
 <nav class="es-nav">
     <a asp-page="/Index" class="es-logo">Elder<span>Sense</span></a>
+    <button class="es-nav-toggle" aria-label="Menu">
+        <span></span>
+    </button>
     <div class="es-nav-links">
         <a asp-page="/Kits" class="es-nav-featured">Kits</a>
         <a href="/#como-funciona">Como funciona</a>
@@ -242,5 +245,16 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        const navToggle = document.querySelector('.es-nav-toggle');
+        const navLinks = document.querySelector('.es-nav-links');
+        if (navToggle && navLinks) {
+            navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => navLinks.classList.remove('open'));
+            });
+        }
     </script>
 }

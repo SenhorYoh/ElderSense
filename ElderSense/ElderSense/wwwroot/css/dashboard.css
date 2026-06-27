@@ -207,3 +207,80 @@
         flex: none;
         text-align: left;
     }
+
+/* ==================== RESPONSIVO - MOBILE ==================== */
+
+@media (max-width: 768px) {
+    .db-wrap {
+        flex-direction: column;
+        min-height: auto;
+    }
+
+    .db-sidebar {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        gap: 8px;
+        border-right: none;
+        border-bottom: 0.5px solid #e5e5e5;
+    }
+
+    .db-logo {
+        width: 100%;
+        border-bottom: none;
+        margin-bottom: 0;
+        padding: 0 0 0.5rem;
+    }
+
+    .db-nav-item {
+        width: auto;
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .db-sidebar-footer {
+        width: 100%;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 0.5px solid #e5e5e5;
+        padding-top: 0.5rem;
+    }
+
+    .db-user {
+        padding: 0;
+    }
+
+    .db-main {
+        padding: 1rem;
+    }
+
+    .db-stats {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .db-stats-divider {
+        display: none;
+    }
+
+    .table-wrapper-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -1rem;
+        padding: 0 1rem;
+    }
+
+    .table {
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .btn-acao {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+}
