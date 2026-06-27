@@ -8,20 +8,35 @@ using System.Threading.Tasks;
 namespace ElderSense.Services
 {
     /// <summary>
-    /// Classe que trabalha em conjunto com SimuController.cs, 
-    /// enviando os dados de 1 em 1 minuto para o DadosMonitorizacao 
+    /// Classe que trabalha em conjunto com SimuController.cs,
+    /// enviando os dados de 1 em 1 minuto para o DadosMonitorizacao
     /// </summary>
     public class SimuWorker : BackgroundService
     {
+        /// <summary>
+        /// Fornecedor de serviços usado para criar um scope e resolver dependências com âmbito (scoped)
+        /// </summary>
         private readonly IServiceProvider _serviceProvider;
+
+        /// <summary>
+        /// Logger usado para registar o estado e os erros do simulador
+        /// </summary>
         private readonly ILogger<SimuWorker> _logger;
 
+        /// <summary>
+        /// Construtor que recebe as dependências injetadas pelo sistema
+        /// </summary>
         public SimuWorker(IServiceProvider serviceProvider, ILogger<SimuWorker> logger)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Ciclo principal do serviço em segundo plano: cria um scope temporário,
+        /// invoca o SimuController para injetar dados de teste, e repete periodicamente
+        /// enquanto a aplicação estiver ativa
+        /// </summary>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("O Worker do Simulador do ElderSense foi iniciado.");
@@ -39,7 +54,7 @@ namespace ElderSense.Services
                     {
                         var simulador = scope.ServiceProvider.GetRequiredService<SimuController>();
 
-                        // Chama o teu método que cria o dado e apaga os antigos além do limite
+                        // Chama o método que cria os dados novos e apaga os antigos além do limite
                         await simulador.InjetarDadosDeTesteAsync();
                     }
 
@@ -50,8 +65,8 @@ namespace ElderSense.Services
                     _logger.LogError(ex, "Ocorreu um erro ao correr o simulador de sensores.");
                 }
 
-                // Envia os dados de 1 em 1 minuto 
-                await Task.Delay(TimeSpan.FromSeconds(7), stoppingToken);
+                // Envia os dados de 1 em 1 minuto
+                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }
         }
     }

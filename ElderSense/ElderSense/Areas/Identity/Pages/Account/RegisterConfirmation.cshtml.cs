@@ -15,12 +15,25 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace ElderSense.Areas.Identity.Pages.Account
 {
+    /// <summary>
+    /// Página mostrada após o registo, a confirmar que o email foi enviado
+    /// </summary>
     [AllowAnonymous]
     public class RegisterConfirmationModel : PageModel
     {
+        /// <summary>
+        /// Gestor de utilizadores do Identity
+        /// </summary>
         private readonly UserManager<Utilizador> _userManager;
+
+        /// <summary>
+        /// Serviço de envio de emails
+        /// </summary>
         private readonly IEmailSender _sender;
 
+        /// <summary>
+        /// Construtor que recebe as dependências injetadas pelo sistema
+        /// </summary>
         public RegisterConfirmationModel(UserManager<Utilizador> userManager, IEmailSender sender)
         {
             _userManager = userManager;
@@ -28,23 +41,26 @@ namespace ElderSense.Areas.Identity.Pages.Account
         }
 
         /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// Esta API suporta a infraestrutura padrão de UI do ASP.NET Core Identity e não foi
+        /// pensada para ser usada diretamente no código. Esta API pode mudar ou ser removida em futuras versões.
         /// </summary>
         public string Email { get; set; }
 
         /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// Esta API suporta a infraestrutura padrão de UI do ASP.NET Core Identity e não foi
+        /// pensada para ser usada diretamente no código. Esta API pode mudar ou ser removida em futuras versões.
         /// </summary>
         public bool DisplayConfirmAccountLink { get; set; }
 
         /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// Esta API suporta a infraestrutura padrão de UI do ASP.NET Core Identity e não foi
+        /// pensada para ser usada diretamente no código. Esta API pode mudar ou ser removida em futuras versões.
         /// </summary>
         public string EmailConfirmationUrl { get; set; }
 
+        /// <summary>
+        /// Carrega a página de confirmação de registo para o email indicado
+        /// </summary>
         public async Task<IActionResult> OnGetAsync(string email, string returnUrl = null)
         {
             if (email == null)
@@ -56,14 +72,13 @@ namespace ElderSense.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
-                return NotFound($"Unable to load user with email '{email}'.");
+                return NotFound($"Não foi possível carregar o utilizador com o email '{email}'.");
             }
 
             Email = email;
-            ///<summary>
-            ///DisplayConfirmAccountLink é declarada como falso para que exija uma conta confirmada
-            ///e impede o login imediato
-            ///</summary>
+
+            // DisplayConfirmAccountLink é declarado como falso para que exija uma conta confirmada
+            // e impede o login imediato
             DisplayConfirmAccountLink = false;
             if (DisplayConfirmAccountLink)
             {

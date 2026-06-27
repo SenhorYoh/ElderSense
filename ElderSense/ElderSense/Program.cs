@@ -11,7 +11,7 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configuração da base de dados
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -25,14 +25,12 @@ builder.Services.AddDefaultIdentity<Utilizador>(options => options.SignIn.Requir
 // Regista a lógica que cria os sensores e limpa o lixo
 builder.Services.AddScoped<SimuController>();
 
-// 2. Regista o robô invisível que corre em segundo plano a cada 1 minuto
+// Regista o serviço em segundo plano que corre a cada 1 minuto
 builder.Services.AddHostedService<SimuWorker>();
 
-///<summary>
-///configuração unificada de autenticação (Google + JWT)
-///Se alguém aceder as páginas normais (Razor Pages, usa o esquema de cookies do Identity.
-///Se vier uma requisição para a API, valida o cabeçalho bearer (JWT)
-///</summary>
+// configuração unificada de autenticação (Google + JWT)
+// Se alguém aceder às páginas normais (Razor Pages), usa o esquema de cookies do Identity
+// Se vier uma requisição para a API, valida o cabeçalho bearer (JWT)
 builder.Services.AddAuthentication(options =>
 {
     // Por padrão, o site usa cookies. A API vai pedir explicitamente o "Bearer" (JWT)
@@ -66,10 +64,8 @@ builder.Services.AddControllers(); //ativa o suporte para a API
 // Regista o SignalR para permitir notificações em tempo real
 builder.Services.AddSignalR();
 
-///<summary>
-///O utilizador não pode fazer login até confirmar o seu email 
-///+ o tempo limite de inatividade é definido para 5 dias
-///</summary>
+// O utilizador não pode fazer login até confirmar o seu email
+// + o tempo limite de inatividade é definido para 5 dias
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 
@@ -82,18 +78,8 @@ builder.Services.ConfigureApplicationCookie(o => {
     o.AccessDeniedPath = "/AcessoNegado";
 });
 
-// *******************************************************************
-// Instalar o package
-// Microsoft.AspNetCore.Authentication.JwtBearer
-//
-// using Microsoft.IdentityModel.Tokens;
-// *******************************************************************
-// JWT Settings
-
-
-// configuração do JWT
+// Configuração do JWT
 builder.Services.AddScoped<TokenService>();
-
 
 // Eliminar a proteção de 'ciclos' qd se faz uma pesquisa que envolva um relacionamento 1-N em Linq
 // https://code-maze.com/aspnetcore-handling-circular-references-when-working-with-json/
@@ -109,7 +95,7 @@ using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    // Lista das Roles que o teu sistema precisa
+    // Lista das roles que o sistema precisa de ter registadas
     string[] roles = { "Cuidador", "Idoso" };
 
     foreach (var role in roles)
@@ -122,7 +108,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure the HTTP request pipeline.
+// Pipeline de requisições HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -130,7 +116,7 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    // O valor por defeito do HSTS é 30 dias; pode ser ajustado em produção, ver https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
