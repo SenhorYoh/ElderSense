@@ -1,0 +1,226 @@
+﻿@page
+@model ElderSense.Pages.SobreModel
+@{
+    ViewData["Title"] = "Resumo do Trabalho — ElderSense";
+    Layout = "_LayoutLanding";
+}
+
+<h2 class="sr-only">Resumo do trabalho ElderSense</h2>
+
+<!-- ==================== NAVEGAÇÃO ==================== -->
+<nav class="es-nav">
+    <a asp-page="/Index" class="es-logo">Elder<span>Sense</span></a>
+    <button class="es-nav-toggle" aria-label="Menu">
+        <span></span>
+    </button>
+    <div class="es-nav-links">
+        <a asp-page="/Kits">Kits</a>
+        <a asp-page="/Index">Como funciona</a>
+        <a asp-page="/Index">Planos</a>
+        <a asp-page="/Sobre" class="es-nav-featured">Resumo Trabalho</a>
+        @if (User.Identity!.IsAuthenticated)
+        {
+            @if (User.IsInRole("Cuidador"))
+            {
+                <a asp-page="/Sensores/Index" class="es-btn-nav">Dashboard</a>
+            }
+            else
+            {
+                <a asp-page="/Alertas/Index" class="es-btn-nav">Dashboard</a>
+            }
+        }
+        else
+        {
+            <a asp-page="/Account/Register" asp-area="Identity" class="es-btn-nav">Registar</a>
+            <a asp-page="/Account/Login" asp-area="Identity" class="es-btn-nav">Entrar</a>
+        }
+    </div>
+</nav>
+
+<!-- ==================== CABEÇALHO ==================== -->
+<div class="kits-hero">
+    <div class="es-badge">
+        <i class="ti ti-school"></i> Trabalho Académico
+    </div>
+    <h1>Resumo do <em>Trabalho</em></h1>
+    <p>Identificação do curso, autores, tecnologias utilizadas e credenciais de acesso de demonstração.</p>
+</div>
+
+<!-- ==================== IDENTIFICAÇÃO ==================== -->
+<section class="es-section" id="identificacao">
+    <div class="es-section-label">Identificação</div>
+    <h2>Curso e disciplina</h2>
+    <div class="es-cards">
+        <div class="es-card">
+            <div class="es-card-icon"><i class="ti ti-school"></i></div>
+            <h3>Curso</h3>
+            <p>Engenharia Informática</p>
+        </div>
+        <div class="es-card">
+            <div class="es-card-icon"><i class="ti ti-book"></i></div>
+            <h3>Disciplina</h3>
+            <p>Desenvolvimento Web — 2º ano, 2º semestre</p>
+        </div>
+        <div class="es-card">
+            <div class="es-card-icon"><i class="ti ti-calendar"></i></div>
+            <h3>Ano letivo</h3>
+            <p>2025 / 2026</p>
+        </div>
+    </div>
+</section>
+
+<hr class="es-divider">
+
+<!-- ==================== AUTORES ==================== -->
+<section class="es-section" id="autores">
+    <div class="es-section-label">Autores</div>
+    <h2>Quem desenvolveu este trabalho</h2>
+    <div class="es-cards">
+        <div class="es-card">
+            <div class="es-card-icon"><i class="ti ti-user"></i></div>
+            <h3>Yohan Enrique de Oliveira Silva</h3>
+            <p>Nº 27213</p>
+        </div>
+        <div class="es-card">
+            <div class="es-card-icon"><i class="ti ti-user"></i></div>
+            <h3>Tomás António Segurado</h3>
+            <p>Nº 27460</p>
+        </div>
+    </div>
+</section>
+
+<hr class="es-divider">
+
+<!-- ==================== BIBLIOTECAS E FRAMEWORKS ==================== -->
+<section class="es-section" id="bibliotecas">
+    <div class="es-section-label">Bibliotecas, Frameworks e Código de Terceiros</div>
+    <h2>Tecnologias utilizadas</h2>
+    <p>Todas as dependências abaixo foram obtidas a partir dos respetivos gestores de pacotes oficiais (NuGet para .NET, e CDNs públicos para bibliotecas client-side), sem qualquer modificação ao código-fonte original.</p>
+
+    <div class="es-how">
+
+        <div class="es-step">
+            <div class="es-step-num"><i class="ti ti-server" style="font-size:14px;"></i></div>
+            <div class="es-step-content">
+                <h4>ASP.NET Core 10 &amp; Razor Pages</h4>
+                <p>Framework principal da aplicação (backend e renderização de páginas). Obtido via Microsoft / .NET SDK.</p>
+            </div>
+        </div>
+
+        <div class="es-step">
+            <div class="es-step-num"><i class="ti ti-database" style="font-size:14px;"></i></div>
+            <div class="es-step-content">
+                <h4>Entity Framework Core 10 (SqlServer, Tools, Design)</h4>
+                <p>ORM utilizado para todo o acesso à base de dados. Pacote NuGet: <code>Microsoft.EntityFrameworkCore.SqlServer</code>, <code>Microsoft.EntityFrameworkCore.Tools</code>, <code>Microsoft.EntityFrameworkCore.Design</code>.</p>
+            </div>
+        </div>
+
+        <div class="es-step">
+            <div class="es-step-num"><i class="ti ti-lock" style="font-size:14px;"></i></div>
+            <div class="es-step-content">
+                <h4>ASP.NET Core Identity (Identity.UI, Identity.EntityFrameworkCore)</h4>
+                <p>Sistema de autenticação, registo e gestão de contas (Cuidador/Idoso). Pacote NuGet: <code>Microsoft.AspNetCore.Identity.EntityFrameworkCore</code>, <code>Microsoft.AspNetCore.Identity.UI</code>.</p>
+            </div>
+        </div>
+
+        <div class="es-step">
+            <div class="es-step-num"><i class="ti ti-brand-google" style="font-size:14px;"></i></div>
+            <div class="es-step-content">
+                <h4>Microsoft.AspNetCore.Authentication.Google</h4>
+                <p>Permite login/registo através de uma conta Google (OAuth). Obtido via NuGet.</p>
+            </div>
+        </div>
+
+        <div class="es-step">
+            <div class="es-step-num"><i class="ti ti-key" style="font-size:14px;"></i></div>
+            <div class="es-step-content">
+                <h4>Microsoft.AspNetCore.Authentication.JwtBearer</h4>
+                <p>Autenticação por token JWT, usada na API REST que comunica com o hardware (Hub/sensores). Obtido via NuGet.</p>
+            </div>
+        </div>
+
+        <div class="es-step">
+            <div class="es-step-num"><i class="ti ti-mail" style="font-size:14px;"></i></div>
+            <div class="es-step-content">
+                <h4>SendGrid</h4>
+                <p>Serviço de envio de emails (confirmação de conta, convites a idosos). Pacote NuGet: <code>SendGrid</code>, da Twilio SendGrid.</p>
+            </div>
+        </div>
+
+        <div class="es-step">
+            <div class="es-step-num"><i class="ti ti-broadcast" style="font-size:14px;"></i></div>
+            <div class="es-step-content">
+                <h4>SignalR (Microsoft, via CDN)</h4>
+                <p>Comunicação em tempo real para notificação imediata de novos alertas. Carregado via CDN: <code>cdnjs.cloudflare.com/ajax/libs/microsoft-signalr</code>.</p>
+            </div>
+        </div>
+
+        <div class="es-step">
+            <div class="es-step-num"><i class="ti ti-brand-bootstrap" style="font-size:14px;"></i></div>
+            <div class="es-step-content">
+                <h4>Bootstrap 5</h4>
+                <p>Framework CSS base para grelhas, formulários e componentes do backoffice. Instalado via LibMan, obtido do CDN/repositório oficial Bootstrap.</p>
+            </div>
+        </div>
+
+        <div class="es-step">
+            <div class="es-step-num"><i class="ti ti-icons" style="font-size:14px;"></i></div>
+            <div class="es-step-content">
+                <h4>Tabler Icons &amp; Bootstrap Icons</h4>
+                <p>Conjuntos de ícones utilizados em toda a aplicação. Carregados via CDN: <code>cdn.jsdelivr.net/npm/@@tabler/icons-webfont</code> e <code>cdn.jsdelivr.net/npm/bootstrap-icons</code>.</p>
+            </div>
+        </div>
+
+        <div class="es-step">
+            <div class="es-step-num"><i class="ti ti-code" style="font-size:14px;"></i></div>
+            <div class="es-step-content">
+                <h4>jQuery &amp; jQuery Validation</h4>
+                <p>Biblioteca JavaScript usada para validação de formulários no lado do cliente (template padrão do ASP.NET). Instalado via LibMan.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<hr class="es-divider">
+
+<!-- ==================== CREDENCIAIS DE TESTE ==================== -->
+<section class="es-section" id="credenciais">
+    <div class="es-section-label">Credenciais de Acesso</div>
+    <h2>Contas de demonstração</h2>
+    <p>As seguintes contas foram criadas para efeitos de avaliação e demonstração da aplicação.</p>
+
+    <div class="es-pricing">
+        <div class="es-plan">
+            <div class="es-plan-badge"><i class="ti ti-heart" style="font-size:12px;"></i> Cuidador</div>
+            <h3>Conta de Cuidador</h3>
+            <ul class="es-plan-features">
+                <li><i class="ti ti-mail"></i> testeprofCuidador@gmail.com</li>
+                <li><i class="ti ti-lock"></i> qwe123QWE123#</li>
+            </ul>
+            <p class="es-plan-desc">Tem acesso a Sensores, Idosos, Alertas e Dados de Monitorização. Já tem um idoso e sensores associados, com dados de demonstração gerados automaticamente.</p>
+        </div>
+        <div class="es-plan featured">
+            <div class="es-plan-badge"><i class="ti ti-user" style="font-size:12px;"></i> Idoso</div>
+            <h3>Conta de Idoso</h3>
+            <ul class="es-plan-features">
+                <li><i class="ti ti-mail"></i> testeprofIdoso@gmail.com</li>
+                <li><i class="ti ti-lock"></i> qwe123QWE123#</li>
+            </ul>
+            <p class="es-plan-desc">Tem acesso apenas aos seus próprios Alertas e Dados de Monitorização, refletindo a visão restrita de um utilizador do tipo Idoso.</p>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        const navToggle = document.querySelector('.es-nav-toggle');
+        const navLinks = document.querySelector('.es-nav-links');
+        if (navToggle && navLinks) {
+            navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => navLinks.classList.remove('open'));
+            });
+        }
+    </script>
+}
