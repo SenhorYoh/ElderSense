@@ -47,48 +47,77 @@ namespace ElderSense.Areas.Identity.Pages.Account
             _emailSender = emailSender;
         }
 
+        /// <summary>
+        /// Dados do formulário de registo submetidos pelo utilizador
+        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
+        /// <summary>
+        /// URL para onde o utilizador deve ser redirecionado após o registo
+        /// </summary>
         public string ReturnUrl { get; set; }
 
+        /// <summary>
+        /// Lista de esquemas de autenticação externos disponíveis (ex: Google)
+        /// </summary>
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
+        /// <summary>
+        /// Campos que o utilizador vê na criação da conta
+        /// </summary>
         public class InputModel
         {
-
             /// <summary>
-            /// Campos que o utilizador vê na criação da conta
+            /// Nome completo do utilizador
             /// </summary>
             [Required(ErrorMessage = "O(a) {0} é obrigatório(a)")]
             [StringLength(50)]
             [Display(Name = "Nome")]
             public string Nome { get; set; }
 
+            /// <summary>
+            /// Tipo de utilizador (Idoso ou Cuidador)
+            /// </summary>
             [Required(ErrorMessage = "O(a) {0} é obrigatório(a)")]
             [Display(Name = "Tipo de Utilizador")]
             public TipoUtilizador Tipo { get; set; }
 
+            /// <summary>
+            /// Data de nascimento do utilizador, usada para validar a idade mínima
+            /// </summary>
             [Required(ErrorMessage = "O(a) {0} é obrigatório(a)")]
             [Display(Name = "Data de nascimento")]
             [DataType(DataType.Date)]
             [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
             public DateOnly DataNascimento { get; set; }
 
+            /// <summary>
+            /// Número de telefone do utilizador, opcional
+            /// </summary>
             [Display(Name = "Telefone (Opcional)")]
             public string? Telefone { get; set; }
 
+            /// <summary>
+            /// Endereço de email do utilizador, usado como nome de utilizador no login
+            /// </summary>
             [Required(ErrorMessage = "O(a) {0} é obrigatório(a)")]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
+            /// <summary>
+            /// Password escolhida pelo utilizador para aceder à conta
+            /// </summary>
             [Required(ErrorMessage = "O(a) {0} é obrigatório(a)")]
             [StringLength(100, ErrorMessage = "A {0} deve ter pelo menos {2} caracteres", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
+            /// <summary>
+            /// Confirmação da password, tem de coincidir com o campo Password
+            /// </summary>
             [Required(ErrorMessage = "O(a) {0} é obrigatório(a)")]
             [DataType(DataType.Password)]
             [Display(Name = "Confirmar password")]
@@ -97,6 +126,9 @@ namespace ElderSense.Areas.Identity.Pages.Account
         }
 
 
+        /// <summary>
+        /// Carrega a página de registo, pré-preenchendo o email se vier de um login externo sem conta associada
+        /// </summary>
         public async Task OnGetAsync(string returnUrl = null, string email = null)
         {
             ReturnUrl = returnUrl;
@@ -112,6 +144,10 @@ namespace ElderSense.Areas.Identity.Pages.Account
             }
         }
 
+        /// <summary>
+        /// Processa o registo: valida a idade mínima, cria a conta como Cuidador
+        /// e envia o email de confirmação
+        /// </summary>
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
@@ -134,10 +170,10 @@ namespace ElderSense.Areas.Identity.Pages.Account
 
                 var user = CreateUser();
 
-                user.Nome = Input.Nome; // Mapeia o nome do formulário para a classe
-                user.Tipo = TipoUtilizador.Cuidador;         // Mapeia o tipo (Idoso/Cuidador)
-                user.Telefone = Input.Telefone; // Mapeia o telefone
-                user.DataNascimento = Input.DataNascimento; // Mapeia a data de nascimento
+                user.Nome = Input.Nome;
+                user.Tipo = TipoUtilizador.Cuidador;
+                user.Telefone = Input.Telefone;
+                user.DataNascimento = Input.DataNascimento;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -145,7 +181,7 @@ namespace ElderSense.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    _logger.LogInformation("Utilizador criou uma nova conta com password.");
 
                     //o utilizador é do tipo cuidador por padrão
                     await _userManager.AddToRoleAsync(user, "Cuidador");
@@ -159,7 +195,7 @@ namespace ElderSense.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    string assunto = "ElderSense - Confirme a sua conta 🚀";
+                    string assunto = "ElderSense - Confirme a sua conta";
 
                     string corpoEmail = $@"
                     <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;'>
@@ -177,10 +213,10 @@ namespace ElderSense.Areas.Identity.Pages.Account
                         <p style='font-size: 12px; color: #666;'>Se o botão não funcionar, copie e cole o seguinte link no seu navegador:</p>
                         <p style='font-size: 12px; color: #0d6efd; word-break: break-all;'>{callbackUrl}</p>
                         <hr style='border: 0; border-top: 1px solid #eee; margin-top: 30px;' />
-                        <p style='font-size: 11px; color: #999; text-align: center;'>Este é un email automático da ElderSense. Por favor, não responda a esta mensagem.</p>
+                        <p style='font-size: 11px; color: #999; text-align: center;'>Este é um email automático da ElderSense. Por favor, não responda a esta mensagem.</p>
                     </div>";
 
-                    // 3. Envia o email com o teu assunto e corpo personalizados
+                    // Envia o email de confirmação com o assunto e corpo personalizados
                     await _emailSender.SendEmailAsync(Input.Email, assunto, corpoEmail);
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
@@ -199,10 +235,13 @@ namespace ElderSense.Areas.Identity.Pages.Account
                 }
             }
 
-            // If we got this far, something failed, redisplay form
+            // Se chegou até aqui, algo falhou; mostra o formulário novamente
             return Page();
         }
 
+        /// <summary>
+        /// Cria uma nova instância de Utilizador para o registo
+        /// </summary>
         private Utilizador CreateUser()
         {
             try
@@ -211,15 +250,18 @@ namespace ElderSense.Areas.Identity.Pages.Account
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(Utilizador)}'.");
+                throw new InvalidOperationException($"Não foi possível criar uma instância de '{nameof(Utilizador)}'.");
             }
         }
 
+        /// <summary>
+        /// Obtém o store de email do utilizador, necessário porque o login é feito por email
+        /// </summary>
         private IUserEmailStore<Utilizador> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
-                throw new NotSupportedException("The default UI requires a user store with email support.");
+                throw new NotSupportedException("A interface por defeito requer um store de utilizador com suporte a email.");
             }
             return (IUserEmailStore<Utilizador>)_userStore;
         }

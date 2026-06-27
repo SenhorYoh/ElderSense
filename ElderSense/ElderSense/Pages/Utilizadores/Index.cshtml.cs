@@ -7,24 +7,44 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ElderSense.Pages.Utilizadores
 {
+    /// <summary>
+    /// Página de visualização dos idosos associados ao cuidador autenticado
+    /// </summary>
     [Authorize]
     public class IndexModel : PageModel
     {
+        /// <summary>
+        /// Contexto da base de dados
+        /// </summary>
         private readonly ApplicationDbContext _context;
+
+        /// <summary>
+        /// Gestor de utilizadores do Identity, usado para identificar o cuidador autenticado
+        /// </summary>
         private readonly UserManager<Utilizador> _userManager;
 
+        /// <summary>
+        /// Construtor que recebe as dependências injetadas pelo sistema
+        /// </summary>
         public IndexModel(ApplicationDbContext context, UserManager<Utilizador> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        // lista dos idosos associados ao cuidador autenticado
+        /// <summary>
+        /// Lista dos idosos associados ao cuidador autenticado
+        /// </summary>
         public IList<Utilizador> Utilizadores { get; set; } = [];
 
-        // estatística para o cabeçalho da página
+        /// <summary>
+        /// Número total de idosos associados ao cuidador
+        /// </summary>
         public int TotalIdosos => Utilizadores.Count;
 
+        /// <summary>
+        /// Carrega a lista de idosos da rede do cuidador autenticado
+        /// </summary>
         public async Task OnGetAsync()
         {
             var userId = _userManager.GetUserId(User);

@@ -7,23 +7,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ElderSense.Pages.Sensores
 {
-
     /// <summary>
     /// Página de deletar sensores. Apenas um utilizador logado e do tipo Cuidador pode deletar
     /// </summary>
     [Authorize(Roles = "Cuidador")]
     public class DeleteModel : PageModel
     {
+        /// <summary>
+        /// Contexto da base de dados
+        /// </summary>
         private readonly ApplicationDbContext _context;
 
+        /// <summary>
+        /// Construtor que recebe o contexto da base de dados injetado pelo sistema
+        /// </summary>
         public DeleteModel(ApplicationDbContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Sensor a apagar
+        /// </summary>
         [BindProperty]
         public Sensor Sensor { get; set; } = new();
 
+        /// <summary>
+        /// Carrega o sensor selecionado para confirmação antes de apagar
+        /// </summary>
         public async Task<IActionResult> OnGetAsync(int id)
         {
             // vai buscar o sensor pelo id
@@ -36,6 +47,10 @@ namespace ElderSense.Pages.Sensores
             return Page();
         }
 
+        /// <summary>
+        /// Processa a remoção do sensor, limpando antes as ligações M:N a Alertas
+        /// e apagando os DadosMonitorizacao associados, para não violar a tabela de junção
+        /// </summary>
         public async Task<IActionResult> OnPostAsync()
         {
             // vai buscar o sensor pelo id para garantir que existe

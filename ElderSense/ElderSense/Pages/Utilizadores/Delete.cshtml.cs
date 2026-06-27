@@ -8,21 +8,41 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ElderSense.Pages.Utilizadores
 {
+    /// <summary>
+    /// Página de remoção de um utilizador, incluindo a limpeza manual
+    /// de todas as relações associadas antes de apagar a conta
+    /// </summary>
     [Authorize]
     public class DeleteModel : PageModel
     {
+        /// <summary>
+        /// Gestor de utilizadores do Identity, usado para procurar e apagar a conta
+        /// </summary>
         private readonly UserManager<Utilizador> _userManager;
+
+        /// <summary>
+        /// Contexto da base de dados
+        /// </summary>
         private readonly ApplicationDbContext _context;
 
+        /// <summary>
+        /// Construtor que recebe as dependências injetadas pelo sistema
+        /// </summary>
         public DeleteModel(UserManager<Utilizador> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _context = context;
         }
 
+        /// <summary>
+        /// Utilizador a apagar
+        /// </summary>
         [BindProperty]
         public Utilizador Utilizador { get; set; } = new();
 
+        /// <summary>
+        /// Carrega o utilizador selecionado para confirmação antes de apagar
+        /// </summary>
         public async Task<IActionResult> OnGetAsync(string id)
         {
             // vai buscar o utilizador pelo id
@@ -34,6 +54,11 @@ namespace ElderSense.Pages.Utilizadores
             return Page();
         }
 
+        /// <summary>
+        /// Processa a remoção do utilizador: limpa manualmente todas as relações
+        /// (Alertas, DadosMonitorizacao, Sensores e a relação M:N Cuidador/Idoso)
+        /// antes de apagar a conta, respeitando as restrições do SQL Server
+        /// </summary>
         public async Task<IActionResult> OnPostAsync()
         {
             // vai buscar o utilizador pelo id, já com as relações M:N de Cuidador<->Idoso carregadas

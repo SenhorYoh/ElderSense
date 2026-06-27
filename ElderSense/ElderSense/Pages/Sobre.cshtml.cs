@@ -9,6 +9,9 @@ namespace ElderSense.Pages
     /// </summary>
     public class SobreModel : PageModel
     {
+        /// <summary>
+        /// Carrega a página de identificação do trabalho
+        /// </summary>
         public void OnGet()
         {
         }

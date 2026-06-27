@@ -13,22 +13,33 @@ using System.Threading.Tasks;
 
 namespace ElderSense.Pages
 {
-
     /// <summary>
     /// Página de criação/associação de idoso a conta do Cuidador.
     /// O cuidador deve ter pelo menos 1 idoso associado para adicionar sensores,
     /// senão tiver, deve associar um idoso
     /// </summary>
-    /// 
-
     //apenas cuidadores podem aceder a esta página
     [Authorize(Roles = "Cuidador")]
     public class AdicionarIdosoModel : PageModel
     {
+        /// <summary>
+        /// Gestor de utilizadores do Identity, usado para criar a conta do idoso
+        /// </summary>
         private readonly UserManager<Utilizador> _userManager;
+
+        /// <summary>
+        /// Contexto da base de dados
+        /// </summary>
         private readonly ApplicationDbContext _context;
+
+        /// <summary>
+        /// Serviço de envio de emails, usado para notificar o idoso após a criação da conta
+        /// </summary>
         private readonly IEmailSender _emailSender;
 
+        /// <summary>
+        /// Construtor que recebe as dependências injetadas pelo sistema
+        /// </summary>
         public AdicionarIdosoModel(UserManager<Utilizador> userManager, ApplicationDbContext context, IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -36,51 +47,83 @@ namespace ElderSense.Pages
             _emailSender = emailSender;
         }
 
+        /// <summary>
+        /// Dados do formulário de criação do idoso
+        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; } = default!;
 
-        // de onde veio o utilizador, para saber para onde voltar depois de criar o idoso
+        /// <summary>
+        /// De onde veio o utilizador, para saber para onde voltar depois de criar o idoso
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string? ReturnUrl { get; set; }
 
-        // classe auxiliar só para apanhar os dados deste formulário
+        /// <summary>
+        /// Classe auxiliar só para apanhar os dados deste formulário
+        /// </summary>
         public class InputModel
         {
+            /// <summary>
+            /// Nome completo do idoso
+            /// </summary>
             [Required(ErrorMessage = "O nome do idoso é obrigatório.")]
             [Display(Name = "Nome do Idoso")]
             [StringLength(50)]
             public string Nome { get; set; } = string.Empty;
 
+            /// <summary>
+            /// Data de nascimento do idoso, usada para validar a idade mínima
+            /// </summary>
             [Required(ErrorMessage = "A data de nascimento é obrigatória.")]
             [Display(Name = "Data de Nascimento")]
             [DataType(DataType.Date)]
             [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
             public DateOnly DataNascimento { get; set; }
 
+            /// <summary>
+            /// Número de telefone do idoso, opcional
+            /// </summary>
             [Display(Name = "Telefone (Opcional)")]
             public string? Telefone { get; set; }
 
+            /// <summary>
+            /// Endereço de email do idoso, usado como nome de utilizador no login
+            /// </summary>
             [Required(ErrorMessage = "O email é obrigatório.")]
             [EmailAddress(ErrorMessage = "Email inválido.")]
             [Display(Name = "Email do Idoso")]
             public string Email { get; set; } = string.Empty;
 
+            /// <summary>
+            /// Password da conta do idoso
+            /// </summary>
             [Required(ErrorMessage = "A Palavra-Passe é obrigatória.")]
             [StringLength(50, ErrorMessage = "A {0} deve ter entre {2} e {1} caracteres.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Palavra-Passe")]
             public string Password { get; set; } = string.Empty;
 
+            /// <summary>
+            /// Confirmação da password, tem de coincidir com o campo Password
+            /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirmar Palavra-Passe")]
             [Compare("Password", ErrorMessage = "As palavra-passes não coincidem.")]
             public string ConfirmPassword { get; set; } = string.Empty;
         }
 
+        /// <summary>
+        /// Carrega a página de criação do idoso
+        /// </summary>
         public void OnGet()
         {
         }
 
+        /// <summary>
+        /// Processa a criação do idoso: valida a idade mínima e o email,
+        /// cria a conta, associa-a ao cuidador autenticado e envia um email informativo
+        /// </summary>
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -102,7 +145,7 @@ namespace ElderSense.Pages
                 return Page();
             }
 
-            // Verifica  se o E-mail já existe na base de dados
+            // Verifica se o e-mail já existe na base de dados
             var emailJaExiste = await _userManager.FindByEmailAsync(Input.Email);
             if (emailJaExiste != null)
             {
@@ -118,7 +161,6 @@ namespace ElderSense.Pages
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (cuidador == null) return NotFound();
-
 
             // Prepara o novo perfil de Idoso
             var novoIdoso = new Utilizador

@@ -6,22 +6,36 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ElderSense.Services
 {
-
-    /// <summary>/// 
+    /// <summary>
     /// Classe que envia dados falsos para a tabela DadosMonitorizacao.
     /// Simula o funcionamento da monitorização do idoso no sistema, enviando dados de sua rotina
     /// </summary>
     public class SimuController
     {
+        /// <summary>
+        /// Contexto da base de dados, usado para criar e remover registos de simulação
+        /// </summary>
         private readonly ApplicationDbContext _context;
+
+        /// <summary>
+        /// Contexto do Hub de SignalR, usado para notificar os clientes ligados em tempo real
+        /// </summary>
         private readonly IHubContext<AlertaHub> _hubContext;
 
+        /// <summary>
+        /// Construtor que recebe as dependências injetadas pelo sistema
+        /// </summary>
         public SimuController(ApplicationDbContext context, IHubContext<AlertaHub> hubContext)
         {
             _context = context;
             _hubContext = hubContext;
         }
 
+        /// <summary>
+        /// Gera dados de monitorização falsos para todos os sensores ativos (Fase 1),
+        /// deteta frequências cardíacas fora do normal e cria alertas, e por fim
+        /// remove os registos mais antigos para manter no máximo 10 por sensor (Fase 2)
+        /// </summary>
         public async Task InjetarDadosDeTesteAsync()
         {
             var sensoresAtivos = await _context.Sensores
@@ -32,9 +46,7 @@ namespace ElderSense.Services
 
             var random = new Random();
 
-            // ==========================================
-            // FASE 1: CRIAR E GRAVAR OS DADOS NOVOS
-            // ==========================================
+            // FASE 1: criar e gravar os dados novos
             foreach (var sensor in sensoresAtivos)
             {
                 if (sensor.Tipo == TipoSensor.Beacon)
@@ -70,13 +82,13 @@ namespace ElderSense.Services
                 {
                     // Para a pulseira, usamos o idoso que está associado a ela de forma fixa
                     // (Se por algum motivo falhar, usa o do Cuidador)
-                    string DonoPulseira = sensor.FKIdoso ?? sensor.FKUtilizador;
+                    string donoPulseira = sensor.FKIdoso ?? sensor.FKUtilizador;
 
                     var registoTemperatura = new DadosMonitorizacao
                     {
                         DataHora = DateTime.Now,
                         FKSensor = sensor.Id,
-                        FKUtilizador = DonoPulseira,
+                        FKUtilizador = donoPulseira,
                         Tipo = "Temperatura Corporal",
                         Valor = (random.Next(350, 380) / 10.0).ToString("0.0") + " ºC"
                     };
@@ -87,7 +99,7 @@ namespace ElderSense.Services
                     {
                         DataHora = DateTime.Now,
                         FKSensor = sensor.Id,
-                        FKUtilizador = DonoPulseira,
+                        FKUtilizador = donoPulseira,
                         Tipo = "Frequência Cardíaca",
                         Valor = bpm.ToString() + " bpm"
                     };
@@ -100,15 +112,10 @@ namespace ElderSense.Services
                 }
             }
 
-
-
             //Grava os dados novos na base de dados para a contagem ficar certa!
             await _context.SaveChangesAsync();
 
-
-            // ==========================================
-            // FASE 2: LIMPAR O LIXO (Garante 10 por sensor)
-            // ==========================================
+            // FASE 2: limpar o lixo (garante no máximo 10 registos por sensor)
             foreach (var sensor in sensoresAtivos)
             {
                 var limiteDeRegistos = 10;
@@ -119,10 +126,9 @@ namespace ElderSense.Services
                 .Skip(limiteDeRegistos)
                 .ToListAsync();
 
-
                 if (dadosAntigos.Any())
                 {
-                    //CORTAR AS LIGAÇÕES ANTES DE APAGAR
+                    //corta as ligações antes de apagar
                     foreach (var dado in dadosAntigos)
                     {
                         // Isto apaga apenas a ligação na tabela intermédia, libertando os dados
@@ -145,7 +151,6 @@ namespace ElderSense.Services
         /// </summary>
         private async Task CriarAlertaAsync(string idCuidador, string mensagem, DadosMonitorizacao dadoOrigem)
         {
-
             string idDoIdoso = dadoOrigem.FKUtilizador;
 
             var idosoExiste = await _context.Utilizadores.AnyAsync(u => u.Id == idDoIdoso);

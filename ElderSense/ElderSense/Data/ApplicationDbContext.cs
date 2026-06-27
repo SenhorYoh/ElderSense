@@ -4,14 +4,38 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ElderSense.Data
 {
+    /// <summary>
+    /// Contexto da base de dados da aplicação, estende o IdentityDbContext
+    /// para incluir as entidades do negócio (Utilizador, Sensor, Alerta, DadosMonitorizacao)
+    /// </summary>
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext(options)
     {
-
+        /// <summary>
+        /// Tabela de utilizadores (idosos e cuidadores)
+        /// </summary>
         public DbSet<Utilizador> Utilizadores { get; set; }
+
+        /// <summary>
+        /// Tabela de alertas gerados pelo sistema
+        /// </summary>
         public DbSet<Alerta> Alertas { get; set; }
+
+        /// <summary>
+        /// Tabela de dados de monitorização recolhidos pelos sensores
+        /// </summary>
         public DbSet<DadosMonitorizacao> DadosMonitorizacao { get; set; }
+
+        /// <summary>
+        /// Tabela de sensores registados no sistema
+        /// </summary>
         public DbSet<Sensor> Sensores { get; set; }
 
+        /// <summary>
+        /// Configura as conversões de Enum e a lógica de apagamento em cascata.
+        /// Se um utilizador for eliminado do sistema, todos os dados associados
+        /// também devem ser apagados, respeitando as restrições do SQL Server
+        /// quanto a múltiplos caminhos de cascade
+        /// </summary>
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -25,11 +49,6 @@ namespace ElderSense.Data
             builder.Entity<Sensor>()
                 .Property(s => s.Tipo)
                 .HasConversion<string>();
-
-            ///<summary>
-            ///Aqui tem-se a lógica de apagamento em cascata. Se um utilizador for eliminado do sistema,
-            ///todos os dados associados também devem ser apagados 
-            ///</summary>
 
             // 1. UTILIZADOR -> SENSORES (Cascade)
             // Se o Utilizador for apagado, os seus sensores são apagados automaticamente
@@ -47,8 +66,8 @@ namespace ElderSense.Data
                 .HasForeignKey(d => d.FKUtilizador)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // 3. SENSOR -> DADOS MONITORIZAÇÃO (NoAction - Crucial para quebrar o ciclo!)
-            // Isto impede o SQL Server de entrar em loop, mas garante que se o USER for apagado, TUDO desaparece.
+            // 3. SENSOR -> DADOS MONITORIZAÇÃO (NoAction - crucial para quebrar o ciclo)
+            // Isto impede o SQL Server de entrar em loop, mas garante que se o utilizador for apagado, tudo desaparece
             builder.Entity<DadosMonitorizacao>()
                 .HasOne<Sensor>(d => d.Sensor)
                 .WithMany()
@@ -77,10 +96,10 @@ namespace ElderSense.Data
             // Diz ao EF Core para não apagar o Sensor automaticamente se o perfil do Idoso for apagado,
             // evitando o erro "multiple cascade paths". O apagamento em cascata fica só no FKUtilizador (Cuidador).
             builder.Entity<Sensor>()
-            .HasOne(s => s.IdosoAssociado)
-            .WithMany()
-            .HasForeignKey(s => s.FKIdoso)
-            .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(s => s.IdosoAssociado)
+                .WithMany()
+                .HasForeignKey(s => s.FKIdoso)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

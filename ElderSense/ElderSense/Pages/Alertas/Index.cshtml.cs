@@ -8,31 +8,59 @@ using Microsoft.EntityFrameworkCore;
 namespace ElderSense.Pages.Alertas
 {
     /// <summary>
-    /// Página de visualização dos Alertas. Os dois tipos de utilizadores podem consultas as informações
+    /// Página de visualização dos Alertas. Os dois tipos de utilizadores podem consultar as informações
     /// </summary>
     [Authorize]
     public class IndexModel : PageModel
     {
+        /// <summary>
+        /// Contexto da base de dados
+        /// </summary>
         private readonly ApplicationDbContext _context;
+
+        /// <summary>
+        /// Gestor de utilizadores do Identity, usado para identificar o utilizador autenticado
+        /// </summary>
         private readonly UserManager<Utilizador> _userManager;
 
+        /// <summary>
+        /// Construtor que recebe as dependências injetadas pelo sistema
+        /// </summary>
         public IndexModel(ApplicationDbContext context, UserManager<Utilizador> userManager)
         {
             _context = context;
             _userManager = userManager;
         }
 
-        // lista de alertas a mostrar, ordenada do mais recente para o mais antigo
+        /// <summary>
+        /// Lista de alertas a mostrar, ordenada do mais recente para o mais antigo
+        /// </summary>
         public IList<Alerta> Alertas { get; set; } = [];
 
-        // estatísticas para o cabeçalho da página
+        /// <summary>
+        /// Número total de alertas
+        /// </summary>
         public int TotalAlertas => Alertas.Count;
+
+        /// <summary>
+        /// Número de alertas gerados hoje
+        /// </summary>
         public int AlertasHoje => Alertas.Count(a => a.DataHora.Date == DateTime.Today);
+
+        /// <summary>
+        /// Número de alertas gerados esta semana
+        /// </summary>
         public int AlertasEstaSemana => Alertas.Count(a => a.DataHora >= DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + 1));
 
-        // true se o Cuidador autenticado ainda não tiver nenhum Idoso associado
+        /// <summary>
+        /// True se o Cuidador autenticado ainda não tiver nenhum Idoso associado
+        /// </summary>
         public bool BloqueiaAcesso { get; set; } = false;
 
+        /// <summary>
+        /// Carrega a lista de alertas. Se o utilizador for Cuidador sem idosos associados,
+        /// bloqueia o acesso à listagem
+        /// </summary>
         public async Task OnGetAsync()
         {
             if (User.IsInRole("Cuidador"))
