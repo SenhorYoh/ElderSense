@@ -10,42 +10,49 @@
     <p>Notificações de desvios na rotina dos idosos monitorizados</p>
 </div>
 
-<div class="db-stats">
-    <div class="db-stats-item">
-        <div class="db-stats-label">Total</div>
-        <div class="db-stats-value">@Model.TotalAlertas</div>
+@if (Model.BloqueiaAcesso)
+{
+    <partial name="_AvisoSemIdoso" view-data='@(new ViewDataDictionary(ViewData) { ["ReturnUrl"] = Url.Page("/Alertas/Index") })' />
+}
+else
+{
+    <div class="db-stats">
+        <div class="db-stats-item">
+            <div class="db-stats-label">Total</div>
+            <div class="db-stats-value">@Model.TotalAlertas</div>
+        </div>
+        <div class="db-stats-divider"></div>
+        <div class="db-stats-item">
+            <div class="db-stats-label">Hoje</div>
+            <div class="db-stats-value danger">@Model.AlertasHoje</div>
+        </div>
+        <div class="db-stats-divider"></div>
+        <div class="db-stats-item">
+            <div class="db-stats-label">Esta semana</div>
+            <div class="db-stats-value">@Model.AlertasEstaSemana</div>
+        </div>
     </div>
-    <div class="db-stats-divider"></div>
-    <div class="db-stats-item">
-        <div class="db-stats-label">Hoje</div>
-        <div class="db-stats-value danger">@Model.AlertasHoje</div>
-    </div>
-    <div class="db-stats-divider"></div>
-    <div class="db-stats-item">
-        <div class="db-stats-label">Esta semana</div>
-        <div class="db-stats-value">@Model.AlertasEstaSemana</div>
-    </div>
-</div>
 
-<table class="table" id="tabela-alertas">
-    <thead>
-        <tr>
-            <th>Data/Hora</th>
-            <th>Mensagem</th>
-            <th>Idoso</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var alerta in Model.Alertas)
-        {
+    <table class="table" id="tabela-alertas">
+        <thead>
             <tr>
-                <td>@alerta.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
-                <td>@alerta.Mensagem</td>
-                <td>@alerta.IdosoAssociado?.Nome</td>
+                <th>Data/Hora</th>
+                <th>Mensagem</th>
+                <th>Idoso</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var alerta in Model.Alertas)
+            {
+                <tr>
+                    <td>@alerta.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@alerta.Mensagem</td>
+                    <td>@alerta.IdosoAssociado?.Nome</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @section Scripts {
     <script>
