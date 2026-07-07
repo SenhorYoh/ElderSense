@@ -2,11 +2,22 @@
 @model RegisterModel
 
 @{
-    //carregar css
-    Layout = "/Pages/Shared/_Layout.cshtml";
+    Layout = "_LayoutLanding";
 }
 
-<h1>@ViewData["Title"]</h1>
+<nav class="es-nav">
+    <a asp-page="/Index" class="es-logo">Elder<span>Sense</span></a>
+    <button class="es-nav-toggle" aria-label="Menu">
+        <span></span>
+    </button>
+    <div class="es-nav-links">
+        <a asp-page="/Kits" class="es-nav-featured">Kits</a>
+        <a href="/#como-funciona">Como funciona</a>
+        <a href="/#planos">Planos</a>
+        <a href="/#contacto">Contacto</a>
+        <a asp-page="/Account/Login" asp-area="Identity" class="es-btn-nav">Entrar</a>
+    </div>
+</nav>
 
 <div class="login-container-vertical">
     <section>
@@ -24,9 +35,16 @@
 
             <!-- Data de Nascimento -->
             <div class="form-floating mb-3">
-                <input asp-for="Input.DataNascimento" class="form-control" type="date" />
+                <input asp-for="Input.DataNascimento" class="form-control" type="date" min="1920-01-01" max="@DateTime.Today.ToString("yyyy-MM-dd")" />
                 <label asp-for="Input.DataNascimento">Data de Nascimento</label>
                 <span asp-validation-for="Input.DataNascimento" class="text-danger"></span>
+            </div>
+
+            <!-- Telefone -->
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Telefone" class="form-control" placeholder="912345678" />
+                <label asp-for="Input.Telefone">Telefone (Opcional)</label>
+                <span asp-validation-for="Input.Telefone" class="text-danger"></span>
             </div>
 
             <!-- Email (Pode vir preenchido do Login) -->
@@ -84,4 +102,15 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const navToggle = document.querySelector('.es-nav-toggle');
+        const navLinks = document.querySelector('.es-nav-links');
+        if (navToggle && navLinks) {
+            navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => navLinks.classList.remove('open'));
+            });
+        }
+    </script>
 }

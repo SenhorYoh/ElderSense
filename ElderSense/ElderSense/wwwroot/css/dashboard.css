@@ -1,0 +1,347 @@
+﻿/* ==================== DASHBOARD - SIDEBAR ==================== */
+
+.db-nav-toggle {
+    display: none;
+}
+
+/* Estrutura principal — sidebar + conteúdo lado a lado */
+.db-wrap {
+    display: flex;
+    min-height: 100vh;
+}
+
+.db-sidebar {
+    width: 220px;
+    background: #fff;
+    border-right: 0.5px solid #e5e5e5;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.db-sidebar-collapsible {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    flex: 1;
+}
+
+.db-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.db-logo {
+    font-size: 16px;
+    font-weight: 500;
+    color: #1a1a1a;
+    padding: 0 0.5rem 1.5rem;
+    border-bottom: 0.5px solid #e5e5e5;
+    margin-bottom: 0.5rem;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+}
+
+    .db-logo span {
+        color: #1D9E75;
+    }
+
+.db-sidebar-collapsible {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.db-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #666;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+}
+
+    .db-nav-item:hover {
+        background: #f5f5f5;
+        color: #1a1a1a;
+    }
+
+    .db-nav-item.active {
+        background: #E1F5EE;
+        color: #0F6E56;
+        font-weight: 500;
+    }
+
+    .db-nav-item i {
+        font-size: 16px;
+    }
+
+.db-sidebar-footer {
+    margin-top: auto;
+    border-top: 0.5px solid #e5e5e5;
+    padding-top: 1rem;
+    width: 100%;
+}
+
+.db-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+}
+
+.db-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #E1F5EE;
+    color: #0F6E56;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.db-user-info p {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.db-user-info span {
+    font-size: 11px;
+    color: #999;
+}
+
+.db-logout-btn {
+    color: #999;
+}
+
+    .db-logout-btn:hover {
+        background: #fff0f0;
+        color: #A32D2D;
+    }
+
+/* Conteúdo principal — flex column para o footer poder ser empurrado para o fundo */
+.db-main {
+    flex: 1;
+    padding: 2rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* margin-top: auto empurra o footer para o fundo do db-main, mesmo com pouco conteúdo */
+.db-footer {
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 0.5px solid #e5e5e5;
+    font-size: 13px;
+    color: #999;
+}
+
+    .db-footer a {
+        color: #999;
+        text-decoration: underline;
+    }
+
+/* ==================== CABEÇALHO DE PÁGINA ==================== */
+
+.db-header {
+    margin-bottom: 1.5rem;
+}
+
+    .db-header h1 {
+        font-size: 22px;
+        font-weight: 500;
+        color: #1a1a1a;
+        margin: 0;
+    }
+
+    .db-header p {
+        font-size: 14px;
+        color: #999;
+        margin-top: 2px;
+        margin-bottom: 0;
+    }
+
+/* ==================== ESTATÍSTICAS ==================== */
+
+.db-stats {
+    display: flex;
+    background: #fff;
+    border: 0.5px solid #e5e5e5;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.db-stats-item {
+    flex: 1;
+    text-align: center;
+}
+
+    .db-stats-item .db-stats-label {
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #999;
+        margin-bottom: 6px;
+    }
+
+    .db-stats-item .db-stats-value {
+        font-size: 22px;
+        font-weight: 500;
+        color: #1a1a1a;
+    }
+
+        .db-stats-item .db-stats-value.success {
+            color: #1D9E75;
+        }
+
+        .db-stats-item .db-stats-value.danger {
+            color: #E24B4A;
+        }
+
+.db-stats-divider {
+    width: 1px;
+    background: #e5e5e5;
+}
+
+.db-stats.single-item {
+    display: inline-flex;
+    padding: 1rem 2rem;
+}
+
+    .db-stats.single-item .db-stats-item {
+        flex: none;
+        text-align: left;
+    }
+
+/* ==================== RESPONSIVO - MOBILE ==================== */
+
+@media (max-width: 768px) {
+    .db-wrap {
+        flex-direction: column;
+        min-height: auto;
+    }
+
+    .db-sidebar {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-right: none;
+        border-bottom: 0.5px solid #e5e5e5;
+    }
+
+    .db-logo {
+        width: auto;
+        border-bottom: none;
+        margin-bottom: 0;
+        padding: 0;
+    }
+
+    .db-nav-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+        .db-nav-toggle span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: #1a1a1a;
+            border-radius: 1px;
+            position: relative;
+        }
+
+            .db-nav-toggle span::before, .db-nav-toggle span::after {
+                content: "";
+                position: absolute;
+                width: 20px;
+                height: 2px;
+                background: #1a1a1a;
+                border-radius: 1px;
+                left: 0;
+            }
+
+            .db-nav-toggle span::before {
+                top: -6px;
+            }
+
+            .db-nav-toggle span::after {
+                top: 6px;
+            }
+
+    .db-sidebar-collapsible {
+        display: none;
+        margin-top: 0.75rem;
+    }
+
+        .db-sidebar-collapsible.open {
+            display: flex;
+        }
+
+    .db-nav-item {
+        font-size: 13px;
+    }
+
+    .db-sidebar-footer {
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+    }
+
+    .db-main {
+        padding: 1rem;
+    }
+
+    .db-stats {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .db-stats-divider {
+        display: none;
+    }
+
+    .table-wrapper-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 0 -1rem;
+        padding: 0 1rem;
+    }
+
+    .table {
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .btn-acao {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+}

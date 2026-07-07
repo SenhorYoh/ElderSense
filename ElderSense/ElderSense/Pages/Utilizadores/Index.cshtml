@@ -2,38 +2,55 @@
 @model ElderSense.Pages.Utilizadores.IndexModel
 
 @{
-    ViewData["Title"] = "Utilizadores";
+    ViewData["Title"] = "Idosos";
 }
 
-<h1>Utilizadores</h1>
+<div class="db-header">
+    <h1>Idosos</h1>
+    <p>Idosos associados à sua conta de cuidador</p>
+</div>
+
+<div class="db-stats single-item">
+    <div class="db-stats-item">
+        <div class="db-stats-label">Total de idosos</div>
+        <div class="db-stats-value success">@Model.TotalIdosos</div>
+    </div>
+</div>
 
 <p>
-    <a asp-page="Create">Adicionar Utilizador</a>
+    <a asp-page="/Utilizadores/AdicionarIdoso" asp-route-ReturnUrl="@Url.Page("/Utilizadores/Index")" class="btn-acao btn-acao-adicionar">
+        <i class="ti ti-plus"></i> Adicionar Idoso
+    </a>
 </p>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Tipo</th>
-            <th>Telefone</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var utilizador in Model.Utilizadores)
-        {
+<div class="table-wrapper-scroll">
+    <table class="table">
+        <thead>
             <tr>
-                <td>@utilizador.Nome</td>
-                <td>@utilizador.Email</td>
-                <td>@utilizador.Tipo</td>
-                <td>@utilizador.Telefone</td>
-                <td>
-                    <a asp-page="Edit" asp-route-id="@utilizador.Id">Editar</a> |
-                    <a asp-page="Delete" asp-route-id="@utilizador.Id">Apagar</a>
-                </td>
+                <th>Nome</th>
+                <th>Data de Nascimento</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Ações</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var utilizador in Model.Utilizadores)
+            {
+                <tr>
+                    <td>@utilizador.Nome</td>
+                    <td>@utilizador.DataNascimento.ToString("dd/MM/yyyy")</td>
+                    <td>@utilizador.Email</td>
+                    <td>@utilizador.Telefone</td>
+                    <td>
+                        <a asp-page="Edit" asp-route-id="@utilizador.Id" class="btn-acao btn-acao-editar">
+                            <i class="ti ti-edit"></i> Editar
+                        </a>
+                        <a asp-page="Delete" asp-route-id="@utilizador.Id" class="btn-acao btn-acao-apagar">
+                            <i class="ti ti-trash"></i> Apagar
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

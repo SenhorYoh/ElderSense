@@ -1,15 +1,14 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ElderSense.Pages
 {
     /// <summary>
-    /// Página inicial (landing page) pública do site
+    /// Página pública de apresentação dos kits de hardware disponíveis
     /// </summary>
-    public class IndexModel : PageModel
+    public class KitsModel : PageModel
     {
         /// <summary>
-        /// Carrega a página inicial
+        /// Carrega a página de kits
         /// </summary>
         public void OnGet()
         {

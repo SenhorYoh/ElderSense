@@ -5,33 +5,79 @@
     ViewData["Title"] = "Sensores";
 }
 
-<h1>Sensores</h1>
+<div class="db-header">
+    <h1>Sensores</h1>
+    <p>Estado e detalhes dos sensores instalados</p>
+</div>
 
-<p>
-    <a asp-page="Create">Adicionar Sensor</a>
-</p>
+<div class="db-stats">
+    <div class="db-stats-item">
+        <div class="db-stats-label">Total</div>
+        <div class="db-stats-value">@Model.TotalSensores</div>
+    </div>
+    <div class="db-stats-divider"></div>
+    <div class="db-stats-item">
+        <div class="db-stats-label">Ativos</div>
+        <div class="db-stats-value success">@Model.SensoresAtivos</div>
+    </div>
+    <div class="db-stats-divider"></div>
+    <div class="db-stats-item">
+        <div class="db-stats-label">Inativos</div>
+        <div class="db-stats-value danger">@Model.SensoresInativos</div>
+    </div>
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Localização</th>
-            <th>Tipo</th>
-            <th>Estado</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var sensor in Model.Sensores)
-        {
+@if (User.IsInRole("Cuidador"))
+{
+    <p>
+        <a asp-page="Create" class="btn-acao btn-acao-adicionar">
+            <i class="ti ti-plus"></i> Adicionar Sensor
+        </a>
+    </p>
+}
+
+<div class="table-wrapper-scroll">
+    <table class="table">
+        <thead>
             <tr>
-                <td>@sensor.Localizacao</td>
-                <td>@sensor.Tipo</td>
-                <td>@(sensor.Estado ? "Ativo" : "Inativo")</td>
-                <td>
-                    <a asp-page="Edit" asp-route-id="@sensor.Id">Editar</a> |
-                    <a asp-page="Delete" asp-route-id="@sensor.Id">Apagar</a>
-                </td>
+                <th>Localização</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                @if (User.IsInRole("Cuidador"))
+                {
+                    <th>Ações</th>
+                }
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var sensor in Model.Sensores)
+            {
+                <tr>
+                    <td>@sensor.Localizacao</td>
+                    <td>@sensor.Tipo</td>
+                    <td>
+                        @if (sensor.Estado)
+                        {
+                            <span class="badge bg-success">Ativo</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Inativo</span>
+                        }
+                    </td>
+                    @if (User.IsInRole("Cuidador"))
+                    {
+                        <td>
+                            <a asp-page="Edit" asp-route-id="@sensor.Id" class="btn-acao btn-acao-editar">
+                                <i class="ti ti-edit"></i> Editar
+                            </a>
+                            <a asp-page="Delete" asp-route-id="@sensor.Id" class="btn-acao btn-acao-apagar">
+                                <i class="ti ti-trash"></i> Apagar
+                            </a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

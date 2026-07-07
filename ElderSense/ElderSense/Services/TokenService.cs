@@ -7,35 +7,40 @@ using ElderSense.Data.Model;
 
 namespace ElderSense.Services
 {
-
     /// <summary>
     /// Classe que gera a token JWT, ou identidade digital, dos utilizadores que se registem.
     /// É essencial para a gestão de permissões nas páginas do website.
     /// </summary>
     public class TokenService
     {
+        /// <summary>
+        /// Configuração da aplicação, usada para obter as definições do JWT
+        /// </summary>
         private readonly IConfiguration _config;
 
+        /// <summary>
+        /// Construtor que recebe a configuração injetada pelo sistema
+        /// </summary>
         public TokenService(IConfiguration config)
         {
             _config = config;
         }
 
+        /// <summary>
+        /// Gera um token JWT assinado para o utilizador, com as claims de identidade e permissões
+        /// </summary>
         public string GenerateToken(Utilizador user)
         {
             var jwtSettings = _config.GetSection("Jwt");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? "ChaveSuperSecretaComMaisDe32Caracteres"));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+            // As claims carregam o ID único do utilizador, o email, um ID único para o token e o tipo de utilizador
             var claims = new[]
             {
-
-                /// <summary>
-                /// As claims carregam o ID unico do utilizador, o email, ID único para o token e o tipo de utilizador que é
-                /// </summary>
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), 
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("role", user.Tipo.ToString())
             };
 

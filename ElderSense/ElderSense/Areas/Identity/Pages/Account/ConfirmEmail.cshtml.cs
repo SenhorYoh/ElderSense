@@ -15,11 +15,24 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace ElderSense.Areas.Identity.Pages.Account
 {
+    /// <summary>
+    /// Página de confirmação de email, acedida através do link enviado por email no registo
+    /// </summary>
     public class ConfirmEmailModel : PageModel
     {
+        /// <summary>
+        /// Gestor de utilizadores do Identity
+        /// </summary>
         private readonly UserManager<Utilizador> _userManager;
+
+        /// <summary>
+        /// Gestor de autenticação do Identity, usado para iniciar sessão automaticamente após a confirmação
+        /// </summary>
         private readonly SignInManager<Utilizador> _signInManager;
 
+        /// <summary>
+        /// Construtor que recebe as dependências injetadas pelo sistema
+        /// </summary>
         public ConfirmEmailModel(UserManager<Utilizador> userManager, SignInManager<Utilizador> signInManager)
         {
             _userManager = userManager;
@@ -27,11 +40,16 @@ namespace ElderSense.Areas.Identity.Pages.Account
         }
 
         /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        /// Esta API suporta a infraestrutura padrão de UI do ASP.NET Core Identity e não foi
+        /// pensada para ser usada diretamente no código. Esta API pode mudar ou ser removida em futuras versões.
         /// </summary>
         [TempData]
         public string StatusMessage { get; set; }
+
+        /// <summary>
+        /// Valida o código de confirmação recebido por email e, se for válido,
+        /// confirma a conta do utilizador e inicia sessão automaticamente
+        /// </summary>
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
             if (userId == null || code == null)
@@ -45,18 +63,16 @@ namespace ElderSense.Areas.Identity.Pages.Account
                 return NotFound($"Não foi possível carregar o utilizador com o ID '{userId}'.");
             }
 
-
-
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
             StatusMessage = result.Succeeded ? "Obrigado por confirmares o email!" : "Erro ao confirmar email, tente novamente";
 
             if (result.Succeeded)
             {
-                // 2. FAZ O LOGIN AUTOMÁTICO AQUI
+                // Faz o login automático
                 await _signInManager.SignInAsync(user, isPersistent: false);
 
-                // 3. REDIRECIONA PARA A HOME
+                // Redireciona para a página inicial
                 return RedirectToPage("/Index");
             }
             return Page();

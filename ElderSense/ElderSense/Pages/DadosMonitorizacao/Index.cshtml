@@ -5,28 +5,56 @@
     ViewData["Title"] = "Dados de Monitorização";
 }
 
-<h1>Dados de Monitorização</h1>
+<div class="db-header">
+    <h1>Dados de Monitorização</h1>
+    <p>Leituras recolhidas pelos sensores instalados</p>
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Data/Hora</th>
-            <th>Tipo</th>
-            <th>Descrição</th>
-            <th>Sensor</th>
-            <th>Idoso</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var dado in Model.Dados)
-        {
+@if (Model.BloqueiaAcesso)
+{
+    <partial name="_AvisoSemIdoso" view-data='@(new ViewDataDictionary(ViewData) { ["ReturnUrl"] = Url.Page("/DadosMonitorizacao/Index") })' />
+}
+else
+{
+    <div class="db-stats">
+        <div class="db-stats-item">
+            <div class="db-stats-label">Total</div>
+            <div class="db-stats-value">@Model.TotalDados</div>
+        </div>
+        <div class="db-stats-divider"></div>
+        <div class="db-stats-item">
+            <div class="db-stats-label">Hoje</div>
+            <div class="db-stats-value success">@Model.DadosHoje</div>
+        </div>
+        <div class="db-stats-divider"></div>
+        <div class="db-stats-item">
+            <div class="db-stats-label">Esta semana</div>
+            <div class="db-stats-value">@Model.DadosEstaSemana</div>
+        </div>
+    </div>
+    <div class="table-wrapper-scroll">
+    <table class="table">
+        <thead>
             <tr>
-                <td>@dado.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
-                <td>@dado.Tipo</td>
-                <td>@dado.Valor</td>
-                <td>@dado.Sensor.Localizacao</td>
-                <td>@dado.Utilizador.Nome</td>
+                <th>Data/Hora</th>
+                <th>Tipo</th>
+                <th>Descrição</th>
+                <th>Sensor</th>
+                <th>Idoso</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var dado in Model.Dados)
+            {
+                <tr>
+                    <td>@dado.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@dado.Tipo</td>
+                    <td>@dado.Valor</td>
+                    <td>@dado.Sensor.Localizacao</td>
+                    <td>@dado.Utilizador.Nome</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+}

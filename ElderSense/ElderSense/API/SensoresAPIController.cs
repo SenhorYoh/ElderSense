@@ -7,7 +7,6 @@ using System;
 
 namespace ElderSense.Controllers
 {
-
     /// <summary>
     /// Classe da API. Tem as rotas necessárias para a comunicação com o hardware
     /// </summary>
@@ -15,20 +14,26 @@ namespace ElderSense.Controllers
     [Route("api/[controller]")]
     public class SensoresApiController : ControllerBase
     {
+        /// <summary>
+        /// Contexto da base de dados, usado para guardar e consultar as leituras dos sensores
+        /// </summary>
         private readonly ApplicationDbContext _context;
 
+        /// <summary>
+        /// Construtor que recebe o contexto da base de dados injetado pelo sistema
+        /// </summary>
         public SensoresApiController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        //POST: Guarda dados de monitorizacao do idoso na tabela DadosMonitorizacao
+        /// <summary>
+        /// Recebe uma leitura enviada pelo hardware e guarda-a na tabela DadosMonitorizacao
+        /// </summary>
         [HttpPost("leitura")]
         public async Task<IActionResult> ReceberLeituraDoHardware([FromBody] DadosSensor Dto)
         {
             if (Dto == null) return BadRequest("Nenhum dado recebido.");
-
-
 
             // Impede que o hardware envie leituras sem dizer de quem são
             if (string.IsNullOrEmpty(Dto.IdosoId))
@@ -36,10 +41,9 @@ namespace ElderSense.Controllers
                 return BadRequest("O ID do idoso é obrigatório.");
             }
 
-            // Mapeamento: Pacote do Postman -> Tabela da Base de Dados
+            // Mapeia os dados recebidos para a entidade DadosMonitorizacao
             var novaLeitura = new DadosMonitorizacao
             {
-
                 FKUtilizador = Dto.IdosoId,
                 FKSensor = Dto.SensorId,
                 Tipo = Dto.Tipo,
@@ -51,12 +55,12 @@ namespace ElderSense.Controllers
             _context.DadosMonitorizacao.Add(novaLeitura);
             await _context.SaveChangesAsync();
 
-           
             return Ok(new { mensagem = "Leitura guardada e associada ao idoso com sucesso" });
         }
 
-
-        // GET: Devolve o histórico de leituras de um idoso específico
+        /// <summary>
+        /// Devolve o histórico de leituras de um idoso específico, mais recentes primeiro
+        /// </summary>
         [HttpGet("historico/{idosoId}")]
         public async Task<IActionResult> ObterHistorico(string idosoId)
         {
@@ -74,14 +78,16 @@ namespace ElderSense.Controllers
             return Ok(historico);
         }
 
-        // GET: Verifica se o sensor está ativo/online com base na última leitura
-        //o hardware verifica se o sensor existe e está ativo 
+        /// <summary>
+        /// Verifica se o sensor está ativo/online com base na última leitura recebida.
+        /// O hardware usa esta rota para confirmar se o sensor existe e está ativo
+        /// </summary>
         [HttpGet("estado/{sensorId}")]
         public async Task<IActionResult> VerificarEstadoSensor(int sensorId)
         {
             // Vai à tabela buscar a leitura mais recente deste sensor específico
             var ultimaLeitura = await _context.DadosMonitorizacao
-                                              .Where(d => d.FKSensor == sensorId) // Confirma se o teu campo se chama exatamente 'SensorId'
+                                              .Where(d => d.FKSensor == sensorId)
                                               .OrderByDescending(d => d.DataHora)
                                               .FirstOrDefaultAsync();
 
@@ -114,7 +120,9 @@ namespace ElderSense.Controllers
             });
         }
 
-        //GET: Rota que verifica se a API está online
+        /// <summary>
+        /// Rota que verifica se a API está online
+        /// </summary>
         [HttpGet("ping")]
         public IActionResult Ping()
         {
@@ -125,17 +133,31 @@ namespace ElderSense.Controllers
                 horaServidor = DateTime.Now
             });
         }
-
-
-
     }
 
+    /// <summary>
+    /// DTO que representa os dados enviados pelo hardware numa leitura de sensor
+    /// </summary>
     public class DadosSensor
     {
+        /// <summary>
+        /// Identificador do idoso a quem a leitura pertence
+        /// </summary>
         public string IdosoId { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Identificador do sensor que gerou a leitura
+        /// </summary>
         public int SensorId { get; set; }
+
+        /// <summary>
+        /// Tipo de dado recolhido, ex: movimento, temperatura, bpm
+        /// </summary>
         public string Tipo { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Valor associado ao tipo de dado
+        /// </summary>
         public string Valor { get; set; } = string.Empty;
     }
 }

@@ -11,15 +11,7 @@
 
 @if (Model.BloqueiaInsercao)
 {
-    <div class="alert alert-warning mt-4 shadow-sm">
-        <h4 class="alert-heading"><i class="bi bi-exclamation-triangle-fill"></i> Atenção!</h4>
-        <p>Para que o sistema de monitorização funcione corretamente, é obrigatório ter um perfil de Idoso associado à sua conta de Cuidador.</p>
-        <hr>
-        <p class="mb-0">
-            <a asp-page="/Utilizadores/AdicionarIdoso" class="btn btn-warning fw-bold">Associar Idoso Agora</a>
-            <a asp-page="Index" class="btn btn-outline-secondary ms-2">Voltar</a>
-        </p>
-    </div>
+    <partial name="_AvisoSemIdoso" view-data='@(new ViewDataDictionary(ViewData) { ["ReturnUrl"] = Url.Page("Index") })' />
 }
 else
 {
@@ -44,7 +36,7 @@ else
             </div>
 
             <div class="mt-1 text-end">
-                <a asp-page="/Utilizadores/AdicionarIdoso" class="text-decoration-none small fw-bold text-primary">
+                <a asp-page="/Utilizadores/AdicionarIdoso" asp-route-ReturnUrl="@Url.Page("/Sensores/Create")" class="text-decoration-none small fw-bold text-primary">
                     <i class="bi bi-person-plus-fill"></i> Adicionar novo idoso
                 </a>
             </div>
@@ -93,7 +85,7 @@ else
         const grupoLocalizacaoTexto = document.getElementById("grupoLocalizacaoTexto");
         const inputLocalizacao = document.querySelector("[name='Sensor.Localizacao']");
 
-        // 🌟 NOVAS VARIÁVEIS PARA O IDOSO
+        // NOVAS VARIÁVEIS PARA O IDOSO
         const grupoIdoso = document.getElementById("grupoIdoso");
         const selectIdoso = document.getElementById("selectIdoso");
 
@@ -106,12 +98,12 @@ else
                 grupoLocalizacao.style.display = "none";
                 inputLocalizacao.value = "Corpo do idoso"; // valor fixo
 
-                // 🌟 SE FOR PULSEIRA: Mostra o dropdown do Idoso
+                // SE FOR PULSEIRA: Mostra o dropdown do Idoso
                 if (grupoIdoso) grupoIdoso.style.display = "block";
             } else {
                 grupoLocalizacao.style.display = "block";
 
-                // 🌟 SE FOR BEACON: Esconde o dropdown e limpa o valor
+                // SE FOR BEACON: Esconde o dropdown e limpa o valor
                 if (grupoIdoso) {
                     grupoIdoso.style.display = "none";
                     if (selectIdoso) selectIdoso.value = "";

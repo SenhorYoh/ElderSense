@@ -8,17 +8,26 @@ namespace ElderSense.Data.Model
     /// </summary>
     public class DadosMonitorizacao
     {
+        /// <summary>
+        /// Identificador único do registo de monitorização
+        /// </summary>
         [Key]
         public int Id { get; set; }
 
-        // data e hora do registo
+        /// <summary>
+        /// Data e hora do registo
+        /// </summary>
         public DateTime DataHora { get; set; } = DateTime.Now;
 
-        // ex: movimento, porta
+        /// <summary>
+        /// Tipo de dado recolhido, ex: movimento, porta, temperatura, bpm
+        /// </summary>
         [StringLength(50)]
         public string Tipo { get; set; } = "";
 
-        // ex: aberta, ausente 2h
+        /// <summary>
+        /// Valor associado ao tipo de dado, ex: aberta, ausente 2h
+        /// </summary>
         [StringLength(100)]
         public string Valor { get; set; } = "";
 
@@ -29,7 +38,9 @@ namespace ElderSense.Data.Model
         [ForeignKey(nameof(Utilizador))]
         public string FKUtilizador { get; set; } = "";
 
-        // navigation property para o Utilizador
+        /// <summary>
+        /// Navigation property para o Utilizador a quem pertencem os dados
+        /// </summary>
         public Utilizador Utilizador { get; set; } = null!;
 
         /// <summary>
@@ -38,7 +49,9 @@ namespace ElderSense.Data.Model
         [Display(Name = "Sensor")]
         public int FKSensor { get; set; }
 
-        // navigation property para o Sensor
+        /// <summary>
+        /// Navigation property para o Sensor que gerou o registo
+        /// </summary>
         public Sensor Sensor { get; set; } = null!;
 
         /// <summary>
