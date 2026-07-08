@@ -32,9 +32,11 @@ namespace ElderSense.Services
         }
 
         /// <summary>
-        /// Gera dados de monitorização falsos para todos os sensores ativos (Fase 1),
-        /// deteta frequências cardíacas fora do normal e cria alertas, e por fim
+        /// Executa um ciclo completo de simulação: gera leituras para os sensores ativos
+        /// (Beacon com 40% de probabilidade de passagem; Pulseira com temperatura e bpm,
+        /// criando Alerta quando o bpm sai do intervalo saudável) (Fase 1),
         /// remove os registos mais antigos para manter no máximo 10 por sensor (Fase 2)
+        /// e limita os Alertas aos mais recentes, limpando primeiro as ligações M:N (Fase 2b)
         /// </summary>
         public async Task InjetarDadosDeTesteAsync()
         {
@@ -138,6 +140,26 @@ namespace ElderSense.Services
                     // apaga os dados com permissão do SQL Server
                     _context.DadosMonitorizacao.RemoveRange(dadosAntigos);
                 }
+            }
+
+            // FASE 2b: limitar os Alertas (mantém apenas os mais recentes)
+            var limiteDeAlertas = 30;
+            var alertasAntigos = await _context.Alertas
+                .Include(a => a.ListadeDados)
+                .OrderByDescending(a => a.DataHora)
+                .Skip(limiteDeAlertas)
+                .ToListAsync();
+
+            if (alertasAntigos.Any())
+            {
+                // corta as ligações M:N na tabela intermédia antes de apagar (mesmo padrão da limpeza dos dados)
+                foreach (var alerta in alertasAntigos)
+                {
+                    alerta.ListadeDados.Clear();
+                }
+
+                // apaga os alertas antigos com permissão do SQL Server
+                _context.Alertas.RemoveRange(alertasAntigos);
             }
 
             //Executa a limpeza final
