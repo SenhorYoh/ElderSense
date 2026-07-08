@@ -1,6 +1,7 @@
 using ElderSense.Data;
 using ElderSense.Data.Model;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,13 +17,15 @@ namespace ElderSense.Pages.Sensores
         /// Contexto da base de dados
         /// </summary>
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<Utilizador> _userManager;
 
         /// <summary>
         /// Construtor que recebe o contexto da base de dados injetado pelo sistema
         /// </summary>
-        public IndexModel(ApplicationDbContext context)
+        public IndexModel(ApplicationDbContext context, UserManager<Utilizador> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -50,9 +53,13 @@ namespace ElderSense.Pages.Sensores
         /// </summary>
         public async Task OnGetAsync()
         {
-            // busca todos os sensores incluindo o utilizador associado
+            // busca o ID do utilizador logado
+            var userId = _userManager.GetUserId(User);
+
+            // busca apenas os sensores do utilizador logado
             Sensores = await _context.Sensores
                 .Include(s => s.Utilizador)
+                .Where(s => s.FKUtilizador == userId) 
                 .ToListAsync();
         }
     }
