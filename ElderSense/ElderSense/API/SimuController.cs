@@ -51,22 +51,22 @@ namespace ElderSense.Services
             {
                 if (sensor.Tipo == TipoSensor.Beacon)
                 {
-                    bool detetado = random.Next(0, 100) < 40;
-                    if (!detetado) continue;
-
-                    //escolhe um idoso associado ao cuidador
-                    string idDonoDado = sensor.FKUtilizador; // Por defeito, fica o Cuidador caso não haja idosos
-
+                    // vai buscar o cuidador dono do sensor tipo beacon
                     var cuidador = await _context.Set<Utilizador>()
                                  .Include(u => u.ListadeIdosos)
                                  .FirstOrDefaultAsync(u => u.Id == sensor.FKUtilizador);
 
-                    // Se o cuidador existir e tiver idosos na lista, faz o sorteio
-                    if (cuidador != null && cuidador.ListadeIdosos.Any())
+                    // Se não existir cuidador OU ele não tiver nenhum idoso associado, cancela a simulação do sensor
+                    if (cuidador != null && !cuidador.ListadeIdosos.Any())
                     {
-                        var listaIdosos = cuidador.ListadeIdosos.ToList();
-                        idDonoDado = listaIdosos[random.Next(listaIdosos.Count)].Id; // Sorteia um e guarda o ID
+                        continue;
                     }
+
+                    bool detetado = random.Next(0, 100) < 40;
+                    if (!detetado) continue;
+
+                    var listaIdosos = cuidador.ListadeIdosos.ToList();
+                    string idDonoDado = listaIdosos[random.Next(listaIdosos.Count)].Id;
 
                     var registoPassagem = new DadosMonitorizacao
                     {
