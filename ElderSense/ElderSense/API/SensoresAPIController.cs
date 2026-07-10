@@ -180,6 +180,53 @@ namespace ElderSense.Controllers
 
             return Ok(new { mensagem = "Leitura eliminada com sucesso.", id });
         }
+        /// <summary>
+        /// Arquiva um sensor (soft delete): marca-o como arquivado e desativado,
+        /// mas preserva todas as leituras dele como histórico consultável
+        /// </summary>
+        [HttpPut("arquivar/{id}")]
+        public async Task<IActionResult> ArquivarSensor(int id)
+        {
+            var sensor = await _context.Sensores.FindAsync(id);
+            if (sensor == null)
+                return NotFound(new { mensagem = "Sensor não encontrado." });
+
+            if (sensor.Arquivado)
+                return BadRequest(new { mensagem = "Este sensor já se encontra arquivado." });
+
+            // soft delete: não apaga o sensor nem as leituras, apenas o marca como arquivado e inativo
+            sensor.Arquivado = true;
+            sensor.Estado = false;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { mensagem = "Sensor arquivado com sucesso. As leituras foram preservadas como histórico.", sensor.Id });
+        }
+
+        /// <summary>
+        /// Devolve o histórico de leituras de um sensor específico, mesmo que arquivado
+        /// </summary>
+        [HttpGet("historico-sensor/{sensorId}")]
+        public async Task<IActionResult> ObterHistoricoDoSensor(int sensorId)
+        {
+            var sensor = await _context.Sensores.FindAsync(sensorId);
+            if (sensor == null)
+                return NotFound(new { mensagem = "Sensor não encontrado." });
+
+            var historico = await _context.DadosMonitorizacao
+                                          .Where(d => d.FKSensor == sensorId)
+                                          .OrderByDescending(d => d.DataHora)
+                                          .ToListAsync();
+
+            return Ok(new
+            {
+                sensorId = sensor.Id,
+                localizacao = sensor.Localizacao,
+                arquivado = sensor.Arquivado,
+                totalLeituras = historico.Count,
+                historico
+            });
+        }
     }
 
     /// <summary>
