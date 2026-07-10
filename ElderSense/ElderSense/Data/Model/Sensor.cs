@@ -77,5 +77,12 @@ namespace ElderSense.Data.Model
         /// </summary>
         [ForeignKey("FKIdoso")]
         public Utilizador? IdosoAssociado { get; set; }
+        /// <summary>
+        /// Indica se o sensor foi arquivado (soft delete). 
+        /// Sensores arquivados não aparecem nas listagens normais, 
+        /// mas as suas leituras são preservadas como histórico consultável
+        /// </summary>
+        [Display(Name = "Arquivado")]
+        public bool Arquivado { get; set; } = false;
     }
 }

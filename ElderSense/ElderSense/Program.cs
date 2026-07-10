@@ -63,6 +63,9 @@ builder.Services.AddControllers(); //ativa o suporte para a API
 
 // Regista o SignalR para permitir notificações em tempo real
 builder.Services.AddSignalR();
+// Regista o gerador de documentação Swagger/OpenAPI para a API
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 // O utilizador não pode fazer login até confirmar o seu email
 // + o tempo limite de inatividade é definido para 5 dias
@@ -112,6 +115,8 @@ using (var scope = app.Services.CreateScope())
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 else
 {
