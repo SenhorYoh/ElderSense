@@ -133,6 +133,53 @@ namespace ElderSense.Controllers
                 horaServidor = DateTime.Now
             });
         }
+        /// <summary>
+        /// Rota que atualiza o tipo e/ou o valor de uma leitura existente
+        /// </summary>
+        [HttpPut("leitura/{id}")]
+        public async Task<IActionResult> AtualizarLeitura(int id, [FromBody] AtualizarDadosSensor Dto)
+        {
+            if (Dto == null) return BadRequest("Nenhum dado recebido.");
+
+            if (string.IsNullOrEmpty(Dto.Tipo) && string.IsNullOrEmpty(Dto.Valor))
+                return BadRequest("É necessário indicar o Tipo e/ou o Valor a atualizar.");
+
+            // procura a leitura na base de dados
+            var leitura = await _context.DadosMonitorizacao.FindAsync(id);
+            if (leitura == null)
+                return NotFound(new { mensagem = "Leitura não encontrada." });
+
+            // atualiza apenas os campos permitidos (as FKs não são alteráveis via API)
+            if (!string.IsNullOrEmpty(Dto.Tipo)) leitura.Tipo = Dto.Tipo;
+            if (!string.IsNullOrEmpty(Dto.Valor)) leitura.Valor = Dto.Valor;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { mensagem = "Leitura atualizada com sucesso.", leitura.Id, leitura.Tipo, leitura.Valor });
+        }
+
+        /// <summary>
+        /// Rota que elimina uma leitura, cortando primeiro as ligações M:N com os alertas
+        /// </summary>
+        [HttpDelete("leitura/{id}")]
+        public async Task<IActionResult> EliminarLeitura(int id)
+        {
+            // procura a leitura incluindo as ligações aos alertas, para poder limpar a junção M:N
+            var leitura = await _context.DadosMonitorizacao
+                .Include(d => d.ListadeAlertas)
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (leitura == null)
+                return NotFound(new { mensagem = "Leitura não encontrada." });
+
+            // corta as ligações na tabela intermédia antes de apagar (o lado dos dados está em Restrict)
+            leitura.ListadeAlertas.Clear();
+
+            _context.DadosMonitorizacao.Remove(leitura);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { mensagem = "Leitura eliminada com sucesso.", id });
+        }
     }
 
     /// <summary>
@@ -157,6 +204,21 @@ namespace ElderSense.Controllers
 
         /// <summary>
         /// Valor associado ao tipo de dado
+        /// </summary>
+        public string Valor { get; set; } = string.Empty;
+    }
+    /// <summary>
+    /// DTO que representa os campos alteráveis de uma leitura via API
+    /// </summary>
+    public class AtualizarDadosSensor
+    {
+        /// <summary>
+        /// Novo tipo de dado (opcional)
+        /// </summary>
+        public string Tipo { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Novo valor associado (opcional)
         /// </summary>
         public string Valor { get; set; } = string.Empty;
     }
