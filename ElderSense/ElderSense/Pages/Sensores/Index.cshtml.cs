@@ -1,6 +1,7 @@
 using ElderSense.Data;
 using ElderSense.Data.Model;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
@@ -54,6 +55,37 @@ namespace ElderSense.Pages.Sensores
             Sensores = await _context.Sensores
                 .Include(s => s.Utilizador)
                 .ToListAsync();
+        }
+
+        /// <summary>
+        /// Arquiva um sensor (soft delete): marca-o como arquivado e desligado,
+        /// preservando as leituras como histórico
+        /// </summary>
+        public async Task<IActionResult> OnPostArquivarAsync(int id)
+        {
+            var sensor = await _context.Sensores.FindAsync(id);
+            if (sensor == null) return NotFound();
+
+            sensor.Arquivado = true;
+            sensor.Estado = false;
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("Index");
+        }
+
+        /// <summary>
+        /// Reativa um sensor arquivado: retira-o do arquivo mas mantém-no desligado
+        /// </summary>
+        public async Task<IActionResult> OnPostDesarquivarAsync(int id)
+        {
+            var sensor = await _context.Sensores.FindAsync(id);
+            if (sensor == null) return NotFound();
+
+            sensor.Arquivado = false;
+            sensor.Estado = false;
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("Index");
         }
     }
 }

@@ -28,8 +28,20 @@
     </div>
 
     <div class="form-check mb-3">
-        <input asp-for="Sensor.Estado" class="form-check-input" />
-        <label asp-for="Sensor.Estado" class="form-check-label">Ativo</label>
+        @if (Model.Sensor.Arquivado)
+        {
+            <div class="alert alert-secondary">
+                Este sensor está <strong>arquivado</strong>. Reative-o na lista de sensores antes de o poder ativar.
+            </div>
+            <input type="hidden" asp-for="Sensor.Estado" value="false" />
+        }
+        else
+        {
+            <div class="form-check mb-3">
+                <input asp-for="Sensor.Estado" class="form-check-input" />
+                <label asp-for="Sensor.Estado" class="form-check-label">Ativo</label>
+            </div>
+        }
     </div>
 
     <button type="submit" class="btn btn-primary">Guardar</button>

@@ -57,6 +57,13 @@ namespace ElderSense.Pages.Sensores
 
             if (!ModelState.IsValid) return Page();
 
+            // regra: um sensor arquivado tem de estar sempre desligado.
+            // Não pode ser ativado enquanto não for reativado (tirado do arquivo).
+            if (Sensor.Arquivado)
+            {
+                Sensor.Estado = false;
+            }
+
             // atualiza o sensor na BD
             _context.Sensores.Update(Sensor);
             await _context.SaveChangesAsync();

@@ -41,7 +41,7 @@ namespace ElderSense.Services
         public async Task InjetarDadosDeTesteAsync()
         {
             var sensoresAtivos = await _context.Sensores
-                                   .Where(s => s.Estado == true)
+                                   .Where(s => s.Estado == true && !s.Arquivado)    
                                    .ToListAsync();
 
             if (!sensoresAtivos.Any()) return;

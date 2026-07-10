@@ -204,6 +204,29 @@ namespace ElderSense.Controllers
         }
 
         /// <summary>
+        /// Reativa um sensor arquivado: retira-o do arquivo mas mantém-no desligado.
+        /// O utilizador terá de o ativar manualmente depois, se quiser
+        /// </summary>
+        [HttpPut("desarquivar/{id}")]
+        public async Task<IActionResult> DesarquivarSensor(int id)
+        {
+            var sensor = await _context.Sensores.FindAsync(id);
+            if (sensor == null)
+                return NotFound(new { mensagem = "Sensor não encontrado." });
+
+            if (!sensor.Arquivado)
+                return BadRequest(new { mensagem = "Este sensor não está arquivado." });
+
+            // retira do arquivo mas deixa desligado (o utilizador ativa manualmente depois)
+            sensor.Arquivado = false;
+            sensor.Estado = false;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { mensagem = "Sensor desarquivado com sucesso. Ative-o manualmente quando pretender voltar a recolher dados.", sensor.Id });
+        }
+
+        /// <summary>
         /// Devolve o histórico de leituras de um sensor específico, mesmo que arquivado
         /// </summary>
         [HttpGet("historico-sensor/{sensorId}")]
