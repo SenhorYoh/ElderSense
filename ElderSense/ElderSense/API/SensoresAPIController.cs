@@ -43,6 +43,26 @@ namespace ElderSense.Controllers
                 return BadRequest("O ID do idoso é obrigatório.");
             }
 
+            // Impede que o hardware envie leituras sem dizer de quem são
+            if (string.IsNullOrEmpty(Dto.IdosoId))
+            {
+                return BadRequest("O ID do idoso é obrigatório.");
+            }
+
+            // valida que o idoso existe mesmo na base de dados (evita leituras órfãs)
+            var idosoExiste = await _context.Utilizadores.AnyAsync(u => u.Id == Dto.IdosoId);
+            if (!idosoExiste)
+            {
+                return NotFound(new { mensagem = "O idoso indicado não existe." });
+            }
+
+            // valida que o sensor existe mesmo na base de dados
+            var sensorExiste = await _context.Sensores.AnyAsync(s => s.Id == Dto.SensorId);
+            if (!sensorExiste)
+            {
+                return NotFound(new { mensagem = "O sensor indicado não existe." });
+            }
+
             // Mapeia os dados recebidos para a entidade DadosMonitorizacao
             var novaLeitura = new DadosMonitorizacao
             {
