@@ -50,7 +50,7 @@ namespace ElderSense.Controllers
                 FKSensor = Dto.SensorId,
                 Tipo = Dto.Tipo,
                 Valor = Dto.Valor,
-                DataHora = DateTime.Now
+                DataHora = DateTime.UtcNow
             };
 
             // Guarda na tabela e associa ao Idoso
@@ -103,7 +103,7 @@ namespace ElderSense.Controllers
                 });
             }
 
-            var tempoPassado = DateTime.Now - ultimaLeitura.DataHora;
+            var tempoPassado = DateTime.UtcNow - ultimaLeitura.DataHora;
             double minutosAusente = tempoPassado.TotalMinutes;
 
             // Se comunicou há menos de 5 minutos, está ativo. Caso contrário, está offline.
@@ -131,8 +131,8 @@ namespace ElderSense.Controllers
             return Ok(new
             {
                 status = "Online",
-                mensagem = "Pong! A API do ElderSense está a escutar perfeitamente.",
-                horaServidor = DateTime.Now
+                mensagem = "Ping! A API do ElderSense está a escutar perfeitamente.",
+                horaServidor = DateTime.UtcNow
             });
         }
         /// <summary>

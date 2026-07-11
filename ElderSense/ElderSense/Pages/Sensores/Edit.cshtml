@@ -27,6 +27,14 @@
         <span asp-validation-for="Sensor.Tipo" class="text-danger"></span>
     </div>
 
+    <div class="form-floating mb-3">
+        <select asp-for="Sensor.FKIdoso" class="form-control" asp-items="Model.ListaIdosos">
+            <option value="">-- Nenhum idoso associado --</option>
+        </select>
+        <label asp-for="Sensor.FKIdoso">Idoso monitorizado</label>
+        <span asp-validation-for="Sensor.FKIdoso" class="text-danger"></span>
+    </div>
+
     <div class="form-check mb-3">
         @if (Model.Sensor.Arquivado)
         {

@@ -51,9 +51,9 @@ namespace ElderSense.Pages.Sensores
         /// </summary>
         public async Task OnGetAsync()
         {
-            // busca todos os sensores incluindo o utilizador associado
             Sensores = await _context.Sensores
                 .Include(s => s.Utilizador)
+                .Include(s => s.IdosoAssociado)
                 .ToListAsync();
         }
 

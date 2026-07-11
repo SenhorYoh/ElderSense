@@ -42,6 +42,7 @@
             <tr>
                 <th>Localização</th>
                 <th>Tipo</th>
+                <th>Idoso</th>
                 <th>Estado</th>
                 @if (User.IsInRole("Cuidador"))
                 {
@@ -55,6 +56,16 @@
                 <tr>
                     <td>@sensor.Localizacao</td>
                     <td>@sensor.Tipo</td>
+                    <td>
+                        @if (sensor.IdosoAssociado != null)
+                        {
+                            @sensor.IdosoAssociado.Nome
+                        }
+                        else
+                        {
+                            <span class="text-muted">—</span>
+                        }
+                    </td>
                     <td>
                         @if (sensor.Arquivado)
                         {

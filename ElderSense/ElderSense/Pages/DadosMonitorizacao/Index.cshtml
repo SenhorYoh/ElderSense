@@ -1,5 +1,6 @@
 ﻿@page
 @model ElderSense.Pages.DadosMonitorizacao.IndexModel
+@using ElderSense.Services
 
 @{
     ViewData["Title"] = "Dados de Monitorização";
@@ -47,7 +48,7 @@ else
             @foreach (var dado in Model.Dados)
             {
                 <tr>
-                    <td>@dado.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@dado.DataHora.ParaHoraPortugal().ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@dado.Tipo</td>
                     <td>@dado.Valor</td>
                     <td>@dado.Sensor.Localizacao</td>

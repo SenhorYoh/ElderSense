@@ -1,5 +1,6 @@
 using ElderSense.Data;
 using ElderSense.Data.Model;
+using ElderSense.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -43,14 +44,26 @@ namespace ElderSense.Pages.Alertas
         public int TotalAlertas => Alertas.Count;
 
         /// <summary>
-        /// Número de alertas gerados hoje
+        /// Número de alertas gerados hoje (comparação feita em hora de Portugal)
         /// </summary>
-        public int AlertasHoje => Alertas.Count(a => a.DataHora.Date == DateTime.Today);
+        public int AlertasHoje => Alertas.Count(a => a.DataHora.ParaHoraPortugal().Date == DateTime.UtcNow.ParaHoraPortugal().Date);
 
         /// <summary>
-        /// Número de alertas gerados esta semana
+        /// Número de alertas gerados esta semana, a contar de segunda-feira (hora de Portugal)
         /// </summary>
-        public int AlertasEstaSemana => Alertas.Count(a => a.DataHora >= DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + 1));
+        public int AlertasEstaSemana
+        {
+            get
+            {
+                var hojePortugal = DateTime.UtcNow.ParaHoraPortugal().Date;
+
+                // recua até à segunda-feira desta semana
+                int diasDesdeSegunda = ((int)hojePortugal.DayOfWeek + 6) % 7;
+                var inicioSemana = hojePortugal.AddDays(-diasDesdeSegunda);
+
+                return Alertas.Count(a => a.DataHora.ParaHoraPortugal().Date >= inicioSemana);
+            }
+        }
 
         /// <summary>
         /// True se o Cuidador autenticado ainda não tiver nenhum Idoso associado

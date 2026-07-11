@@ -1,8 +1,10 @@
 using ElderSense.Data;
 using ElderSense.Data.Model;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace ElderSense.Pages.Sensores
@@ -19,11 +21,17 @@ namespace ElderSense.Pages.Sensores
         private readonly ApplicationDbContext _context;
 
         /// <summary>
-        /// Construtor que recebe o contexto da base de dados injetado pelo sistema
+        /// Gestor de utilizadores do Identity, usado para identificar o cuidador autenticado
         /// </summary>
-        public EditModel(ApplicationDbContext context)
+        private readonly UserManager<Utilizador> _userManager;
+
+        /// <summary>
+        /// Construtor que recebe as dependências injetadas pelo sistema
+        /// </summary>
+        public EditModel(ApplicationDbContext context, UserManager<Utilizador> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -33,7 +41,12 @@ namespace ElderSense.Pages.Sensores
         public Sensor Sensor { get; set; } = new();
 
         /// <summary>
-        /// Carrega o sensor selecionado para edição
+        /// Lista de idosos do cuidador, para preencher o dropdown de associação
+        /// </summary>
+        public SelectList ListaIdosos { get; set; } = new(new List<Utilizador>());
+
+        /// <summary>
+        /// Carrega o sensor selecionado para edição e a lista de idosos disponíveis
         /// </summary>
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -44,6 +57,9 @@ namespace ElderSense.Pages.Sensores
             if (sensor == null) return NotFound();
 
             Sensor = sensor;
+
+            await CarregarIdososAsync();
+
             return Page();
         }
 
@@ -52,10 +68,21 @@ namespace ElderSense.Pages.Sensores
         /// </summary>
         public async Task<IActionResult> OnPostAsync()
         {
-            // remove a validação da navigation property pois não vem do formulário
+            // remove a validação das navigation properties pois não vêm do formulário
             ModelState.Remove("Sensor.Utilizador");
+            ModelState.Remove("Sensor.IdosoAssociado");
 
-            if (!ModelState.IsValid) return Page();
+            // Validação da Pulseira: garante que continua associada a um idoso
+            if (Sensor.Tipo == TipoSensor.Pulseira && string.IsNullOrEmpty(Sensor.FKIdoso))
+            {
+                ModelState.AddModelError("Sensor.FKIdoso", "Uma pulseira tem de estar associada a um idoso.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await CarregarIdososAsync();
+                return Page();
+            }
 
             // regra: um sensor arquivado tem de estar sempre desligado.
             // Não pode ser ativado enquanto não for reativado (tirado do arquivo).
@@ -69,6 +96,22 @@ namespace ElderSense.Pages.Sensores
             await _context.SaveChangesAsync();
 
             return RedirectToPage("Index");
+        }
+
+        /// <summary>
+        /// Carrega os idosos associados ao cuidador autenticado para o dropdown
+        /// </summary>
+        private async Task CarregarIdososAsync()
+        {
+            var userId = _userManager.GetUserId(User);
+
+            var cuidador = await _context.Utilizadores
+                .Include(u => u.ListadeIdosos)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
+            var idosos = cuidador?.ListadeIdosos.ToList() ?? new List<Utilizador>();
+
+            ListaIdosos = new SelectList(idosos, "Id", "Nome");
         }
     }
 }
