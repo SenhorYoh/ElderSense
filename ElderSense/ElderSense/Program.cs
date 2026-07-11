@@ -64,7 +64,7 @@ builder.Services.AddControllers(); //ativa o suporte para a API
 
 // Regista o SignalR para permitir notificações em tempo real
 builder.Services.AddSignalR();
-
+builder.Services.AddRazorPages();
 // Regista o gerador de documentação Swagger/OpenAPI para a API
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -73,15 +73,15 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Type = SecuritySchemeType.Http,
+        Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Introduza o token JWT (sem escrever 'Bearer' à frente)."
+        Description = "Escreva: Bearer {o teu token}. Exemplo: Bearer eyJhbGci...",
     });
 
     // usa um filtro para exigir o token em todas as operações
-    options.OperationFilter<ElderSense.Swagger.AuthOperationFilter>();
+    options.DocumentFilter<ElderSense.Swagger.SecurityDocumentFilter>();
 });
 
 // O utilizador não pode fazer login até confirmar o seu email
