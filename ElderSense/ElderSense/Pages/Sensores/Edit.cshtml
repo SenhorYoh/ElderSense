@@ -27,8 +27,8 @@
         <span asp-validation-for="Sensor.Tipo" class="text-danger"></span>
     </div>
 
-    <div class="form-floating mb-3">
-        <select asp-for="Sensor.FKIdoso" class="form-control" asp-items="Model.ListaIdosos">
+    <div id="grupoIdoso" class="form-floating mb-3">
+        <select id="selectIdoso" asp-for="Sensor.FKIdoso" class="form-control" asp-items="Model.ListaIdosos">
             <option value="">-- Nenhum idoso associado --</option>
         </select>
         <label asp-for="Sensor.FKIdoso">Idoso monitorizado</label>
@@ -58,4 +58,28 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        const tipoSensor = document.querySelector("[name='Sensor.Tipo']");
+        const grupoIdoso = document.getElementById("grupoIdoso");
+        const selectIdoso = document.getElementById("selectIdoso");
+
+        // O enum TipoSensor gera value="0" para Beacon e value="1" para Pulseira
+        const VALOR_PULSEIRA = "1";
+
+        // mostra o dropdown do idoso apenas quando o sensor é uma Pulseira.
+        // O Beacon não tem idoso fixo (sorteia da lista do cuidador a cada leitura)
+        function atualizarVisibilidadeIdoso() {
+            if (tipoSensor.value === VALOR_PULSEIRA) {
+                grupoIdoso.style.display = "block";
+            } else {
+                grupoIdoso.style.display = "none";
+                selectIdoso.value = ""; // limpa a associação se mudar para Beacon
+            }
+        }
+
+        tipoSensor.addEventListener("change", atualizarVisibilidadeIdoso);
+
+        // estado inicial ao carregar a página
+        atualizarVisibilidadeIdoso();
+    </script>
 }
