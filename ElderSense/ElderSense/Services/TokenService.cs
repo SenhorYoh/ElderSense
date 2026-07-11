@@ -32,7 +32,12 @@ namespace ElderSense.Services
         public string GenerateToken(Utilizador user)
         {
             var jwtSettings = _config.GetSection("Jwt");
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? "ChaveSuperSecretaComMaisDe32Caracteres"));
+            var jwtKey = jwtSettings["Key"];
+            if (string.IsNullOrEmpty(jwtKey))
+            {
+                throw new InvalidOperationException("A chave Jwt:Key não foi configurada.");
+            }
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             // As claims carregam o ID único do utilizador, o email, um ID único para o token e o tipo de utilizador

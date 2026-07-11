@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ElderSense.Data;
+﻿using ElderSense.Data;
 using ElderSense.Data.Model;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 using System;
+using System.Threading.Tasks;
 
 namespace ElderSense.Controllers
 {
@@ -12,6 +13,7 @@ namespace ElderSense.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class SensoresApiController : ControllerBase
     {
         /// <summary>
@@ -137,6 +139,7 @@ namespace ElderSense.Controllers
         /// Rota que atualiza o tipo e/ou o valor de uma leitura existente
         /// </summary>
         [HttpPut("leitura/{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Cuidador")]
         public async Task<IActionResult> AtualizarLeitura(int id, [FromBody] AtualizarDadosSensor Dto)
         {
             if (Dto == null) return BadRequest("Nenhum dado recebido.");
@@ -162,6 +165,7 @@ namespace ElderSense.Controllers
         /// Rota que elimina uma leitura, cortando primeiro as ligações M:N com os alertas
         /// </summary>
         [HttpDelete("leitura/{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Cuidador")]
         public async Task<IActionResult> EliminarLeitura(int id)
         {
             // procura a leitura incluindo as ligações aos alertas, para poder limpar a junção M:N
@@ -185,6 +189,7 @@ namespace ElderSense.Controllers
         /// mas preserva todas as leituras dele como histórico consultável
         /// </summary>
         [HttpPut("arquivar/{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Cuidador")]
         public async Task<IActionResult> ArquivarSensor(int id)
         {
             var sensor = await _context.Sensores.FindAsync(id);
@@ -208,6 +213,7 @@ namespace ElderSense.Controllers
         /// O utilizador terá de o ativar manualmente depois, se quiser
         /// </summary>
         [HttpPut("desarquivar/{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Cuidador")]
         public async Task<IActionResult> DesarquivarSensor(int id)
         {
             var sensor = await _context.Sensores.FindAsync(id);
@@ -217,7 +223,6 @@ namespace ElderSense.Controllers
             if (!sensor.Arquivado)
                 return BadRequest(new { mensagem = "Este sensor não está arquivado." });
 
-            // retira do arquivo mas deixa desligado (o utilizador ativa manualmente depois)
             sensor.Arquivado = false;
             sensor.Estado = false;
 
