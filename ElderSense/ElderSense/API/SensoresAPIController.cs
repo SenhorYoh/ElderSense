@@ -1,5 +1,6 @@
 ﻿using ElderSense.Data;
 using ElderSense.Data.Model;
+using ElderSense.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,15 +34,9 @@ namespace ElderSense.Controllers
         /// Recebe uma leitura enviada pelo hardware e guarda-a na tabela DadosMonitorizacao
         /// </summary>
         [HttpPost("leitura")]
-        public async Task<IActionResult> ReceberLeituraDoHardware([FromBody] DadosSensor Dto)
+        public async Task<IActionResult> ReceberLeituraDoHardware([FromBody] CriarLeituraDto Dto)
         {
             if (Dto == null) return BadRequest("Nenhum dado recebido.");
-
-            // Impede que o hardware envie leituras sem dizer de quem são
-            if (string.IsNullOrEmpty(Dto.IdosoId))
-            {
-                return BadRequest("O ID do idoso é obrigatório.");
-            }
 
             // Impede que o hardware envie leituras sem dizer de quem são
             if (string.IsNullOrEmpty(Dto.IdosoId))
@@ -86,10 +81,20 @@ namespace ElderSense.Controllers
         [HttpGet("historico/{idosoId}")]
         public async Task<IActionResult> ObterHistorico(string idosoId)
         {
-            // Vai à tabela DadosMonitorizacao procurar tudo o que pertence a este idoso
+            // Vai à tabela DadosMonitorizacao procurar tudo o que pertence a este idoso,
+            // projetando para DTO para não expor as navegações internas da entidade
             var historico = await _context.DadosMonitorizacao
                                           .Where(d => d.FKUtilizador == idosoId)
                                           .OrderByDescending(d => d.DataHora) // Mostra os mais recentes primeiro
+                                          .Select(d => new LeituraDto
+                                          {
+                                              Id = d.Id,
+                                              DataHora = d.DataHora,
+                                              Tipo = d.Tipo,
+                                              Valor = d.Valor,
+                                              FKSensor = d.FKSensor,
+                                              FKUtilizador = d.FKUtilizador
+                                          })
                                           .ToListAsync();
 
             if (historico.Count == 0)
@@ -155,12 +160,13 @@ namespace ElderSense.Controllers
                 horaServidor = DateTime.UtcNow
             });
         }
+
         /// <summary>
         /// Rota que atualiza o tipo e/ou o valor de uma leitura existente
         /// </summary>
         [HttpPut("leitura/{id}")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "Cuidador")]
-        public async Task<IActionResult> AtualizarLeitura(int id, [FromBody] AtualizarDadosSensor Dto)
+        public async Task<IActionResult> AtualizarLeitura(int id, [FromBody] AtualizarLeituraDto Dto)
         {
             if (Dto == null) return BadRequest("Nenhum dado recebido.");
 
@@ -204,6 +210,7 @@ namespace ElderSense.Controllers
 
             return Ok(new { mensagem = "Leitura eliminada com sucesso.", id });
         }
+
         /// <summary>
         /// Arquiva um sensor (soft delete): marca-o como arquivado e desativado,
         /// mas preserva todas as leituras dele como histórico consultável
@@ -261,9 +268,19 @@ namespace ElderSense.Controllers
             if (sensor == null)
                 return NotFound(new { mensagem = "Sensor não encontrado." });
 
+            // projeta para DTO para devolver apenas os campos relevantes de cada leitura
             var historico = await _context.DadosMonitorizacao
                                           .Where(d => d.FKSensor == sensorId)
                                           .OrderByDescending(d => d.DataHora)
+                                          .Select(d => new LeituraDto
+                                          {
+                                              Id = d.Id,
+                                              DataHora = d.DataHora,
+                                              Tipo = d.Tipo,
+                                              Valor = d.Valor,
+                                              FKSensor = d.FKSensor,
+                                              FKUtilizador = d.FKUtilizador
+                                          })
                                           .ToListAsync();
 
             return Ok(new
@@ -275,46 +292,5 @@ namespace ElderSense.Controllers
                 historico
             });
         }
-    }
-
-    /// <summary>
-    /// DTO que representa os dados enviados pelo hardware numa leitura de sensor
-    /// </summary>
-    public class DadosSensor
-    {
-        /// <summary>
-        /// Identificador do idoso a quem a leitura pertence
-        /// </summary>
-        public string IdosoId { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Identificador do sensor que gerou a leitura
-        /// </summary>
-        public int SensorId { get; set; }
-
-        /// <summary>
-        /// Tipo de dado recolhido, ex: movimento, temperatura, bpm
-        /// </summary>
-        public string Tipo { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Valor associado ao tipo de dado
-        /// </summary>
-        public string Valor { get; set; } = string.Empty;
-    }
-    /// <summary>
-    /// DTO que representa os campos alteráveis de uma leitura via API
-    /// </summary>
-    public class AtualizarDadosSensor
-    {
-        /// <summary>
-        /// Novo tipo de dado (opcional)
-        /// </summary>
-        public string Tipo { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Novo valor associado (opcional)
-        /// </summary>
-        public string Valor { get; set; } = string.Empty;
     }
 }

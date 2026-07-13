@@ -77,11 +77,18 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Escreva: Bearer {o teu token}. Exemplo: Bearer eyJhbGci...",
+        Description = "Escreva: Bearer {o teu token}. Exemplo: Bearer eyJhbGci..."
     });
 
-    // usa um filtro para exigir o token em todas as operações
     options.DocumentFilter<ElderSense.Swagger.SecurityDocumentFilter>();
+
+    // inclui os comentários XML do código na documentação apresentada no Swagger
+    var ficheiroXml = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var caminhoXml = Path.Combine(AppContext.BaseDirectory, ficheiroXml);
+    if (File.Exists(caminhoXml))
+    {
+        options.IncludeXmlComments(caminhoXml);
+    }
 });
 
 // O utilizador não pode fazer login até confirmar o seu email
