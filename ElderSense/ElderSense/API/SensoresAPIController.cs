@@ -34,6 +34,10 @@ namespace ElderSense.Controllers
         /// Recebe uma leitura enviada pelo hardware e guarda-a na tabela DadosMonitorizacao
         /// </summary>
         [HttpPost("leitura")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ReceberLeituraDoHardware([FromBody] CriarLeituraDto Dto)
         {
             if (Dto == null) return BadRequest("Nenhum dado recebido.");
@@ -79,6 +83,9 @@ namespace ElderSense.Controllers
         /// Devolve o histórico de leituras de um idoso específico, mais recentes primeiro
         /// </summary>
         [HttpGet("historico/{idosoId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ObterHistorico(string idosoId)
         {
             // Vai à tabela DadosMonitorizacao procurar tudo o que pertence a este idoso,
@@ -110,6 +117,8 @@ namespace ElderSense.Controllers
         /// O hardware usa esta rota para confirmar se o sensor existe e está ativo
         /// </summary>
         [HttpGet("estado/{sensorId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> VerificarEstadoSensor(int sensorId)
         {
             // Vai à tabela buscar a leitura mais recente deste sensor específico
@@ -151,6 +160,8 @@ namespace ElderSense.Controllers
         /// Rota que verifica se a API está online
         /// </summary>
         [HttpGet("ping")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public IActionResult Ping()
         {
             return Ok(new
@@ -166,6 +177,11 @@ namespace ElderSense.Controllers
         /// </summary>
         [HttpPut("leitura/{id}")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "Cuidador")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> AtualizarLeitura(int id, [FromBody] AtualizarLeituraDto Dto)
         {
             if (Dto == null) return BadRequest("Nenhum dado recebido.");
@@ -192,6 +208,10 @@ namespace ElderSense.Controllers
         /// </summary>
         [HttpDelete("leitura/{id}")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "Cuidador")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> EliminarLeitura(int id)
         {
             // procura a leitura incluindo as ligações aos alertas, para poder limpar a junção M:N
@@ -217,6 +237,11 @@ namespace ElderSense.Controllers
         /// </summary>
         [HttpPut("arquivar/{id}")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "Cuidador")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ArquivarSensor(int id)
         {
             var sensor = await _context.Sensores.FindAsync(id);
@@ -241,6 +266,11 @@ namespace ElderSense.Controllers
         /// </summary>
         [HttpPut("desarquivar/{id}")]
         [Authorize(AuthenticationSchemes = "Bearer", Roles = "Cuidador")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DesarquivarSensor(int id)
         {
             var sensor = await _context.Sensores.FindAsync(id);
@@ -262,6 +292,9 @@ namespace ElderSense.Controllers
         /// Devolve o histórico de leituras de um sensor específico, mesmo que arquivado
         /// </summary>
         [HttpGet("historico-sensor/{sensorId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ObterHistoricoDoSensor(int sensorId)
         {
             var sensor = await _context.Sensores.FindAsync(sensorId);
