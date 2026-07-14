@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ElderSense.DTOs;
 
 namespace ElderSense.API
 {
@@ -60,7 +61,7 @@ namespace ElderSense.API
         /// </summary>
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] ApiLoginModel login)
+        public async Task<IActionResult> Login([FromBody] LoginDTO login)
         {
             var user = await _userManager.FindByEmailAsync(login.Username);
             if (user == null) return Unauthorized();
