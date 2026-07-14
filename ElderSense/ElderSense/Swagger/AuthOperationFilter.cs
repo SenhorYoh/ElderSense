@@ -10,6 +10,9 @@ namespace ElderSense.Swagger
     /// </summary>
     public class SecurityDocumentFilter : IDocumentFilter
     {
+        /// <summary>
+        /// Adiciona o requisito de segurança Bearer ao documento OpenAPI gerado
+        /// </summary>
         public void Apply(OpenApiDocument doc, DocumentFilterContext context)
         {
             doc.Security ??= new List<OpenApiSecurityRequirement>();
