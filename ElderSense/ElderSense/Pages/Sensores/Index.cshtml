@@ -42,6 +42,7 @@
             <tr>
                 <th>Localização</th>
                 <th>Tipo</th>
+                <th>Idoso</th>
                 <th>Estado</th>
                 @if (User.IsInRole("Cuidador"))
                 {
@@ -56,7 +57,21 @@
                     <td>@sensor.Localizacao</td>
                     <td>@sensor.Tipo</td>
                     <td>
-                        @if (sensor.Estado)
+                        @if (sensor.IdosoAssociado != null)
+                        {
+                            @sensor.IdosoAssociado.Nome
+                        }
+                        else
+                        {
+                            <span class="text-muted">—</span>
+                        }
+                    </td>
+                    <td>
+                        @if (sensor.Arquivado)
+                        {
+                            <span class="badge bg-dark">Arquivado</span>
+                        }
+                        else if (sensor.Estado)
                         {
                             <span class="badge bg-success">Ativo</span>
                         }
@@ -68,12 +83,28 @@
                     @if (User.IsInRole("Cuidador"))
                     {
                         <td>
-                            <a asp-page="Edit" asp-route-id="@sensor.Id" class="btn-acao btn-acao-editar">
-                                <i class="ti ti-edit"></i> Editar
-                            </a>
-                            <a asp-page="Delete" asp-route-id="@sensor.Id" class="btn-acao btn-acao-apagar">
-                                <i class="ti ti-trash"></i> Apagar
-                            </a>
+                            @if (sensor.Arquivado)
+                            {
+                                <form method="post" asp-page-handler="Desarquivar" asp-route-id="@sensor.Id" style="display:inline">
+                                    <button type="submit" class="btn-acao btn-acao-editar">
+                                        <i class="ti ti-restore"></i> Desarquivar
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <a asp-page="Edit" asp-route-id="@sensor.Id" class="btn-acao btn-acao-editar">
+                                    <i class="ti ti-edit"></i> Editar
+                                </a>
+                                <form method="post" asp-page-handler="Arquivar" asp-route-id="@sensor.Id" style="display:inline">
+                                    <button type="submit" class="btn-acao btn-acao-apagar">
+                                        <i class="ti ti-archive"></i> Arquivar
+                                    </button>
+                                </form>
+                                <a asp-page="Delete" asp-route-id="@sensor.Id" class="btn-acao btn-acao-apagar">
+                                    <i class="ti ti-trash"></i> Apagar
+                                </a>
+                            }
                         </td>
                     }
                 </tr>

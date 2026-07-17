@@ -1,5 +1,6 @@
 ﻿@page
 @model ElderSense.Pages.Alertas.IndexModel
+@using ElderSense.Services
 
 @{
     ViewData["Title"] = "Alertas";
@@ -45,7 +46,7 @@ else
             @foreach (var alerta in Model.Alertas)
             {
                 <tr>
-                    <td>@alerta.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@alerta.DataHora.ParaHoraPortugal().ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@alerta.Mensagem</td>
                     <td>@alerta.IdosoAssociado?.Nome</td>
                 </tr>

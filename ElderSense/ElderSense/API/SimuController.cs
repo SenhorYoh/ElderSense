@@ -41,7 +41,7 @@ namespace ElderSense.Services
         public async Task InjetarDadosDeTesteAsync()
         {
             var sensoresAtivos = await _context.Sensores
-                                   .Where(s => s.Estado == true)
+                                   .Where(s => s.Estado == true && !s.Arquivado)    
                                    .ToListAsync();
 
             if (!sensoresAtivos.Any()) return;
@@ -72,7 +72,7 @@ namespace ElderSense.Services
 
                     var registoPassagem = new DadosMonitorizacao
                     {
-                        DataHora = DateTime.Now,
+                        DataHora = DateTime.UtcNow,
                         FKSensor = sensor.Id,
                         FKUtilizador = idDonoDado,
                         Tipo = "Passagem",
@@ -82,13 +82,15 @@ namespace ElderSense.Services
                 }
                 else if (sensor.Tipo == TipoSensor.Pulseira)
                 {
-                    // Para a pulseira, usamos o idoso que está associado a ela de forma fixa
-                    // (Se por algum motivo falhar, usa o do Cuidador)
-                    string donoPulseira = sensor.FKIdoso ?? sensor.FKUtilizador;
+                    // uma pulseira sem idoso associado não deve gerar leituras nem alertas,
+                    // senão os dados ficariam atribuídos ao cuidador em vez do idoso
+                    if (string.IsNullOrEmpty(sensor.FKIdoso)) continue;
+
+                    string donoPulseira = sensor.FKIdoso;
 
                     var registoTemperatura = new DadosMonitorizacao
                     {
-                        DataHora = DateTime.Now,
+                        DataHora = DateTime.UtcNow,
                         FKSensor = sensor.Id,
                         FKUtilizador = donoPulseira,
                         Tipo = "Temperatura Corporal",
@@ -99,7 +101,7 @@ namespace ElderSense.Services
                     int bpm = random.Next(110, 121);
                     var registoBpm = new DadosMonitorizacao
                     {
-                        DataHora = DateTime.Now,
+                        DataHora = DateTime.UtcNow,
                         FKSensor = sensor.Id,
                         FKUtilizador = donoPulseira,
                         Tipo = "Frequência Cardíaca",
@@ -186,7 +188,7 @@ namespace ElderSense.Services
 
             var novoAlerta = new Alerta
             {
-                DataHora = DateTime.Now,
+                DataHora = DateTime.UtcNow,
                 Mensagem = mensagem,
                 FKIdoso = idDoIdoso,
                 FKUtilizador = idCuidador

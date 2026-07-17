@@ -2,6 +2,7 @@ using ElderSense.Data;
 using ElderSense.Data.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +21,12 @@ namespace ElderSense.Pages.Sensores
         private readonly UserManager<Utilizador> _userManager;
 
         /// <summary>
-        /// Construtor que recebe o contexto da base de dados injetado pelo sistema
+        /// Gestor de utilizadores do Identity, usado para identificar o utilizador autenticado
+        /// </summary>
+        private readonly UserManager<Utilizador> _userManager;
+
+        /// <summary>
+        /// Construtor que recebe as dependências injetadas pelo sistema
         /// </summary>
         public IndexModel(ApplicationDbContext context, UserManager<Utilizador> userManager)
         {
@@ -49,18 +55,49 @@ namespace ElderSense.Pages.Sensores
         public int SensoresInativos => Sensores.Count(s => !s.Estado);
 
         /// <summary>
-        /// Carrega a lista de sensores, incluindo o utilizador responsável associado
+        /// Carrega a lista de sensores do utilizador autenticado:
+        /// os que lhe pertencem como Cuidador ou os que o monitorizam como Idoso
         /// </summary>
         public async Task OnGetAsync()
         {
-            // busca o ID do utilizador logado
             var userId = _userManager.GetUserId(User);
 
-            // busca apenas os sensores do utilizador logado
             Sensores = await _context.Sensores
                 .Include(s => s.Utilizador)
-                .Where(s => s.FKUtilizador == userId) 
+                .Include(s => s.IdosoAssociado)
+                .Where(s => s.FKUtilizador == userId || s.FKIdoso == userId)
                 .ToListAsync();
+        }
+
+        /// <summary>
+        /// Arquiva um sensor (soft delete): marca-o como arquivado e desligado,
+        /// preservando as leituras como histórico
+        /// </summary>
+        public async Task<IActionResult> OnPostArquivarAsync(int id)
+        {
+            var sensor = await _context.Sensores.FindAsync(id);
+            if (sensor == null) return NotFound();
+
+            sensor.Arquivado = true;
+            sensor.Estado = false;
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("Index");
+        }
+
+        /// <summary>
+        /// Reativa um sensor arquivado: retira-o do arquivo mas mantém-no desligado
+        /// </summary>
+        public async Task<IActionResult> OnPostDesarquivarAsync(int id)
+        {
+            var sensor = await _context.Sensores.FindAsync(id);
+            if (sensor == null) return NotFound();
+
+            sensor.Arquivado = false;
+            sensor.Estado = false;
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage("Index");
         }
     }
 }

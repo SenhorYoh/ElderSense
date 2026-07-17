@@ -4,10 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using ElderSense.DTOs;
 
 namespace ElderSense.API
 {
@@ -39,17 +36,24 @@ namespace ElderSense.API
         private readonly IConfiguration _config;
 
         /// <summary>
+        /// Serviço responsável por gerar os tokens JWT
+        /// </summary>
+        private readonly Services.TokenService _tokenService;
+
+        /// <summary>
         /// Construtor que recebe as dependências injetadas pelo sistema
         /// </summary>
         public AuthController(ApplicationDbContext context,
            UserManager<Utilizador> userManager,
            SignInManager<Utilizador> signInManager,
-           IConfiguration config)
+           IConfiguration config,
+           Services.TokenService tokenService)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _config = config;
+            _tokenService = tokenService;
         }
 
         /// <summary>
@@ -57,7 +61,7 @@ namespace ElderSense.API
         /// </summary>
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] ApiLoginModel login)
+        public async Task<IActionResult> Login([FromBody] LoginDTO login)
         {
             var user = await _userManager.FindByEmailAsync(login.Username);
             if (user == null) return Unauthorized();
@@ -65,37 +69,9 @@ namespace ElderSense.API
             var result = await _signInManager.CheckPasswordSignInAsync(user, login.Password, false);
             if (!result.Succeeded) return Unauthorized();
 
-            var token = GenerateJwtToken(login.Username);
+            var token = _tokenService.GenerateToken(user);
 
             return Ok(new { token });
-        }
-
-        /// <summary>
-        /// Gera um token JWT assinado, válido durante 2 horas, com o nome de utilizador como claim
-        /// </summary>
-        private string GenerateJwtToken(string username)
-        {
-            var claims = new[] {
-                new Claim(ClaimTypes.Name, username)
-            };
-
-            var jwtKey = _config["Jwt:Key"];
-            if (string.IsNullOrEmpty(jwtKey))
-            {
-                throw new Exception("A chave Jwt:Key não foi configurada.");
-            }
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddHours(2),
-                signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 
