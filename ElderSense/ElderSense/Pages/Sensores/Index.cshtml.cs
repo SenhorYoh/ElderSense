@@ -18,7 +18,6 @@ namespace ElderSense.Pages.Sensores
         /// Contexto da base de dados
         /// </summary>
         private readonly ApplicationDbContext _context;
-        private readonly UserManager<Utilizador> _userManager;
 
         /// <summary>
         /// Gestor de utilizadores do Identity, usado para identificar o utilizador autenticado
