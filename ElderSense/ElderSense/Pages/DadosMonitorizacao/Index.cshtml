@@ -33,29 +33,84 @@ else
             <div class="db-stats-value">@Model.DadosEstaSemana</div>
         </div>
     </div>
+
     <div class="table-wrapper-scroll">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Data/Hora</th>
-                <th>Tipo</th>
-                <th>Descrição</th>
-                <th>Sensor</th>
-                <th>Idoso</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var dado in Model.Dados)
-            {
+        <table class="table">
+            <thead>
                 <tr>
-                        <td>@dado.DataHora.ParaHoraPortugal().ToString("dd/MM/yyyy HH:mm")</td>
-                    <td>@dado.Tipo</td>
-                    <td>@dado.Valor</td>
-                    <td>@dado.Sensor.Localizacao</td>
-                    <td>@dado.Utilizador.Nome</td>
+                    <th>Data/Hora</th>
+                    <th>Tipo</th>
+                    <th>Descrição</th>
+                    <th>Sensor</th>
+                    <th>Idoso</th>
+                    @if (User.IsInRole("Cuidador"))
+                    {
+                        <th>Ações</th>
+                    }
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var dado in Model.Dados)
+                {
+                    <tr>
+                        <td>@dado.DataHora.ParaHoraPortugal().ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@dado.Tipo</td>
+                        <td>@dado.Valor</td>
+                        <td>@dado.Sensor.Localizacao</td>
+                        <td>@dado.Utilizador.Nome</td>
+                        @if (User.IsInRole("Cuidador"))
+                        {
+                            <td>
+                                <button type="button" class="btn-acao btn-acao-editar"
+                                        onclick="abrirEdicao(@dado.Id, '@dado.Tipo', '@dado.Valor')">
+                                    <i class="ti ti-edit"></i> Editar
+                                </button>
+                                <form method="post" asp-page-handler="Eliminar" asp-route-id="@dado.Id"
+                                      onsubmit="return confirm('Eliminar esta leitura? Esta ação não pode ser desfeita.');"
+                                      style="display:inline">
+                                    <button type="submit" class="btn-acao btn-acao-apagar">
+                                        <i class="ti ti-trash"></i> Eliminar
+                                    </button>
+                                </form>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
+
+    @if (User.IsInRole("Cuidador"))
+    {
+        <div id="modalEditar" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;">
+            <div style="background:#fff;border-radius:10px;padding:24px;width:340px;">
+                <h4>Editar leitura</h4>
+                <form method="post" asp-page-handler="Editar">
+                    <input type="hidden" name="id" id="editId" />
+                    <div class="mb-3">
+                        <label class="form-label">Tipo</label>
+                        <input type="text" name="tipo" id="editTipo" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Valor</label>
+                        <input type="text" name="valor" id="editValor" class="form-control" />
+                    </div>
+                    <button type="submit" class="btn-acao btn-acao-editar">Guardar</button>
+                    <button type="button" class="btn-acao" onclick="fecharEdicao()">Cancelar</button>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            function abrirEdicao(id, tipo, valor) {
+                document.getElementById('editId').value = id;
+                document.getElementById('editTipo').value = tipo;
+                document.getElementById('editValor').value = valor;
+                document.getElementById('modalEditar').style.display = 'flex';
+            }
+            function fecharEdicao() {
+                document.getElementById('modalEditar').style.display = 'none';
+            }
+        </script>
+    }
 }
